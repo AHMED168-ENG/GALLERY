@@ -1,0 +1,437 @@
+   <link
+      href="/public/dashboard/Tagging-System-Autocomplete-Amsify-Suggestags/css/amsify.suggestags.css"
+      rel="stylesheet"
+    />
+
+<%- include("../includes/head.ejs") %>
+
+</head>
+<body class="vertical-layout vertical-menu 2-columns   menu-expanded fixed-navbar"
+data-open="click" data-menu="vertical-menu" data-col="2-columns">
+    <%- include("../includes/navebar.ejs") %>
+    <%- include("../includes/aside.ejs") %>
+    <div class="app-content content">
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-md-6 col-12 mb-2">
+                    <div class="row breadcrumbs-top">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/dashboard">main </a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="/dashboard/products/">all products</a>
+                                </li>
+                                <li class="breadcrumb-item active">add product
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- Basic form layout section start -->
+                <section id="basic-form-layouts">
+                    <div class="row match-height">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title" id="basic-layout-form">add new product</h4>
+                                    <a class="heading-elements-toggle"><i
+                                            class="la la-ellipsis-v font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <%- include("../includes/notification") %> 
+                                <div class="card-content collapse show">
+                                    <div class="card-body">
+                                        <form class="form" action="?_csrf=<%= csrf %>" method="post" enctype="multipart/form-data">
+                                            <div class="form-body">
+                                                <h4 class="form-section"><i class="ft-home"></i> product details</h4>
+
+                                                <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> product name in arabic</label>
+                                                                <input type="text" value="<%= bodyData.productName_ar %>" class="form-control" placeholder="enter product name in arabic" name="productName_ar" autocomplate="on">
+                                                                <% if (validationError["productName_ar"]) { %>
+                                                                  <span class="text-danger"><%=validationError["productName_ar"][0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> product name in english</label>
+                                                                <input type="text" value="<%= bodyData.productName_en %>" class="form-control" placeholder="enter product name in arabic" name="productName_en" autocomplate="on">
+                                                                <% if (validationError["productName_en"]) { %>
+                                                                  <span class="text-danger"><%=validationError["productName_en"][0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1">product overview in arabic </label>
+                                                                <textarea type="text" class="form-control" placeholder="product overview in arabic" name="productOverview_ar"><%= bodyData.productOverview_ar %></textarea>
+                                                                <% if (validationError["productOverview_ar"]) { %>
+                                                                    <span class="text-danger"><%=validationError["productOverview_ar"][0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1">product overview in english </label>
+                                                                <textarea type="text" class="form-control" placeholder="product overview in english" name="productOverview_en"><%= bodyData.productOverview_en %></textarea>
+                                                                <% if (validationError["productOverview_en"]) { %>
+                                                                    <span class="text-danger"><%=validationError["productOverview_en"][0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label>full description in arabic</label>
+                                                                <textarea placeholder="enter Full Description In arabic" name="fullDescription_ar" class="form-control editor"><%- bodyData.fullDescription_ar %></textarea>
+                                                                <% if (validationError["fullDescription_ar"]) { %>
+                                                                    <span class="text-danger"><%=validationError["fullDescription_ar"][0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label>full description in english</label>
+                                                                <textarea name="fullDescription_en" type="text" placeholder="enter Full Description In English" class="form-control editor"><%- bodyData.fullDescription_en %></textarea>
+                                                                
+                                                                    <% if (validationError["fullDescription_en"]) { %>
+                                                                        <span class="text-danger"><%=validationError["fullDescription_en"][0].msg %></span>
+                                                                    <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label>sentence description in arabic</label>
+                                                                <input  id="tags" name="statmentDescription_ar" class="form-control" type="text" value="<%= bodyData.statmentDescription_ar %>">
+                                                                    <% if (validationError["statmentDescription_ar"]) { %>
+                                                                        <span class="text-danger"><%=validationError["statmentDescription_ar"][0].msg %></span>
+                                                                    <% } %>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label>sentence description in english</label>
+                                                                <input type="text" value="<%= bodyData.statmentDescription_en %>" id="tags" name="statmentDescription_en" class="form-control">
+                                                                
+                                                                    <% if (validationError["statmentDescription_en"]) { %>
+                                                                        <span class="text-danger"><%=validationError["statmentDescription_en"][0].msg %></span>
+                                                                    <% } %>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <hr>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1">price</label>
+                                                                <input value="<%= bodyData.price  %>" type="number" min="0" value="0" class="form-control" placeholder="Enter the price of the product" name="price">
+                                                                
+                                                                    <% if (validationError["price"]) { %>
+                                                                        <span class="text-danger"><%=validationError["price"][0].msg %></span>
+                                                                    <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> The cost of installing the product</label>
+                                                                <input value="<%= bodyData.structure  %>" type="number" min="0" value="0" class="form-control" placeholder="enter The cost of installing the product" name="structure">
+                                                                <% if (validationError["structure"]) { %>
+                                                                    <span class="text-danger"><%=validationError["structure"][0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label >Enter the shipping cost of the product</label>
+                                                                <input  value="<%= bodyData.shipping  %>" type="number"  min="0" value="0" class="form-control" placeholder="Enter the shipping cost of the product" name="shipping">
+                                                                <% if (validationError["shipping"]) { %>
+                                                                    <span class="text-danger"><%=validationError["shipping"][0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> discount if you like</label>
+                                                                <input value="<%= bodyData.descount %>" type="number"  min="0" value="0" class="form-control" placeholder="Enter the product discount" name="descount">
+                                                                <% if (validationError["descount"]) { %>
+                                                                    <span class="text-danger"><%=validationError["descount"][0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="allCatigorySelect col-md-12" >
+                                                            <div>
+                                                                <div class="form-group">
+                                                                    <label for="projectinput1">main category</label>
+                                                                    <select onchange="getCatigory(event)" data_count="0" name="category[]" class="language form-control">
+                                                                        <option></option>
+                                                                        <% catigorys.forEach(element => { %>
+                                                                            <option value="<%= element.id %>"><%= element.category_en %></option>
+                                                                        <% }) %>
+                                                                    </select>
+                                                                        <% if (validationError["category"]) { %>
+                                                                            <span class="text-danger"><%=validationError["category"][0].msg %></span>
+                                                                        <% } %>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <label>Enter the keywords through which the product is searched</label>
+                                                            <div class="form-group">
+                                                                <input value="<%= bodyData.keyWord %>" type="text" name="keyWord" id="tags" class="form-control">
+                                                                
+                                                                    <% if (validationError["keyWord"]) { %>
+                                                                        <span class="text-danger"><%=validationError["keyWord"][0].msg %></span>
+                                                                    <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> meta Description in english</label>
+                                                                <textarea type="text" value="<%= bodyData.metaDescription_en %>" class="form-control" placeholder="enter meta description in english" name="metaDescription_en"><%= bodyData.metaDescription_en %></textarea>
+                                                                    <% if (validationError.metaDescription_en) { %>
+                                                                        <span class="text-danger"><%=validationError.metaDescription_en[0].msg %></span>
+                                                                    <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> meta Description in arabic</label>
+                                                                <textarea type="text" value="<%= bodyData.metaDescription_ar %>" class="form-control" placeholder="enter meta description in arabic" name="metaDescription_ar"><%= bodyData.metaDescription_ar %></textarea>
+                                                                    <% if (validationError.metaDescription_ar) { %>
+                                                                        <span class="text-danger"><%=validationError.metaDescription_ar[0].msg %></span>
+                                                                    <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> meta Keywords in english</label>
+                                                                <textarea type="text" value="<%= bodyData.metaKeywords_en  %>" class="form-control" placeholder="enter meta Keywords in english" name="metaKeywords_en"><%= bodyData.metaKeywords_en %></textarea>
+                                                                    <% if (validationError.metaKeywords_en) { %>
+                                                                        <span class="text-danger"><%=validationError.metaKeywords_en[0].msg %></span>
+                                                                    <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> meta Keywords in arabic</label>
+                                                                <textarea type="text" value="<%= bodyData.metaKeywords_ar  %>" class="form-control" placeholder="enter meta Keywords in arabic" name="metaKeywords_ar"><%= bodyData.metaKeywords_ar %></textarea>
+                                                                    <% if (validationError.metaKeywords_ar) { %>
+                                                                        <span class="text-danger"><%=validationError.metaKeywords_ar[0].msg %></span>
+                                                                    <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group col-md-12">
+                                                            <label for="projectinput2"> Product pictures </label>
+                                                            <div class="custom-file">
+                                                                <input type="file" multiple name="productImage" class="custom-file-input" id="inputGroupFile01">
+                                                                <label class="custom-file-label" for="inputGroupFile01">Choose image product</label>
+                                                            </div>
+                                                            <% if (validationError.productImage) { %>
+                                                                <span class="text-danger"><%=validationError.productImage[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                        
+                                                        <div class="form-group  col-md-12">
+                                                            <label for="projectinput2"> Product description image </label>
+                                                            <div class="custom-file">
+                                                                <input type="file" multiple name="descriptionImage" class="custom-file-input" id="inputGroupFile01">
+                                                                <label class="custom-file-label" for="inputGroupFile01">Choose description image</label>
+                                                            </div>
+                                                            <% if (validationError.descriptionImage) { %>
+                                                                <span class="text-danger"><%=validationError.descriptionImage[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+
+                                                        <div class="form-group col-md-12">
+                                                            <label for="projectinput2"> youtube video link</label>
+                                                            <div class="custom-file">
+                                                                <input  value="<%= bodyData.productVideo %>" type="text" placeholder="enter Youtube Video Link" name="productVideo" class="form-control">
+                                                            </div>
+                                                            <% if (validationError.productVideo) { %>
+                                                                <span class="text-danger"><%=validationError.productVideo[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group mt-1">
+                                                                <input type="checkbox" name="active"
+                                                                    id="switcheryColor4"
+                                                                    value="1"
+                                                                    class="switch"
+                                                                    checked
+                                                                    />
+                                                                <label for="switcheryColor4"
+                                                                    class="card-title ml-1">state </label>
+                                                            </div>
+                                                        </div>               
+
+                                                        <button type="submit" class="btn btn-primary  col-md-12">
+                                                            <i class="la la-check-square-o"></i> save
+                                                        </button>
+                                                </div>
+                                            </div>
+                                    </form>
+                                    <div class="d-none copySelect">
+                                        <div class="form-group">
+                                            <label for="projectinput1">sup category</label>
+                                            <select onchange="getCatigory(event)" name="category[]" class="language form-control">
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- // Basic form layout section end -->
+            </div>
+        </div>
+    </div>
+
+    <%- include("../includes/footer") %> 
+    <%- include("../includes/footerScript") %> 
+<script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+<script>
+    const allEditor = document.querySelectorAll( '.editor' )
+    allEditor.forEach(ele => {
+    ClassicEditor
+    .create( ele , {
+            toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ],
+        heading: {
+            options: [
+                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+            ]
+        },
+    } )
+    .catch( error => {
+        console.error( error );
+    } );
+    })
+
+    const coursesPageForm = document.querySelector("form.coursesPage")
+    const allFields = coursesPageForm.querySelectorAll(".overView")
+    const allFieldsErrors = coursesPageForm.querySelectorAll(".errorLength")
+    const alertSuccess = document.querySelector(".alert-success")
+    const textLength = 84
+    coursesPageForm.onsubmit  = function(e) {
+        
+        allFields.forEach((ele , index) => {
+            if(ele.value.trim().length > textLength) {
+                e.preventDefault()
+                allFieldsErrors[index].className = "alert alert-danger"
+                allFieldsErrors[index].innerHTML = `your content length should be less than ${textLength}`
+                console.log(ele.offsetTop)
+                window.scrollTo({top: ele.offsetTop + 500,behavior: 'smooth',})
+                if(alertSuccess)  alertSuccess.remove()
+            } else {
+                allFieldsErrors[index].className = ""
+            }
+        })
+    }
+
+</script>   
+<script src="/public/dashboard/Tagging-System-Autocomplete-Amsify-Suggestags/js/jquery.amsify.suggestags.js"></script>
+<script>
+    $('input[id="tags"]').amsifySuggestags({
+
+  type : 'amsify',
+  suggestions: ['Black', 'White', 'Red', 'Blue', 'Green', 'Orange']
+
+});
+</script>
+    <script type="text/javascript">
+    var counter = 0;
+    var allCatigorySelect = document.querySelector(".allCatigorySelect")
+    var copySelect = document.querySelector(".copySelect")
+
+        function copyElement(data) {
+            var child = copySelect.cloneNode(true);
+            child.classList.remove("d-none")
+            counter++
+            child.querySelector("select").setAttribute("data_count" , counter)
+            child.querySelector("select").setAttribute("name" , `category[]`)
+            data.catigorys.forEach(ele => {
+                child.querySelector("select").innerHTML += `<option value="${ele.id}">${ele.category_en}</option>`
+            })
+            allCatigorySelect.appendChild(child)
+        }
+
+        function removeElement(dataCount) {
+            var elements = document.querySelectorAll(".allCatigorySelect .copySelect")
+            elements.forEach(ele => {
+                if(ele.querySelector("select").getAttribute("data_count") > dataCount) {
+                    ele.remove()
+                }
+            })   
+            counter = dataCount  
+        }
+
+        function getCatigory(e , categoryId) {
+            var id = e.target.value ? e.target.value : 0;
+            var dataCount = e.target.getAttribute("data_count")
+            if(id) {
+                $.ajax({
+                type : "post",
+                data :{categoryId : categoryId || 0},
+                url  : "/dashboard/sup-categorys/getMainCatigoryAjax/" + id  + "?_csrf=" + '<%= csrf %>',
+                success(data) {
+                    if(data.catigorys.length > 0) {
+                        if(counter == dataCount) {
+                            copyElement(data)
+                        } else if(counter > dataCount) {
+                            var elements = document.querySelectorAll(".allCatigorySelect .copySelect")
+                            elements.forEach(ele => {
+                                if(ele.querySelector("select").getAttribute("data_count") > dataCount) {
+                                    ele.remove()
+                                }
+                            })
+                            counter = dataCount
+                            copyElement(data , allCatigorySelect , copySelect)
+                        }
+                    } else {
+                        removeElement(dataCount)
+                    }
+                },
+                error(error) {
+                    console.log(error)
+                }
+                })
+            } else {
+                removeElement(dataCount)
+            }
+        }
+
+    </script>
+</body>
+</html>

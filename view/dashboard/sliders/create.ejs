@@ -1,0 +1,202 @@
+<%- include("../includes/head") %> 
+</head>
+<body class="vertical-layout vertical-menu 2-columns   menu-expanded fixed-navbar"
+data-open="click" data-menu="vertical-menu" data-col="2-columns">
+    <%- include("../includes/navebar") %> 
+    <%- include("../includes/aside") %> 
+
+
+    <div class="app-content content">
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-md-6 col-12 mb-2">
+                    <div class="row breadcrumbs-top">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/dashboard">main </a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="/dashboard/sliders/"> sliders </a>
+                                </li>
+                                <li class="breadcrumb-item active">add new slider
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- Basic form layout section start -->
+                <section id="basic-form-layouts">
+                    <div class="row match-height">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title" id="basic-layout-form"> add new slider </h4>
+                                    <a class="heading-elements-toggle"><i
+                                            class="la la-ellipsis-v font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <%- include("../includes/notification") %> 
+                                <div class="card-content collapse show">
+                                    <div class="card-body">
+                                        <form class="form" method="post" action="?_csrf=<%= csrf %>" enctype="multipart/form-data">
+                                            <div class="form-body">
+                                                <h4 class="form-section"><i class="ft-home"></i> slider data</h4>
+
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> sliders header in arabic </label>
+                                                            <textarea type="text" class="form-control " placeholder="enter sliders header in arabic" name="header_ar"><%- bodyData.header_ar %></textarea>
+                                                            <% if (validationError) { %>
+                                                                <% if (validationError["header_ar"]) { %>
+                                                                    <span class="text-danger"><%=validationError["header_ar"][0].msg %></span>
+                                                                <% } %>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> sliders header in english </label>
+                                                            <textarea type="text" class="form-control " placeholder="enter sliders header in english" name="header_en"><%- bodyData.header_en %></textarea>
+                                                            <% if (validationError) { %>
+                                                                <% if (validationError["header_en"]) { %>
+                                                                    <span class="text-danger"><%=validationError["header_en"][0].msg %></span>
+                                                                <% } %>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> description in arabic </label>
+                                                            <textarea type="text" class="form-control " placeholder="enter sliders description in arabic" name="description_ar"><%- bodyData.description_ar %></textarea>
+                                                            <% if (validationError) { %>
+                                                                <% if (validationError["description_ar"]) { %>
+                                                                    <span class="text-danger"><%=validationError["description_ar"][0].msg %></span>
+                                                                <% } %>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> sliders description in english </label>
+                                                            <textarea type="text" class="form-control " placeholder="enter sliders description in english" name="description_en"><%- bodyData.description_en %></textarea>
+                                                            <% if (validationError) { %>
+                                                                <% if (validationError["description_en"]) { %>
+                                                                    <span class="text-danger"><%=validationError["description_en"][0].msg %></span>
+                                                                <% } %>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1">button link </label>
+                                                            <textarea type="text" class="form-control " placeholder="enter button link " name="<%= element["link_" + lang]"><%- bodyData.<%= element["link_" + lang] %></textarea>
+                                                            <% if (validationError) { %>
+                                                                <% if (validationError["<%= element["link_" + lang]"]) { %>
+                                                                    <span class="text-danger"><%=validationError["<%= element["link_" + lang]"][0].msg %></span>
+                                                                <% } %>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                          
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> slider position </label>
+                                                            <select name="position" class="language form-control">
+                                                                <option></option>
+                                                                <% sildersPosition.forEach(element => { %>
+                                                                    <option <%= element == bodyData.position ? "selected" : "" %> ><%= element %></option>
+                                                                <% }) %>
+                                                            </select>
+                                                            <% if (validationError) { %>
+                                                                <% if (validationError["position"]) { %>
+                                                                    <span class="text-danger"><%=validationError["position"][0].msg %></span>
+                                                                <% } %>
+                                                            <% } %>
+                                                        </div>                                                    
+                                                    </div>
+                                                    <div class="form-group col-12">
+                                                        <label for="projectinput2"> صور الكاروسال </label>
+                                                        <div class="custom-file">
+                                                            <input type="file" name="image" class="custom-file-input" id="inputGroupFile01">
+                                                            <label class="custom-file-label" for="inputGroupFile01">Choose image</label>
+                                                        </div>
+                                                        <% if (validationError) { %>
+                                                            <% if (validationError.image) { %>
+                                                                <span class="text-danger"><%=validationError.image[0].msg %></span>
+                                                            <% } %>
+                                                        <% } %>
+                                                    </div>                                                    
+                                                    <div class="col-md-6">
+                                                        <div class="form-group mt-1">
+                                                            <input type="checkbox" name="active"
+                                                                id="switcheryColor4"
+                                                                value="1"
+                                                                class="switch"
+                                                                checked
+                                                                />
+                                                            <label for="switcheryColor4"
+                                                                class="card-title ml-1">state </label>
+                                                        </div>
+                                                    </div>                                                    
+                                                </div>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-primary btn-block">
+                                                <i class="la la-check-square-o"></i> save
+                                            </button>
+                                    </form>
+                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- // Basic form layout section end -->
+            </div>
+        </div>
+    </div>
+
+    <%- include("../includes/footer") %> 
+    <%- include("../includes/footerScript") %> 
+<!-- <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+<script>
+    const allEditor = document.querySelectorAll( '.editor' )
+    allEditor.forEach(ele => {
+    ClassicEditor
+    .create( ele , {
+        //    toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+           toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ],
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                    // { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                    // { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                ]
+            },
+    } )
+    .catch( error => {
+        console.error( error );
+    } );
+    })
+
+
+</script>    -->
+</body>
+
+</html>

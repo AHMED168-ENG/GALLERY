@@ -1,0 +1,231 @@
+<%- include("../includes/head") %> 
+<style>
+    .supTitel {
+        text-align: center;
+        background:#eee;
+        padding:10px ;
+        font-size:14px !important
+    }
+</style>
+<%- include("../includes/navebar.ejs") %> 
+<%- include("../includes/aside") %> 
+</head>
+<body class="vertical-layout vertical-menu 2-columns   menu-expanded fixed-navbar"
+data-open="click" data-menu="vertical-menu" data-col="2-columns">
+    <div class="app-content content">
+        <div class="content-wrapper"> 
+            <div class="content-header row">
+                <div class="content-header-left col-md-6 col-12 mb-2">
+                    <div class="row breadcrumbs-top">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/dashboard">main </a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="/dashboard/orders/"> orders </a>
+                                </li>
+                                <li class="breadcrumb-item active">show order
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- Basic form layout section start -->
+                <section id="basic-form-layouts">
+                    <div class="row match-height">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title" id="basic-layout-form"> show order Data</h4>
+                                    <a class="heading-elements-toggle"><i
+                                            class="la la-ellipsis-v font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <%- include("../includes/notification") %> 
+                                <div class="card-content collapse show">
+                                    <div class="card-body card-dashboard ">
+                                        <div class="form-body">
+                                            <h4 class="card-title supTitel"> show User Data</h4>
+                                            <div class="row">
+
+                                                <div class="col-md-12">
+                                                    <div class="row form-group justify-content-center">
+                                                        <div class="image text-center col-md-3 ">
+                                                            <a href="/dashboard/users/update/<%= order.orderUser.id %>">
+                                                                <img title="User Data" style="width:100%;aspect-ratio:1/1;border-radius: 50%;width:70px;height:70px" 
+                                                            src="<%= order.orderUser.image ?  "/assets/dashboard/Users/" + order.orderUser.image.split("--")[0] :"/assets/dashboard/defaultImages/avatar.png" %>" alt="">
+                                                            </a>
+                                                        </div>
+                                                    </div>  
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="projectinput1"> user name</label>
+                                                        <input type="text" value="<%= order.orderUser.fName + " " + order.orderUser.lName %>" class="form-control" readonly autocomplate="on">
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="projectinput1"> user mobile</label>
+                                                        <input type="text" value="<%= order.orderUser.mobile %>"  readonly class="form-control" >
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="projectinput1"> user address </label>
+                                                        <input type="text" value="<%= order.orderUser.address  %>" readonly class="form-control" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h4 class="card-title supTitel"> product Data</h4>
+                                        <table 
+                                            class="table display nowrap table-striped table-bordered scroll-horizontal table-responsive" style="width:100%">
+                                            <thead>
+                                            <tr>
+                                                <th>product image</th>
+                                                <th>product name</th>
+                                                <th>count</th>
+                                                <th>Price For One</th>
+                                                <th>descount</th>
+                                                <th>shipping</th>
+                                                <th>structure</th>
+                                                <th>price before descount</th>
+                                                <th>price after descount</th>                                                
+                                                <th>totla price</th>                                                
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% allProducts.forEach((element,index) => { %>
+                                                 <tr>   
+                                                        <% if (element.productImage) { %>
+                                                            <td><img style="width:40px ; height:40px" src="/assets/dashboard/Products/<%= element.productImage.split("--")[0] %>" alt=""></td>
+                                                        <% } else { %>
+                                                            <td><img style="width:40px ; height:40px" src="/assets/dashboard/defaultImages/avatar.png" alt=""></td>
+                                                        <%}%>                                                        
+                                                        <td class="chang"><p><a href="/dashboard/products/update/<%= element.id %>"><%= element.productName_en %></a></p></td>
+                                                        <td><%= getTotalPriceForOneProduct(element , order).count %></td>
+                                                        <td><%= element.price %>Eg</td>
+                                                        <td><%= element.descount %>%</td>
+                                                        <td><%= getTotalPriceForOneProduct(element , order).shipping %>Eg</td>
+                                                        <td><%= getTotalPriceForOneProduct(element , order).structure %>Eg</td>
+                                                        <td><%= getTotalPriceForOneProduct(element , order).price %>Eg</td>
+                                                        <td><%= getTotalPriceForOneProduct(element , order).afterDescount %>Eg</td>
+                                                        <td><%= getTotalPriceForOneProduct(element , order).totalPrice %>Eg</td>
+                                                    </tr>
+                                                <% }) %>
+                                            </tbody>
+                                        </table>
+                                        <h4 class="card-title supTitel"> final price Data</h4>
+                                        <div class="row ">
+                                            <div class="col-lg-12">
+                                                <div class=" mb-5">
+                                                    <div class="border-bottom pb-2">
+                                                        <div class="d-flex justify-content-between mb-3">
+                                                            <h6>structure</h6>
+                                                            <h6><%= totalOfAll.structure %>Eg</h6>
+                                                        </div>
+                                                        <div class="d-flex justify-content-between">
+                                                            <h6 class="font-weight-medium">Shipping</h6>
+                                                            <h6 class="font-weight-medium"><%= totalOfAll.shipping %>Eg</h6>
+                                                        </div>
+                                                    </div>
+                                        
+                                                    <div class="pt-2">
+                                                        <div class="d-flex justify-content-between mt-2">
+                                                            <h5>Total Price Before Descount</h5>
+                                                            <h5><%= totalOfAll.price %>Eg</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="pt-2">
+                                                        <div class="d-flex justify-content-between mt-2">
+                                                            <h5>Total After Descount </h5>
+                                                            <h5><%= totalOfAll.afterDescount %>Eg</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="pt-2">
+                                                        <div class="d-flex justify-content-between mt-2">
+                                                            <h5>Total After Descount with & shipping & structure</h5>
+                                                            <h5><%= totalOfAll.totalPrice %>Eg</h5>
+                                                        </div>
+                                                    </div>
+                                                
+                                                </div>
+                                                <div class="mb-2">
+                                                    <div class="bg-light ">
+                                                        <form action="/dashboard/orders/finished/<%= order.id %>?_csrf=<%= csrf %>" method="post">
+                                                            <input type="hidden" name="isFinished" value="<%= order.isFinished %>">
+                                                            <button class="btn btn-block btn-primary font-weight-bold"> <%= order.isFinished ? "mack order unfit" : "mack order finished" %></button>
+                                                        </form>
+                                                    </div>
+                                                </div>   
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- // Basic form layout section end -->
+            </div>
+        </div>
+    </div>
+
+    <%- include("../includes/footer") %> 
+    <script src="https://cdn.ckshowor.com/ckshowor5/36.0.0/classic/ckshowor.js"></script>
+    <script type="text/javascript">
+        const allshowor = document.querySelectorAll( '.showor' )
+        console.log( allshowor[0])
+        document.onclick = function() {
+            console.log( allshowor[0].value)
+        }
+        allshowor.forEach(ele => {
+        Classicshowor
+        .create( ele, {
+            toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ],
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+
+                ]
+            },
+        } )
+        .catch( error => {
+            console.log( error );
+        } );
+        })
+
+    // Classicshowor
+    //     .create( document.querySelector( '#ar_body' ), {
+    //         language: 'ar',
+    //         toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+    //         heading: {
+    //             options: [
+    //                 { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+    //                 { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+    //                 { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+    //                 { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+    //             ]
+    //         }
+    //     } )
+    //     .catch( error => {
+    //         console.log( error );
+    //     } );
+
+    </script>
+    <%- include("../includes/footerScript") %> 
+ 
+</body>
+</html>

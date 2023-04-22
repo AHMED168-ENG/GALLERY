@@ -1,0 +1,159 @@
+<%- include("../includes/head") %> 
+<body class="vertical-layout vertical-menu 2-columns   menu-expanded fixed-navbar"
+data-open="click" data-menu="vertical-menu" data-col="2-columns">
+    <%- include("../includes/navebar") %> 
+    <%- include("../includes/aside") %> 
+    <div class="app-content content">
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-md-6 col-12 mb-2">
+                    <div class="row breadcrumbs-top">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/dashboard">main </a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="/dashboard/gallery/"> gallery </a>
+                                </li>
+                                <li class="breadcrumb-item active">update image gallery
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- Basic form layout section start -->
+                <section id="basic-form-layouts">
+                    <div class="row match-height">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title" id="basic-layout-form">update image gallery</h4>
+                                    <a class="heading-elements-toggle"><i
+                                            class="la la-ellipsis-v font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <%- include("../includes/notification") %> 
+                                <div class="card-content collapse show">
+                                    <div class="card-body">
+                                        <form enctype="multipart/form-data" class="form" action="?_csrf=<%=csrf%>" method="post"  >
+                                            <div class="form-body main">
+                                                <h4 class="form-section"><i class="ft-home"></i>image gallery iformations</h4>
+
+                                                <div class="row main">
+                                                    
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> image gallery title in arabic</label>
+                                                            <textarea type="text" class="form-control" placeholder="enter title in arabic" name="title_ar"><%= bodyData ? bodyData.title_ar : gallery.title_ar %></textarea>
+                                                            <% if (validationError) { %>
+                                                                <% if (validationError.title_ar) { %>
+                                                                    <span class="text-danger"><%=validationError.title_ar[0].msg %></span>
+                                                                <% } %>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> image gallery title in english</label>
+                                                            <textarea type="text" class="form-control" placeholder="enter title in english" name="title_en"><%= bodyData ? bodyData.title_en : gallery.title_en %></textarea>
+                                                            <% if (validationError) { %>
+                                                                <% if (validationError.title_en) { %>
+                                                                    <span class="text-danger"><%=validationError.title_en[0].msg %></span>
+                                                                <% } %>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1">product id</label>
+                                                            <select  name="productId" class="language form-control">
+                                                                <option></option>
+                                                                <% products.forEach(element => { %>
+                                                                    <option <%= (bodyData ? bodyData.productId : gallery.productId) == element.id ? "selected" : "" %> value="<%= element.id %>"><%= element.productName_ar %></option>
+                                                                <% }) %>
+                                                            </select>
+                                                            <% if (validationError.productId) { %>
+                                                                <span class="text-danger"><%=validationError.productId[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label for="projectinput2"> image </label>
+                                                        <div class="custom-file">
+                                                            <input type="file"  name="image" class="custom-file-input" >
+                                                            <label class="custom-file-label" for="inputGroupFile01">Choose image</label>
+                                                        </div>
+                                                        <% if (validationError.image) { %>
+                                                            <span class="text-danger"><%=validationError.image[0].msg %></span>
+                                                        <% } %>
+                                                    </div>
+                                                    <div class="image col-12" >
+                                                        <input type="hidden" name="oldImage" value="<%= gallery.image %>">
+                                                        <img style="width:300px;height:300px" src="/assets/dashboard/Gallery/<%= gallery.image.split("--")[0] %>" alt="">
+                                                    </div>  
+                                                    <div class="col-md-4">
+                                                        <div class="form-group mt-1">
+                                                            <input type="checkbox" name="active"
+                                                                value="1"
+                                                                class="switch "
+                                                                <%= gallery.active ? "checked" : "" %>
+                                                                />
+                                                            <label
+                                                                class="card-title ml-1">Show in website </label>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+                                            <button type="submit" class="btn btn-primary col-12">
+                                                <i class="la la-check-square-o"></i> save
+                                            </button>
+                                        </form>
+
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- // Basic form layout section end -->
+            </div>
+        </div>
+    </div>
+
+     <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+    <script>
+        const allEditor = document.querySelectorAll( '.editor' )
+        allEditor.forEach(ele => {
+        ClassicEditor
+        .create( ele  , {
+             toolbar: [ 'heading', '|', 'bold', 'italic', 'link', ],
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                ]
+            },
+        })
+        .catch( error => {
+            console.error( error );
+        } );
+        })
+        
+    </script>
+    <%- include("../includes/footer") %> 
+    <%- include("../includes/footerScript") %> 
+</body>
+</html>

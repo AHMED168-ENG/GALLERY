@@ -1,0 +1,138 @@
+<%- include("../includes/head") %> 
+    <style> 
+    .dataTables_scrollBody {
+        overflow: visible !important;
+    }
+    .dataTables_filter {
+        text-align: right;
+    }
+    </style>
+    <%- include("../includes/navebar.ejs") %> 
+    <%- include("../includes/aside") %> 
+</head>
+<body class="vertical-layout vertical-menu 2-columns   menu-expanded fixed-navbar"
+data-open="click" data-menu="vertical-menu" data-col="2-columns">
+<div class="app-content content">
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-md-6 col-12 mb-2">
+                    <h3 class="content-header-title"> all messages</h3>
+                    <div class="row breadcrumbs-top">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/dashboard">main</a>
+                                </li>
+                                <li class="breadcrumb-item active"> all messages
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- DOM - jQuery events table -->
+                <section id="dom">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">all messages in site</h4>
+                                    <a class="heading-elements-toggle"><i
+                                            class="la la-ellipsis-v font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <%- include("../includes/notification") %> 
+
+                                <div class="card-content collapse show">
+                                    <div class="card-body card-dashboard ">
+                                        <table 
+                                            class="table display nowrap table-striped table-bordered scroll-horizontal " style="width:100%">
+                                            <thead>
+                                            <tr>
+                                                <th>message</th>
+                                                <th>Show in website</th>
+                                                <th>action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% messages.forEach(element => { %>
+                                                 <tr>
+                                         
+                                                        <td class="chang"><p><%- element.message %></p></td>
+                                                        <td><%- element.isSeen ? "Seen" : "Not Seen" %></td>
+                                                        <td><%= element.active ? "active" : "not active" %></td>
+
+                                                     
+                                                        <td style="position:relative">
+                                                            <a class="btn btn-secondary dropdown-toggle" href="#" data-toggle="dropdown">Actions</a>
+                                                            <ul class="dropdown-menu " style="box-shadow: 3px 3px 7px rgba(0,0,0,0.1);" aria-labelledby="dropdownMenuButton2">
+                                                                <li><a href="/dashboard/messages/<%= element.id %>" class="dropdown-item">See Message</a></li>
+                                                       
+                                                                <li>
+                                                                    <form class="d-inline-block" action="delete/?_csrf=<%=csrf%>" method="post" style="width:100%">
+                                                                        <input type="hidden" name="id" value="<%= element.id%>">
+                                                                        <button  onclick="return confirm('Are you sure you want to delete this item?');" class="dropdown-item d-block" style="cursor: pointer;width:100%;outline:0;border:0;background:none">delete</button>
+                                                                    </form>
+                                                                </li>
+                                                         
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                <% }) %>
+                                            </tbody>
+                                        </table>
+                                         <div class="pagination row">
+                                            <div class="col-md-4">
+                                                <div class="dataTables_info">Showing <%=  (curantPage - 1) * elements %> to <%=  ((curantPage - 1) * elements) + elements %> of <%= allElementCount %> entries</div>
+                                            </div>
+                                            <div class="col-md-4 dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+                                               <% if ((hasPrevious || hasNext)) { %>
+                                                <ul style="margin:0" class=" pagination">
+                                                    <% if (curantPage != 1) { %>
+                                                    <li id="DataTables_Table_0_previous" class="paginate_button page-item previous"><a class="page-link" href="?page=<%= curantPage - 1 %>">Previous</a></li>
+                                                    <% } %>
+                                                    <% if (curantPage != 1 &&  curantPage - 1 != 1) { %> 
+                                                     <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= 1 %>">1</a></li>
+                                                    <% } %>
+                                                    <% if (hasPrevious) { %>
+                                                     <li class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage - 1 %>"><%= curantPage - 1 %></a></li>
+                                                    <% } %>
+                                                    <li id="" class="paginate_button page-item active"><a class="page-link" href="?page=<%= curantPage %>"><%= curantPage %></a></li>
+                                                    <% if (hasNext) { %>
+                                                    <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage + 1 %>"><%= curantPage + 1 %></a></li>
+                                                    <% } %>
+                                                    <% if (curantPage !=  lastPage &&  curantPage + 1 != lastPage) { %>
+                                                    <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= lastPage %>"><%= lastPage %></a></li>
+                                                    <% } %>
+                                                    <% if (curantPage != lastPage) { %>
+                                                    <li id="DataTables_Table_0_next" class="paginate_button page-item next"><a class="page-link" href="?page=<%= curantPage + 1 %>">Next</a></li>  
+                                                    <% } %>
+
+                                                </ul>
+                                               <%}%>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+
+    <%- include("../includes/footer") %> 
+    <%- include("../includes/footerScript") %> 
+</body>
+</html>
+
+

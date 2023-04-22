@@ -1,0 +1,153 @@
+<%- include("../includes/head") %> 
+    <style> 
+    .dataTables_scrollBody {
+        overflow: visible !important;
+    }
+    .dataTables_filter {
+        text-align: right;
+    }
+    </style>
+    <%- include("../includes/navebar.ejs") %> 
+    <%- include("../includes/aside") %> 
+</head>
+<body class="vertical-layout vertical-menu 2-columns   menu-expanded fixed-navbar"
+data-open="click" data-menu="vertical-menu" data-col="2-columns">
+<div class="app-content content">
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-md-6 col-12 mb-2">
+                    <h3 class="content-header-title"> all Orders finished</h3>
+                    <div class="row breadcrumbs-top">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/dashboard">main</a>
+                                </li>
+                                <li class="breadcrumb-item active"> all Orders
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- DOM - jQuery events table -->
+                <section id="dom">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">all Orders finished in site</h4>
+                                    <a class="heading-elements-toggle"><i
+                                            class="la la-ellipsis-v font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <%- include("../includes/notification") %> 
+
+                                <div class="card-content collapse show">
+                                    <div class="card-body card-dashboard ">
+                                        <table 
+                                            class="table display nowrap table-striped table-bordered scroll-horizontal " style="width:100%">
+                                            <thead>
+                                            <tr>
+                                                <th>user image</th>
+                                                <th>user name</th>
+                                                <th>user phone</th>
+                                                <th>is seen</th>
+                                                <th>is finished</th>
+                                                <th>action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% allOrders.forEach(element => { %>
+                                                 <tr>   
+                                                        <% if (element.orderUser.image) { %>
+                                                            <td><img style="width:70px ; height:70px" src="/assets/dashboard/Users/<%= element.orderUser.image.split("--")[0] %>" alt=""></td>
+                                                        <% } else { %>
+                                                            <td><img style="width:70px ; height:70px" src="/assets/dashboard/defaultImages/avatar.png" alt=""></td>
+                                                        <%}%>                                                        
+                                                        <td><%= element.orderUser.fName + " " + element.orderUser.lName %></td>
+                                                        <td><%= element.orderUser.mobile %></td>
+                                                        <td><%= element.isSeen ? "seen" : "not seen" %></td>
+                                                        <td><%= element.isFinished ? "finished" : "not finished" %></td>
+
+                                                     
+                                                        <td style="position:relative">
+                                                            <a class="btn btn-secondary dropdown-toggle" href="#" data-toggle="dropdown">Actions</a>
+                                                            <ul class="dropdown-menu " style="box-shadow: 3px 3px 7px rgba(0,0,0,0.1);" aria-labelledby="dropdownMenuButton2">
+                                                                <li><a href="/dashboard/orders/<%= element.id %>" class="dropdown-item">See Order</a></li>    
+          
+                                                                <li>
+                                                                    <form class="d-inline-block" action="/dashboard/orders/finishOrder?_csrf=<%=csrf%>" method="post" style="width:100%">
+                                                                        <input type="hidden" name="isFinished" value="<%= element.isFinished %>">
+                                                                        <input type="hidden" name="id" value="<%= element.id %>">
+                                                                        <button  onclick="return '<%= element.isFinished %>' == 'false' ? confirm('Are you sure you want to finished this item?') : true " class="dropdown-item d-block" style="cursor: pointer;width:100%;outline:0;border:0;background:none"><%= element.isFinished ? "unfit" : "finished" %></button>
+                                                                    </form>
+                                                                </li>
+
+                                                                <li>
+                                                                    <form class="d-inline-block" action="/dashboard/orders/delete?_csrf=<%=csrf%>" method="post" style="width:100%">
+                                                                        <input type="hidden" name="id" value="<%= element.id%>">
+                                                                        <button class="dropdown-item d-block" style="cursor: pointer;width:100%;outline:0;border:0;background:none">delete</button>
+                                                                    </form>
+                                                                </li>
+                                                         
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                <% }) %>
+                                            </tbody>
+                                        </table>
+                                         <div class="pagination row">
+                                            <div class="col-md-4">
+                                                <div class="dataTables_info">Showing <%=  (curantPage - 1) * elements %> to <%=  ((curantPage - 1) * elements) + elements %> of <%= allElementCount %> entries</div>
+                                            </div>
+                                            <div class="col-md-4 dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+                                               <% if ((hasPrevious || hasNext)) { %>
+                                                <ul style="margin:0" class=" pagination">
+                                                    <% if (curantPage != 1) { %>
+                                                    <li id="DataTables_Table_0_previous" class="paginate_button page-item previous"><a class="page-link" href="?page=<%= curantPage - 1 %>">Previous</a></li>
+                                                    <% } %>
+                                                    <% if (curantPage != 1 &&  curantPage - 1 != 1) { %> 
+                                                     <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= 1 %>">1</a></li>
+                                                    <% } %>
+                                                    <% if (hasPrevious) { %>
+                                                     <li class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage - 1 %>"><%= curantPage - 1 %></a></li>
+                                                    <% } %>
+                                                    <li id="" class="paginate_button page-item active"><a class="page-link" href="?page=<%= curantPage %>"><%= curantPage %></a></li>
+                                                    <% if (hasNext) { %>
+                                                    <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage + 1 %>"><%= curantPage + 1 %></a></li>
+                                                    <% } %>
+                                                    <% if (curantPage !=  lastPage &&  curantPage + 1 != lastPage) { %>
+                                                    <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= lastPage %>"><%= lastPage %></a></li>
+                                                    <% } %>
+                                                    <% if (curantPage != lastPage) { %>
+                                                    <li id="DataTables_Table_0_next" class="paginate_button page-item next"><a class="page-link" href="?page=<%= curantPage + 1 %>">Next</a></li>  
+                                                    <% } %>
+
+                                                </ul>
+                                               <%}%>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+</div>
+
+    <%- include("../includes/footer") %> 
+    <%- include("../includes/footerScript") %> 
+</body>
+</html>
+
+

@@ -1,0 +1,105 @@
+<script src="/public/website/js/jquery-3.2.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+<script src="/public/website/lib/easing/easing.min.js"></script>
+<script src="/public/website/lib/owlcarousel/owl.carousel.min.js"></script>
+
+<!-- Contact Javascript File -->
+<script src="/public/website/mail/jqBootstrapValidation.min.js"></script>
+<script src="/public/website/mail/contact.js"></script>
+
+<!-- Template Javascript -->
+<script src="/public/website/js/main.js"></script>
+<script src="/public/website/js/navbar.js"></script>
+
+<!-- this script about search in navbare -->
+<script>
+  const classNavSearch = document.querySelector(".classNavSearch");
+  const searchUl = document.querySelector(".classNavSearch ul");
+  const inputSearch = document.querySelector(".classNavSearch input");
+
+  inputSearch.oninput = (e) => {
+    getProducts(e.target.value);
+  };
+
+  function getProducts(search) {
+    $.ajax({
+      url: "/search-product?search=" + search,
+      method: "get",
+      data: {},
+      success({ data }) {
+        emptyUl();
+        if (data.length > 0) {
+          data.forEach((element) => {
+            searchUl.innerHTML += `
+               <li class="d-flex align-items-center" onclick="addProductNameToSearch('${
+                 element["productName_" + "<%= lang %>"]
+               }')">
+                  <div class="image">
+                  <img
+                      src="/assets/dashboard/Products/${
+                        element.productImage.split("--")[0]
+                      }"
+                      alt=""
+                  />
+                  </div>
+                  <div class="info">
+                  <span>${element["productName_" + "<%= lang %>"]}</span>
+                  </div>
+              </li>`;
+          });
+        } else {
+          searchUl.innerHTML = "";
+        }
+      },
+      error(error) {
+        console.log(error);
+      },
+    });
+  }
+
+  // start add product name to search box
+  function addProductNameToSearch(search) {
+    inputSearch.value = search;
+    navigatFun(search);
+  }
+
+  // icon search
+  function searchIcon() {
+    const inputSearch = document.querySelector(".classNavSearch input");
+    // if (!inputSearch.value) return;
+    navigatFun(inputSearch.value);
+  }
+
+  // start navigat function
+  function navigatFun(search) {
+    const userID = "<%= userData ? userData.id : '' %>";
+    if (userID) {
+      addUserSearch(search, userID);
+    }
+    window.location.href =
+      window.location.origin + "/all-products?products=" + search;
+  }
+
+  // start add user search
+  function addUserSearch(search, userId) {
+    $.ajax({
+      url: "/add-user-search?_csrf=" + "<%= csrf %>",
+      method: "post",
+      data: { search: search, userId: userId },
+      success({ data }) {
+        console.log(data);
+      },
+      error(error) {
+        console.log(error);
+      },
+    });
+  }
+
+  //   reset ul from eny data
+  function emptyUl() {
+    searchUl.innerHTML = "";
+  }
+  document.onclick = emptyUl;
+  document.onscroll = emptyUl;
+</script>

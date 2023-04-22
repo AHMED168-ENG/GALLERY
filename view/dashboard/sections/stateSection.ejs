@@ -1,0 +1,221 @@
+<%- include("../includes/head") %> 
+
+
+
+    <%- include("../includes/navebar.ejs") %> 
+    <%- include("../includes/aside") %> 
+</head>
+<body class="vertical-layout vertical-menu 2-columns   menu-expanded fixed-navbar"
+data-open="click" data-menu="vertical-menu" data-col="2-columns">
+    <div class="app-content content">
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-md-6 col-12 mb-2">
+                    <div class="row breadcrumbs-top">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/dashboard">main </a>
+                                </li>
+                                <li class="breadcrumb-item active">stats page
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- Basic form layout section start -->
+                <section id="basic-form-layouts">
+                    <div class="row match-height">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title" id="basic-layout-form"> Edit stats section</h4>
+                                    <a class="heading-elements-toggle"><i
+                                            class="la la-ellipsis-v font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <%- include("../includes/notification") %> 
+                                <div class="card-content collapse show">
+                                    <div class="card-body">
+                                        <form enctype="application/x-www-form-urlencoded" class="statsSections" action="?_csrf=<%=csrf%>" class="form" method="post"  >
+                                            <div class="form-body main">
+                                                <h4 class="form-section"><i class="ft-home"></i> stats section information</h4>
+
+                                                <div class="row main">
+                                                    
+
+                                                    <div class="col-md-12">
+                                                     <h1>first block</h1>
+                                                     <hr>
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> enter text one in arabic</label>
+                                                            <textarea type="text" class="editor form-control" placeholder="enter text one in arabic" name="text_one_ar"><%- bodyData ? bodyData.text_one_ar : statsSection.text_one_ar %></textarea>
+                                                            <div class="errorLength"></div>
+                                                             <% if (validationError && validationError.text_one_ar) { %>
+                                                                   <span class="text-danger"><%=validationError.text_one_ar[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> enter text one in english</label>
+                                                            <textarea type="text" class=" editor form-control" placeholder="enter text one in english" name="text_one_en"><%- bodyData ? bodyData.text_one_en : statsSection.text_one_en %></textarea>
+                                                            <div class="errorLength"></div>
+                                                                <% if (validationError && validationError.text_one_en) { %>
+                                                                    <span class="text-danger"><%=validationError.text_one_en[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> enter icon one </label>
+                                                            <textarea type="text" class=" editor form-control" placeholder="enter icone one" name="icon_one"><%- bodyData ? bodyData.icon_one : statsSection.icon_one %></textarea>
+                                                            <div class="errorLength"></div>
+                                                                <% if (validationError && validationError.icon_one) { %>
+                                                                    <span class="text-danger"><%=validationError.icon_one[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+                                                    
+
+                                                    <div class="col-md-12">
+                                                     <h1>second block</h1>
+                                                     <hr>
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> enter text tow in arabic</label>
+                                                            <textarea type="text" class="editor form-control" placeholder="enter text tow in arabic" name="text_tow_ar"><%- bodyData ? bodyData.text_tow_ar : statsSection.text_tow_ar %></textarea>
+                                                            <div class="errorLength"></div>
+                                                             <% if (validationError && validationError.text_tow_ar) { %>
+                                                                   <span class="text-danger"><%=validationError.text_tow_ar[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> enter text tow in english</label>
+                                                            <textarea type="text" class=" editor form-control" placeholder="enter text tow in english" name="text_tow_en"><%- bodyData ? bodyData.text_tow_en : statsSection.text_tow_en %></textarea>
+                                                            <div class="errorLength"></div>
+                                                                <% if (validationError && validationError.text_tow_en) { %>
+                                                                    <span class="text-danger"><%=validationError.text_tow_en[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> enter icon tow </label>
+                                                            <textarea type="text" class=" editor form-control" placeholder="enter icone one" name="icon_tow"><%- bodyData ? bodyData.icon_tow : statsSection.icon_tow %></textarea>
+                                                            <div class="errorLength"></div>
+                                                                <% if (validationError && validationError.icon_tow) { %>
+                                                                    <span class="text-danger"><%=validationError.icon_tow[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+                                                    
+
+                                                    <div class="col-md-12">
+                                                     <h1>third block</h1>
+                                                     <hr>
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> enter text three in arabic</label>
+                                                            <textarea type="text" class="editor form-control" placeholder="enter text three in arabic" name="text_three_ar"><%- bodyData ? bodyData.text_three_ar : statsSection.text_three_ar %></textarea>
+                                                            <div class="errorLength"></div>
+                                                             <% if (validationError && validationError.text_three_ar) { %>
+                                                                   <span class="text-danger"><%=validationError.text_three_ar[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> enter text three in english</label>
+                                                            <textarea type="text" class=" editor form-control" placeholder="enter text three in english" name="text_three_en"><%- bodyData ? bodyData.text_three_en : statsSection.text_three_en %></textarea>
+                                                            <div class="errorLength"></div>
+                                                                <% if (validationError && validationError.text_three_en) { %>
+                                                                    <span class="text-danger"><%=validationError.text_three_en[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> enter icon three </label>
+                                                            <textarea type="text" class=" editor form-control" placeholder="enter icone one" name="icon_three"><%- bodyData ? bodyData.icon_three : statsSection.icon_three %></textarea>
+                                                            <div class="errorLength"></div>
+                                                                <% if (validationError && validationError.icon_three) { %>
+                                                                    <span class="text-danger"><%=validationError.icon_three[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                     <h1>fourth block</h1>
+                                                     <hr>
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> enter text four in arabic</label>
+                                                            <textarea type="text" class="editor form-control" placeholder="enter text four in arabic" name="text_four_ar"><%- bodyData ? bodyData.text_four_ar : statsSection.text_four_ar %></textarea>
+                                                            <div class="errorLength"></div>
+                                                             <% if (validationError && validationError.text_four_ar) { %>
+                                                                   <span class="text-danger"><%=validationError.text_four_ar[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> enter text four in english</label>
+                                                            <textarea type="text" class=" editor form-control" placeholder="enter text four in english" name="text_four_en"><%- bodyData ? bodyData.text_four_en : statsSection.text_four_en %></textarea>
+                                                            <div class="errorLength"></div>
+                                                                <% if (validationError && validationError.text_four_en) { %>
+                                                                    <span class="text-danger"><%=validationError.text_four_en[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> enter icon four </label>
+                                                            <textarea type="text" class=" editor form-control" placeholder="enter icone one" name="icon_four"><%- bodyData ? bodyData.icon_four : statsSection.icon_four %></textarea>
+                                                            <div class="errorLength"></div>
+                                                                <% if (validationError && validationError.icon_four) { %>
+                                                                    <span class="text-danger"><%=validationError.icon_four[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+                                            <button type="submit"  class="btn btn-primary col-12">
+                                                <i class="la la-check-square-o"></i> save
+                                            </button>
+                                        </form>
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- // Basic form layout section end -->
+            </div>
+        </div>
+    </div>
+
+    <%- include("../includes/footer") %> 
+    <%- include("../includes/footerScript") %> 
+ 
+</body>
+</html>

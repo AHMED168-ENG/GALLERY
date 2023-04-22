@@ -1,0 +1,520 @@
+
+<!-- Begin SideBar-->
+<div
+  class="main-menu menu-fixed menu-dark menu-accordion menu-shadow"
+  data-scroll-to-active="true"
+>
+  <div class="main-menu-content">
+    <ul
+    class="navigation navigation-main"
+      id="main-menu-navigation"
+      data-menu="menu-navigation"
+    >
+      <li class="nav-item <%= URL == "" ? "active" : "" %>">
+        <a href="/dashboard"
+          ><i class="la la-mouse-pointer"></i
+          ><span class="menu-title" data-i18n="nav.add_on_drag_drop.main"
+            >Main
+          </span></a
+        >
+      </li>
+
+
+
+      <li class="nav-item">
+        <a href=""
+          ><i class="fas fa-users"></i>
+          <span class="menu-title" data-i18n="nav.dash.main"
+            >users</span
+          >
+          
+          <span
+            class="badge badge badge-success badge-pill float-right mr-2"
+          ><%= FeaturesNumber.usersNotActive || 0 %></span>
+        </a>
+   
+        <ul class="menu-content">
+          <% if (adminData.roles == "SuperAdmin") { %>
+          <li class="<%= URL == "/users/admins/" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/users/admins/"
+              data-i18n="nav.dash.ecommerce"
+            >
+              All Admins
+            </a>
+          </li>
+          <% } %>
+          <li class="<%= URL == "/users/" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/users/"
+              data-i18n="nav.dash.ecommerce"
+            >
+              All Users
+            </a>
+          </li>
+          <li class=" <%= URL == "/users/create" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/users/create"
+              data-i18n="nav.dash.crypto"
+              >Add User
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a href=""
+          ><i class="fas fa-certificate"></i>
+          <span class="menu-title" data-i18n="nav.dash.main"
+            >main categories</span
+          >
+          <span
+            class="badge badge badge-success badge-pill float-right mr-2"
+          ><%= FeaturesNumber.mainCategorysNotActive || 0 %></span>
+        </a>
+        <ul class="menu-content">
+          <li class="<%= URL == "/main-categorys/" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/main-categorys/"
+              data-i18n="nav.dash.ecommerce"
+            >
+              All main categories
+            </a>
+          </li>
+          <li class=" <%= URL == "/main-categorys/create" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/main-categorys/create"
+              data-i18n="nav.dash.crypto"
+              >Add main categorie
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a href=""
+          ><i class="fas fa-certificate"></i>
+          <span class="menu-title" data-i18n="nav.dash.main"
+            >sup categories</span
+          >
+          <span
+            class="badge badge badge-success badge-pill float-right mr-2"
+          ><%= FeaturesNumber.supCategorysNotActive || 0 %></span>
+        </a>
+        <ul class="menu-content">
+          <li class="<%= URL == "/sup-categorys/" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/sup-categorys/"
+              data-i18n="nav.dash.ecommerce"
+            >
+              All sup categories
+            </a>
+          </li>
+          <li class=" <%= URL == "/sup-categorys/create" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/sup-categorys/create"
+              data-i18n="nav.dash.crypto"
+              >Add sup categorie
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a href=""
+          ><i class="fab fa-leanpub"></i>
+          <span class="menu-title" data-i18n="nav.dash.main"
+            >products</span
+          >
+          <span
+            class="badge badge badge-success badge-pill float-right mr-2"
+          ><%= FeaturesNumber.productsNotActive || 0 %></span>
+        </a>
+        <ul class="menu-content">
+          <li class="<%= URL == "/products/" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/products/"
+              data-i18n="nav.dash.ecommerce"
+            >
+              All Products
+            </a>
+          </li>
+          <li class=" <%= URL == "/products/create" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/products/create"
+              data-i18n="nav.dash.crypto"
+              >Add products
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a href=""
+          ><i class="fa-solid fa-crosshairs"></i>
+          <span class="menu-title" data-i18n="nav.dash.main"
+            >Sliders</span
+          >
+          <span
+            class="badge badge badge-danger badge-pill float-right mr-2"
+          ><%= FeaturesNumber.slidersNotActive || 0 %></span>
+        </a>
+        <ul class="menu-content">
+          <li class=" <%= URL == "/sliders/" ? "active" : "" %>">
+            <a
+              class="menu-item "
+              href="/dashboard/sliders/"
+              data-i18n="nav.dash.ecommerce"
+            >
+              All Sliders
+            </a>
+          </li>
+          <li class=" <%= URL == "/sliders/create" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/sliders/create"
+              data-i18n="nav.dash.crypto"
+            >
+              Add Slider
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- <li class="nav-item">
+        <a href=""
+          ><i class="fas fa-handshake"></i>
+          <span class="menu-title" data-i18n="nav.dash.main">
+            Offers</span
+          >
+          <span
+            class="badge badge badge-warning badge-pill float-right mr-2"
+          ><%= FeaturesNumber.allOffers || 0 %></span>
+        </a>
+        <ul class="menu-content">
+          <li class=" <%= URL == "/offers/" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/offers/"
+              data-i18n="nav.dash.ecommerce"
+            >
+             All Offers %>
+            </a>
+          </li>
+          <li class="<%= URL == "/offers/create" ? "active" : "" %>">
+            <a
+              class="menu-item "
+              href="/dashboard/offers/create"
+              data-i18n="nav.dash.crypto"
+            >
+              Add Offer
+            </a>
+          </li>
+        </ul>
+      </li> -->
+
+      <li class="nav-item">
+        <a href=""
+          ><i class="far fa-comments"></i>
+          <span class="menu-title" data-i18n="nav.dash.main">Testmonials</span>
+          <span
+            class="badge badge badge-danger badge-pill float-right mr-2"
+          ><%= FeaturesNumber.testmonialNotActive || 0 %></span>
+        </a>
+        <ul class="menu-content">
+          <li class="<%= URL == "/testmonials/" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/testmonials/"
+              data-i18n="nav.dash.ecommerce"
+            >
+              All Testmonials
+            </a>
+          </li>
+          <li class="<%= URL == "/testmonials/create" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/testmonials/create"
+              data-i18n="nav.dash.crypto"
+              >Add Testmonials
+            </a>
+          </li>
+        </ul>
+      </li>
+
+  
+      <li class="nav-item">
+        <a href=""
+          ><i class="fab fa-jedi-order"></i>
+          <span class="menu-title" data-i18n="nav.dash.main">orders</span>
+          <span
+            class="badge badge badge-info badge-pill float-right mr-2"
+          ><%= FeaturesNumber.orderNotActive || 0 %></span>
+        </a>
+        <ul class="menu-content">
+          <li class="<%= URL == "/orders/" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/orders/"
+              data-i18n="nav.dash.ecommerce"
+            >
+              All Orders
+            </a>
+          </li>
+          <li class="<%= URL == "/orders/not-seen/" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/orders/not-seen/"
+              data-i18n="nav.dash.ecommerce"
+            >
+              All Orders not seen
+            </a>
+          </li>
+          <li class="<%= URL == "/orders/not-finished/" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/orders/not-finished/"
+              data-i18n="nav.dash.ecommerce"
+            >
+              All Orders not finished
+            </a>
+          </li>
+          <li class="<%= URL == "/orders/finished/" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/orders/finished/"
+              data-i18n="nav.dash.ecommerce"
+            >
+              All Orders finished
+            </a>
+          </li>
+        </ul>
+      </li>
+  
+  
+      <li class="nav-item">
+        <a href=""
+          ><i class="fas fa-comments"></i>
+          <span class="menu-title" data-i18n="nav.dash.main">messages</span>
+          <span
+            class="badge badge badge-info badge-pill float-right mr-2"
+          ><%= FeaturesNumber.allMessages || 0 %></span>
+        </a>
+        <ul class="menu-content">
+          <li class="<%= URL == "/messages/" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/messages/"
+              data-i18n="nav.dash.ecommerce"
+            >
+              All messages
+            </a>
+          </li>
+          <li class="<%= URL == "/messages/not-seen/" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/messages/not-seen/"
+              data-i18n="nav.dash.ecommerce"
+            >
+              All messages not seen
+            </a>
+          </li>
+        </ul>
+      </li>
+  
+      <li class="nav-item">
+        <a href=""
+          ><i class="fas fa-images"></i>
+          <span class="menu-title" data-i18n="nav.dash.main">Gallery</span>
+          <span
+            class="badge badge badge-info badge-pill float-right mr-2"
+          ><%= FeaturesNumber.allImgGallery || 0 %></span>
+        </a>
+        <ul class="menu-content">
+          <li class="<%= URL == "/gallery/" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/gallery/"
+              data-i18n="nav.dash.ecommerce"
+            >
+              All Image Gallery
+            </a>
+          </li>
+          <li class="<%= URL == "/gallery/create" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/gallery/create"
+              data-i18n="nav.dash.crypto"
+              > Add Image Gallery
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a href=""
+          ><i class="fa fa-question-circle"></i>
+          <span class="menu-title" data-i18n="nav.dash.main">Faqs</span>
+          <span
+            class="badge badge badge-info badge-pill float-right mr-2"
+          ><%= FeaturesNumber.faqsNotActive || 0 %></span>
+        </a>
+        <ul class="menu-content">
+          <li class="<%= URL == "/questions/" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/questions/"
+              data-i18n="nav.dash.ecommerce"
+            >
+              All questions
+            </a>
+          </li>
+          <li class="<%= URL == "/questions/create" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/questions/create"
+              data-i18n="nav.dash.crypto"
+              >Add Questions
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a href=""
+          ><i class="fas fa-pager"></i>
+          <span class="menu-title" data-i18n="nav.dash.main">Websit Sections</span>
+          
+        </a>
+        <ul class="menu-content">
+ 
+            <li class="<%= URL == "/front-sections/stats-section" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/front-sections/stats-section"
+              data-i18n="nav.dash.crypto"
+              > stats section
+            </a>
+          </li>
+          <!-- </li>
+            <li class="<%= URL == "/our-introduction" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/our-introduction"
+              data-i18n="nav.dash.crypto"
+              > our introduction
+            </a>
+          </li>
+          <li class="<%= URL == "/why-choose-us" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/why-choose-us"
+              data-i18n="nav.dash.crypto"
+              > why choose us
+            </a>
+          </li>
+          <li class="<%= URL == "/Last-page" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/Last-page"
+              data-i18n="nav.dash.crypto"
+              > last page
+            </a>
+          </li>
+          <li class="<%= URL == "/after-fun-facts" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/after-fun-facts"
+              data-i18n="nav.dash.crypto"
+              > after fun facts
+            </a>
+          </li>
+          <li class="<%= URL == "/instructors-skills" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/instructors-skills"
+              data-i18n="nav.dash.ecommerce"
+            >
+              instructors skills
+            </a>
+          </li>
+          <li class="<%= URL == "/about" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/about"
+              data-i18n="nav.dash.ecommerce"
+            >
+              About
+            </a>
+          </li> -->
+
+          <!-- <li class="<%= URL == "/Benefits" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/Benefits"
+              data-i18n="nav.dash.crypto"
+              > Get Some Benefits
+            </a>
+          </li>
+          <li class="<%= URL == "/Dive" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/Dive"
+              data-i18n="nav.dash.crypto"
+              > Haw We Dive
+            </a>
+          </li>
+          <li class="<%= URL == "/Discover" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/Discover"
+              data-i18n="nav.dash.crypto"
+              > Discover New World
+            </a>
+          </li>
+        
+          <li class="<%= URL == "/About" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/About"
+              data-i18n="nav.dash.crypto"
+              > About Scubo Center
+            </a>
+          </li>
+          <li class="<%= URL == "/Benefits" ? "active" : "" %>">
+            <a
+              class="menu-item"
+              href="/dashboard/Benefits"
+              data-i18n="nav.dash.crypto"
+              > Join And Get Some Benefits
+            </a>
+          </li> -->
+        </ul>
+      </li>
+      
+      <li class="nav-item <%= URL == "/app-setting" ? "active" : "" %>">
+        <a href="/dashboard/app-setting"
+          ><i class="fas fa-cogs"></i>
+          <span class="menu-title" data-i18n="nav.dash.main">web seting</span>
+          
+        </a>
+       
+      </li>
+
+    </ul>
+  </div>
+</div>
+
+<!--End Sidebare-->
+
+
+

@@ -1,0 +1,391 @@
+
+<%- include("../includes/head.ejs") %>
+
+</head>
+<body class="vertical-layout vertical-menu 2-columns   menu-expanded fixed-navbar"
+data-open="click" data-menu="vertical-menu" data-col="2-columns">
+    <%- include("../includes/navebar") %> 
+    <%- include("../includes/aside") %> 
+
+    <div class="app-content content">
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-md-6 col-12 mb-2">
+                    <div class="row breadcrumbs-top">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/dashboard">main </a>
+                                </li>
+                                <li class="breadcrumb-item active">website setting
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- Basic form layout section start -->
+                <section id="basic-form-layouts">
+                    <div class="row match-height">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title" id="basic-layout-form"> Edit website setting</h4>
+                                    <a class="heading-elements-toggle"><i
+                                            class="la la-ellipsis-v font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <%- include("../includes/notification") %> 
+                                <div class="card-content collapse show">
+                                    <div class="card-body">
+                                        <form enctype="multipart/form-data" action="?_csrf=<%=csrf%>" class="form" method="post"  >
+                                            <div class="form-body main">
+                                                <h4 class="form-section"><i class="ft-home"></i> website setting Information</h4>
+
+                                                <div class="row main">
+                                                    
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> Summary of the company in arabic</label>
+                                                            <textarea type="text" class="editor" placeholder="Summary of the company in arabic" name="summary_ar"><%= bodyData ? bodyData.summary_ar : appSetting.summary_ar %></textarea>
+                                                             <% if (validationError && validationError.summary_ar) { %>
+                                                                   <span class="text-danger"><%=validationError.summary_ar[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> Summary of the company in english</label>
+                                                            <textarea class="editor " placeholder="Summary of the company in english" name="summary_en"><%= bodyData ? bodyData.summary_en : appSetting.summary_en %></textarea>
+                                                            <% if (validationError && validationError.summary_en) { %>
+                                                                   <span class="text-danger"><%=validationError.summary_en[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> addres in arabic</label>
+                                                            <input type="text" class="form-control" placeholder="addres in arabic" name="addres_ar" value="<%= bodyData ? bodyData.addres_ar : appSetting.addres_ar %>">
+                                                             <% if (validationError && validationError.addres_ar) { %>
+                                                                   <span class="text-danger"><%=validationError.addres_ar[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput1"> addres in english</label>
+                                                            <input class="form-control" type="text" placeholder="addres in english" name="addres_en" value="<%= bodyData ? bodyData.addres_en : appSetting.addres_en %>">
+                                                            <% if (validationError && validationError.addres_en) { %>
+                                                                   <span class="text-danger"><%=validationError.addres_en[0].msg %></span>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row ">
+                                                    <div class="col-md-6">
+                                                        <h2>Basic information:</h2>
+                                                        <hr>
+                                                         <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> sit name arabic </label>
+                                                                <input class="form-control" type="text" placeholder="enter web sit name arabic" name="sitName_ar" value="<%= bodyData ? bodyData.sitName_ar : appSetting.sitName_ar %>">
+                                                                <% if (validationError && validationError.sitName_ar) { %>
+                                                                    <span class="text-danger"><%=validationError.sitName_ar[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+                                                         <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> sit name english </label>
+                                                                <input class="form-control" type="text" placeholder="enter web sit name english" name="sitName_en" value="<%= bodyData ? bodyData.sitName_en : appSetting.sitName_en %>">
+                                                                <% if (validationError && validationError.sitName_en) { %>
+                                                                    <span class="text-danger"><%=validationError.sitName_en[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                         <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> Nickname - abbreviation name </label>
+                                                                <input class="form-control" type="text" placeholder="enter Nickname - abbreviation name" name="companyNickName" value="<%= bodyData ? bodyData.companyNickName : appSetting.companyNickName %>">
+                                                                <% if (validationError && validationError.companyNickName) { %>
+                                                                    <span class="text-danger"><%=validationError.companyNickName[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                         <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> Slogan </label>
+                                                                <input class="form-control" type="text"  placeholder="enter Slogan" name="slogan" value="<%= bodyData ? bodyData.slogan : appSetting.slogan %>">
+                                                                <% if (validationError && validationError.slogan) { %>
+                                                                    <span class="text-danger"><%=validationError.slogan[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                         <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> Website address </label>
+                                                                <input type="text"  class="form-control" placeholder="enter Website address" name="websiteAddress" value="<%= bodyData ? bodyData.websiteAddress : appSetting.websiteAddress %>">
+                                                                <% if (validationError && validationError.websiteAddress) { %>
+                                                                    <span class="text-danger"><%=validationError.websiteAddress[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                         <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> Official email </label>
+                                                                <input type="text"  class="form-control" placeholder="enter Official email" name="officialEmail" value="<%= bodyData ? bodyData.officialEmail : appSetting.officialEmail %>">
+                                                                <% if (validationError && validationError.officialEmail) { %>
+                                                                    <span class="text-danger"><%=validationError.officialEmail[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                         <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> Phone number </label>
+                                                                <input type="text"  class="form-control" placeholder="enter Phone number" name="phoneNumber" value="<%= bodyData ? bodyData.phoneNumber : appSetting.phoneNumber %>">
+                                                                <% if (validationError && validationError.phoneNumber) { %>
+                                                                    <span class="text-danger"><%=validationError.phoneNumber[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                         <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> Mobile </label>
+                                                                <input type="text"  class="form-control" placeholder="enter Mobile" name="mobile" value="<%= bodyData ? bodyData.mobile : appSetting.mobile %>">
+                                                                <% if (validationError && validationError.mobile) { %>
+                                                                    <span class="text-danger"><%=validationError.mobile[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                         <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> Fax </label>
+                                                                <input type="text"  class="form-control" placeholder="enter Fax " name="fax" value="<%= bodyData ? bodyData.fax : appSetting.fax %>">
+                                                                <% if (validationError && validationError.fax) { %>
+                                                                    <span class="text-danger"><%=validationError.fax[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+                                                        <h2>Social network:</h2>
+                                                        <hr>
+                                                        
+                                                         <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> Facebook  </label>
+                                                                <input type="text"  class="form-control" placeholder="enter Facebook link" name="facebookLink" value="<%= bodyData ? bodyData.facebookLink : appSetting.facebookLink %>">
+                                                                <% if (validationError && validationError.facebookLink) { %>
+                                                                    <span class="text-danger"><%=validationError.facebookLink[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                         <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> Twitter </label>
+                                                                <input type="text"  value="<%= bodyData ? bodyData.twitterLink : appSetting.twitterLink %>" class="form-control" placeholder="enter Twitter link" name="twitterLink">
+                                                                <% if (validationError && validationError.twitterLink) { %>
+                                                                    <span class="text-danger"><%=validationError.twitterLink[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                         <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> Instagram </label>
+                                                                <input type="text"  class="form-control" value="<%= bodyData ? bodyData.instagramLink : appSetting.instagramLink %>" placeholder="enter Instagram link" name="instagramLink">
+                                                                <% if (validationError && validationError.instagramLink) { %>
+                                                                    <span class="text-danger"><%=validationError.instagramLink[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                         <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> tiktok </label>
+                                                                <input type="text"  class="form-control" value="<%= bodyData ? bodyData.pinterestLink : appSetting.pinterestLink %>" placeholder="enter tiktok link" name="pinterestLink">
+                                                                <% if (validationError && validationError.pinterestLink) { %>
+                                                                    <span class="text-danger"><%=validationError.pinterestLink[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                         <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> Youtube Link </label>
+                                                                <input type="text"  class="form-control" value="<%= bodyData ? bodyData.YoutubeLink : appSetting.YoutubeLink %>" placeholder="enter youtube link" name="YoutubeLink">
+                                                                <% if (validationError && validationError.YoutubeLink) { %>
+                                                                    <span class="text-danger"><%=validationError.YoutubeLink[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <div class="form-group mt-1">
+                                                                <input type="checkbox" name="active"
+                                                                    value="1"
+                                                                    class="switch "
+                                                                    <%= appSetting.active ? "checked" : "" %>
+                                                                    />
+                                                                <label sclass="card-title ml-1">sit open </label>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="col-md-6" >
+                                                        <h2>Modul SEO (Search Engine Optimization)</h2>
+                                                        <hr>
+
+                                                        
+                                                        <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> arabic Keywords (Keyword search for Google, Bing, etc) separet with ' , '</label>
+                                                                <textarea type="text" class="form-control " placeholder="English Keywords (Keyword search for Google, Bing, etc)" name="metakeywords_ar" ><%= bodyData ? bodyData.metaKeywords_ar : appSetting.metakeywords_ar %></textarea>
+                                                                <% if (validationError && validationError.metakeywords_ar) { %>
+                                                                    <span class="text-danger"><%=validationError.metakeywords_ar[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> english Keywords (Keyword search for Google, Bing, etc) separet with ' , ' </label>
+                                                                <textarea type="text" class="form-control  " placeholder="english Keywords (Keyword search for Google, Bing, etc)" name="metakeywords_en" ><%= bodyData ? bodyData.metakeywords_en : appSetting.metakeywords_en %></textarea>
+                                                                <% if (validationError && validationError.metakeywords_en) { %>
+                                                                    <span class="text-danger"><%=validationError.metakeywords_en[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> arabic description for chrome engine</label>
+                                                                <textarea type="text" class="form-control" placeholder="arabic description (Keyword search for Google, Bing, etc)" name="metaDescription_ar"><%= bodyData ? bodyData.description_ar : appSetting.metaDescription_ar %></textarea>
+                                                                <% if (validationError && validationError.metaDescription_ar) { %>
+                                                                    <span class="text-danger"><%=validationError.metaDescription_ar[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> english description for chrome engine</label>
+                                                                <textarea type="text" class="form-control" placeholder="english description (Keyword search for Google, Bing, etc)" name="metaDescription_en"><%= bodyData ? bodyData.metaDescription_en : appSetting.metaDescription_en %></textarea>
+                                                                <% if (validationError && validationError.metaDescription_en) { %>
+                                                                    <span class="text-danger"><%=validationError.metaDescription_en[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+                                                        <h2>Google Map</h2>
+                                                        <hr>
+                                                        <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput1"> Google Map</label>
+                                                                <textarea style="min-height:120px" type="text" class="form-control " placeholder="enter Google Map" name="ifream"><%= bodyData ? bodyData.ifream : appSetting.ifream %></textarea>
+                                                                <% if (validationError && validationError.ifream) { %>
+                                                                    <span class="text-danger"><%=validationError.ifream[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+                                                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d27626.078478598676!2d31.345132099999994!3d30.0580864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1675947095790!5m2!1sen!2seg" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+                                                        <div class="image col-12" style="padding:0;background:#eee">
+                                                            <img style="width:100%;height:300px" src="/assets/dashboard/AppSetting/<%= appSetting.logo ? appSetting.logo.split("--")[0] : "avatar.jpg" %>" alt="">
+                                                        </div>
+                                                        <div class="col-md-12" style="padding:0">
+                                                            <div class="form-group">
+                                                                <label for="projectinput2"> website setting logo prefer 150 * 40 pexels</label>
+                                                                <div class="custom-file">
+                                                                    <input type="file" name="logo" class="custom-file-input">
+                                                                    <input type="hidden" value="<%= appSetting.logo %>" name="oldImage" class="custom-file-input">
+                                                                    <label class="custom-file-label">Choose file</label>
+                                                                </div>
+                                                                <% if (validationError && validationError.image) { %>
+                                                                    <span class="text-danger"><%=validationError.image[0].msg %></span>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <button type="submit" class="btn btn-primary col-12">
+                                                <i class="la la-check-square-o"></i> save
+                                            </button>
+                                        </form>
+
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- // Basic form layout section end -->
+            </div>
+        </div>
+    </div>
+
+    <%- include("../includes/footer") %> 
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.0/classic/ckeditor.js"></script>
+    <script type="text/javascript">
+        const allEditor = document.querySelectorAll( '.editor' )
+        console.log( allEditor[0])
+        document.onclick = function() {
+            console.log( allEditor[0].value)
+        }
+        allEditor.forEach(ele => {
+        ClassicEditor
+        .create( ele, {
+            toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                ]
+            },
+        } )
+        .catch( error => {
+            console.log( error );
+        } );
+        })
+
+    // ClassicEditor
+    //     .create( document.querySelector( '#ar_body' ), {
+    //         language: 'ar',
+    //         toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+    //         heading: {
+    //             options: [
+    //                 { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+    //                 { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+    //                 { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+    //                 { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+    //             ]
+    //         }
+    //     } )
+    //     .catch( error => {
+    //         console.log( error );
+    //     } );
+
+    </script>
+    <%- include("../includes/footerScript") %> 
+
+</body>
+</html>

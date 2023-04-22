@@ -1,0 +1,99 @@
+
+<%- include("../inclueds/head")  %>
+<link rel="stylesheet" href="/public/website/css/faqs.css">
+</head>
+<body>
+<%- include("../inclueds/upperNavbare")  %> 
+<%- include("../inclueds/lowerNavbare")  %> 
+<!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="/home">Home</a>
+                    <a class="breadcrumb-item text-dark" href="/all-products">Shop</a>
+                    <span class="breadcrumb-item active">Faqs</span>
+                </nav>
+                <%- include("../inclueds/notification.ejs") %> 
+            </div>    
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- faqs Start -->
+    <div class="all_faqs">
+    <div class="container-fluid">
+         <div class="row px-xl-5">
+            <div class="col-12">
+                <h3 class="header">Frequently Asked Questions</h3>
+                <div class="accordion">
+                    <% allfaqs.forEach((element , index) => { %>
+                        <div class="accordion-item ">
+                            <button id="accordion-button-1" aria-expanded="<%= index == 0 ? true : false %>">
+                                <span class="accordion-title"
+                                ><%= element["question_" + lang] %></span
+                                ><span class="icon" aria-hidden="true"></span>
+                            </button>
+                            <div class="accordion-content">
+                                <%- element["ansower_" + lang] %>
+                            </div>
+                        </div>                    
+                    <% }) %>
+                </div>
+            </div>
+            
+        </div>
+        <br>
+        <div class="pagination row px-xl-5">
+            <div class="col-md-4">
+                    <div class="dataTables_info">Showing <%=  (curantPage - 1) * elements %> to <%=  ((curantPage - 1) * elements) + elements %> of <%= allElementCount %> entries</div>
+            </div>
+            <div class="col-md-4 dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+                    <% if ((hasPrevious || hasNext)) { %>
+                    <ul style="margin:0 ;justify-content: center;" class=" pagination">
+                        <% if (curantPage != 1) { %>
+                        <li id="DataTables_Table_0_previous" class="paginate_button page-item previous"><a class="page-link" href="?page=<%= curantPage - 1 %>">Previous</a></li>
+                        <% } %>
+                        <% if (curantPage != 1 &&  curantPage - 1 != 1) { %> 
+                            <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= 1 %>">1</a></li>
+                        <% } %>
+                        <% if (hasPrevious) { %>
+                            <li class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage - 1 %>"><%= curantPage - 1 %></a></li>
+                        <% } %>
+                        <li id="" class="paginate_button page-item active"><a class="page-link" href="?page=<%= curantPage %>"><%= curantPage %></a></li>
+                        <% if (hasNext) { %>
+                        <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage + 1 %>"><%= curantPage + 1 %></a></li>
+                        <% } %>
+                        <% if (curantPage !=  lastPage &&  curantPage + 1 != lastPage) { %>
+                        <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= lastPage %>"><%= lastPage %></a></li>
+                        <% } %>
+                        <% if (curantPage != lastPage) { %>
+                        <li id="DataTables_Table_0_next" class="paginate_button page-item next"><a class="page-link" href="?page=<%= curantPage + 1 %>">Next</a></li>  
+                        <% } %>
+
+                    </ul>
+                    <%}%>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- faqs End -->
+
+
+<%- include("../inclueds/footer")  %>
+<%- include("../inclueds/footer_script")  %>
+<script src="/public/website/js/sweetalert.min.js"></script>
+<script src="/public/website/js/faqs.js"></script>
+</body>
+    
+
+
+
+
+
+
+
+

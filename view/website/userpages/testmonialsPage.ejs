@@ -1,0 +1,242 @@
+
+<%- include("../inclueds/head")  %>
+<link rel="stylesheet" href="/public/website/css/testmonials.css">
+</head>
+<body>
+<%- include("../inclueds/upperNavbare")  %> 
+<%- include("../inclueds/lowerNavbare")  %> 
+<!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="/home">Home</a>
+                    <a class="breadcrumb-item text-dark" href="/all-products">Shop</a>
+                    <span class="breadcrumb-item active">testmonials</span>
+                </nav>
+                <%- include("../inclueds/notification.ejs") %> 
+            </div>    
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Cart Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <div class="addTestMonial ">
+                    <form onsubmit="addTestmonial(event)" class="form testmonialForm">
+                        <div class="form-group">
+                            <label for="projectinput1"> enter testmonial in arabic <%= numberOfLetters %> Letters maximum</label>
+                            <textarea class="form-control" placeholder="enter testmonial in arabic"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="projectinput1"> enter testmonial in english <%= numberOfLetters %> Letters maximum</label>
+                            <textarea class="form-control" placeholder="enter testmonial in arabic"></textarea>
+                        </div>
+                        <div class="productRate d-flex align-items-center mb-3">
+                            <% [1,2,3,4,5].forEach(ele => { %>
+                                <i class="far fa-star"></i>
+                            <% }) %>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Creat Your Testmonials</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div style="background:#eee" class=" col-lg-12 table-responsive mb-5">
+                <% if (allTestmonials.length > 0) { %>
+                    <div class="row">
+                        <% allTestmonials.forEach(element => { %>
+                            <div class="col-md-4">
+                                <div class=" testmonial">
+                                <blockquote>
+                                    <p><%= element["testmonial_" + lang]%></p>
+                                    <div class="arrow"></div>
+                                </blockquote>
+                                <img src="<%= element.testmonialsUser.image ? "/assets/dashboard/Users/" + element.testmonialsUser.image.split("--")[0] : "/assets/dashboard/defaultImages/avatar.png" %>" alt="sq-sample3" />
+                                <div class="author">
+                                    <h5 class="d-flex align-items-center justify-content-between">
+                                        <span class="name"><%= element.testmonialsUser.fName + " " + element.testmonialsUser.lName %></span>
+                                        <span class="text-primary  d-flex align-items-center justify-content-center mb-1">  
+                                            <% [1,2,3,4,5].forEach(ele => { %>
+                                                <i class="<%= element.rate >= ele ? "fas" : "far" %> fa-star"></i>
+                                            <% }) %>
+                                        </span>
+                                    </h5>
+                                </div>
+                                </div> 
+                            </div>
+                        <% }) %>
+                    </div>
+                <% } else { %>
+                    <div class="alert alert-danger">No testmonials hir to show</div>
+                <% } %>
+              
+            </div>
+        </div>
+        <div class="pagination row px-xl-5">
+            <div class="col-md-4">
+                    <div class="dataTables_info">Showing <%=  (curantPage - 1) * elements %> to <%=  ((curantPage - 1) * elements) + elements %> of <%= allElementCount %> entries</div>
+            </div>
+            <div class="col-md-4 dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+                    <% if ((hasPrevious || hasNext)) { %>
+                    <ul style="margin:0 ;justify-content: center;" class=" pagination">
+                        <% if (curantPage != 1) { %>
+                        <li id="DataTables_Table_0_previous" class="paginate_button page-item previous"><a class="page-link" href="?page=<%= curantPage - 1 %>">Previous</a></li>
+                        <% } %>
+                        <% if (curantPage != 1 &&  curantPage - 1 != 1) { %> 
+                            <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= 1 %>">1</a></li>
+                        <% } %>
+                        <% if (hasPrevious) { %>
+                            <li class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage - 1 %>"><%= curantPage - 1 %></a></li>
+                        <% } %>
+                        <li id="" class="paginate_button page-item active"><a class="page-link" href="?page=<%= curantPage %>"><%= curantPage %></a></li>
+                        <% if (hasNext) { %>
+                        <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage + 1 %>"><%= curantPage + 1 %></a></li>
+                        <% } %>
+                        <% if (curantPage !=  lastPage &&  curantPage + 1 != lastPage) { %>
+                        <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= lastPage %>"><%= lastPage %></a></li>
+                        <% } %>
+                        <% if (curantPage != lastPage) { %>
+                        <li id="DataTables_Table_0_next" class="paginate_button page-item next"><a class="page-link" href="?page=<%= curantPage + 1 %>">Next</a></li>  
+                        <% } %>
+
+                    </ul>
+                    <%}%>
+            </div>
+        </div>
+    </div>
+    <!-- Cart End -->
+
+
+<%- include("../inclueds/footer")  %>
+<%- include("../inclueds/footer_script")  %>
+<script src="/public/website/js/sweetalert.min.js"></script>
+<script>
+    const UserCart = document.querySelector(".UserCart")
+    const testmonialForm = document.querySelector(".testmonialForm")
+    const testmonialButton = testmonialForm.querySelector(" button")
+    const formTextArea = testmonialForm.querySelectorAll("textarea")
+    const productRate = document.querySelectorAll(".productRate i") 
+    let finalRate = 0
+    function addTestmonial(e) {
+        e.preventDefault()
+        if(!validationForm()) return
+        createTestmonialAjax()
+    }
+    
+
+    function createTestmonialAjax(){
+        console.log(formTextArea[1].value)
+            $.ajax({
+            url : "/add-testmonials?_csrf=" + '<%= csrf %>',
+            method:"post",
+            data : {
+                testmonial_en : formTextArea[1].value,
+                testmonial_ar : formTextArea[0].value,
+                userId : '<%= userData ? userData.id : 0 %>',
+                rate : finalRate,
+            },
+            success(data) {
+                if(data.status) {
+                    Swal.fire({
+                        icon: 'success',
+                        title:data.message,
+                        showConfirmButton: false,
+                        timer: 2500
+                    })
+                    resetAll()
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title:data.message,
+                        showConfirmButton: false,
+                        timer: 2500
+                    })                    
+                }
+            },
+            error(error){
+                Swal.fire({
+                    icon: 'error',
+                    title:error.message,
+                    showConfirmButton: false,
+                    timer: 2500
+                })                
+            }
+        })
+    }
+    
+ 
+
+    // start function validation form 
+    function validationForm() {
+        let valid = true
+        let isLessThanNumber = true 
+        let errorMessage = "" 
+        formTextArea.forEach(ele => {
+            if(!ele.value) {
+                valid = false
+            } else if(!finalRate) {
+                valid = false
+            }
+            if(ele.value.length > '<%= numberOfLetters %>') {
+                isLessThanNumber = false
+            }
+            
+
+        })
+        if(!valid) {
+            errorMessage = "you should enter testmonial with to language and your rate please"
+        } else if(!isLessThanNumber) {
+            errorMessage = "your testmonial should be equal or less than <%= numberOfLetters %>"
+        }
+        
+        
+        if(valid && isLessThanNumber) {
+            return true
+        } else {
+            Swal.fire({
+            icon: 'error',
+            title: errorMessage,
+            showConfirmButton: false,
+            timer: 4500
+            })
+            return false
+        }
+    }
+
+    // start rate part
+    productRate.forEach((ele , index) => {
+        ele.onmouseover = () => {rateChange(index)}
+        ele.onmouseleave = () => {
+            finalRate = index + 1
+        }
+        
+    })
+
+    function rateChange(index){
+        productRate.forEach((element , i) => {
+            if(i <= index) {
+                element.className = "fa fa-star"
+            } else {
+                element.className = "far fa-star"
+            }
+        })
+    }
+
+    // start reset all fields 
+    function resetAll() {
+        productRate.forEach((ele , index) => {
+            ele.className = "far fa-star"
+        })
+        formTextArea.forEach((ele , index) => {
+            ele.value = ""
+        })
+    }
+</script>
+</body>
+    

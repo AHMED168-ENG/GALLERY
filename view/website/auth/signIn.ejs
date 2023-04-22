@@ -1,0 +1,96 @@
+<%- include("../inclueds/head") %>
+
+<head>
+  <body>
+    <%- include("../inclueds/upperNavbare.ejs") %> <%-
+    include("../inclueds/lowerNavbare") %>
+
+    <!-- //////////////////////////////////////////////////// -->
+    <div class="signin">
+      <div class="container">
+        <%- include("../inclueds/notification") %>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="right p-4 mb-3">
+              <h4>welcome back to site!</h4>
+              <br />
+
+              <form
+                method="post"
+                enctype="application/x-www-form-urlencoded"
+                action="?_csrf=<%= csrf %>"
+              >
+                <div class="form-group">
+                  <label for="exampleInputEmail1"
+                    >email <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="email"
+                    class="form-control"
+                    name="email"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                  />
+                  <% if (validationError) { %> <% if (validationError.email) {
+                  %>
+                  <span class="text-danger"
+                    ><%=validationError.email[0].msg %></span
+                  >
+                  <% } %> <% } %>
+                </div>
+                <div class="form-group pass_show">
+                  <label for="PASS"
+                    >password <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="password"
+                    name="password"
+                    class="form-control"
+                    id="PASS"
+                  />
+                  <% if (validationError) { %> <% if (validationError.password)
+                  { %>
+                  <span class="text-danger"
+                    ><%=validationError.password[0].msg %></span
+                  >
+                  <% } %> <% } %>
+                </div>
+
+                <div class="form-group form-check">
+                  <input
+                    type="checkbox"
+                    name="rememberMe"
+                    value="1"
+                    class="form-check-input"
+                    id="exampleCheck1"
+                  />
+                  <label class="form-check-label" for="exampleCheck1"
+                    >remember me</label
+                  >
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                  sign in
+                </button>
+              </form>
+
+              <p class="mb-0 mt-2">
+                i dont have acount? <a href="signUp">sign up</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="left">
+              <img src="/assets/website/login.svg" class="img-fluid" alt="0" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+
+    <%- include("../inclueds/footer_script") %> <%-
+    include("../inclueds/footer") %>
+  </body>
+</head>

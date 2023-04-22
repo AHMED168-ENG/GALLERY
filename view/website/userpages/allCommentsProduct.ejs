@@ -1,0 +1,199 @@
+<style>
+    .category select , .category input {
+        width:100%;
+        padding:10px
+    }
+    .category input {
+        padding:7px
+    }
+    .category div {
+        padding:0 !important
+    }
+    .category label {
+        display: block !important;
+    }
+</style>
+<%- include("../inclueds/head")  %>
+</head>
+<body>
+<%- include("../inclueds/upperNavbare")  %> 
+<%- include("../inclueds/lowerNavbare")  %> 
+<!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+<header class="d-flex comments_header justify-content-between">
+    <h2 style="font-size:19px">all comments on this product <a href="/product-Details/<%= product["slug_" + lang] %>">(<%= product["productName_" + lang] %>)</a></h2>
+    <div>
+        <select class="filter">
+            <option value="createdAt" <%= query.filter == "createdAt" ? "selected" : "" %> >date</option>
+        </select>
+        <select class="type">
+            <option value="asc" <%= query.type == "asc" ? "selected" : "" %> >Asc</option>
+            <option value="desc" <%= query.type == "desc" ? "selected" : "" %> >desc</option>
+        </select>
+        <input type="text" value="<%= query.search ? query.search : '' %>" placeholder="search for user">
+        <button>search</button>
+    </div>
+</header>
+<div class="container">
+    <% if (userData) { %>
+        <div class="enterComment col-9 offset-2">
+            <textarea placeholder="enter your comment" class="commentValue"></textarea>
+            <button type="button" class="bg-primary btn" onclick="addCommentFunction(event)" class="addComment">Add Comment</button>
+        </div>
+    <% } else { %>
+        <div class="enterComment col-9 offset-2">
+            <a class="btn bg-primary text-center" href="/signIn">Login Before</a>
+        </div>
+        
+    <% } %>
+    <div class=" productComments" style="padding:50px 0">
+
+        <% if (allComments.length > 0) { %>
+            <% allComments.forEach(element => { %>
+                <div style="margin-bottom:20px">
+                    <div class="main align-items-center row ">
+                        <div class="image col-md-2">
+                            <% if (element.commentUser.image) { %>
+                                <a href="/userProfile/<%= element.commentUser.id %>"><img src="/assets/dashboard/Users/<%= element.commentUser.image.split("--")[0] %>" alt=""></a>
+                            <% } else { %>
+                                <img src="/assets/dashboard/defaultImages/avatar.png">
+                            <% } %>
+                        </div>
+                        <div class="comment col-md-9">
+                            <div class="d-flex justify-content-between">
+                                <a href=""><h4><%= element.commentUser.fName %> <%= element.commentUser.lName %></h4></a>
+                                <span><%= formateDate(element.createdAt) %></span>
+                            </div>
+                            <div class="text">
+                                <div>
+                                    <p><%= element.comment %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            <% }) %>
+        <% } else { %>
+            <div class="col-12">
+                <p class="text-center" style="font-style:italic;color:#444;font-size:19px;background:#eee;padding:5px">there is no comment on product</p>
+            </div>
+        <% } %>
+    </div>
+    <div class="pagination row px-xl-5">
+        <div class="col-md-4">
+            <div class="dataTables_info">Showing <%=  (curantPage - 1) * elements %> to <%=  ((curantPage - 1) * elements) + elements %> of <%= allElementCount %> entries</div>
+        </div>
+        <div class="col-md-4 dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+            <% if ((hasPrevious || hasNext)) { %>
+            <ul style="margin:0 ;justify-content: center;" class=" pagination">
+                <% if (curantPage != 1) { %>
+                <li id="DataTables_Table_0_previous" class="paginate_button page-item previous"><a class="page-link" href="?page=<%= curantPage - 1 %>">Previous</a></li>
+                <% } %>
+                <% if (curantPage != 1 &&  curantPage - 1 != 1) { %> 
+                    <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= 1 %>">1</a></li>
+                <% } %>
+                <% if (hasPrevious) { %>
+                    <li class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage - 1 %>"><%= curantPage - 1 %></a></li>
+                <% } %>
+                <li id="" class="paginate_button page-item active"><a class="page-link" href="?page=<%= curantPage %>"><%= curantPage %></a></li>
+                <% if (hasNext) { %>
+                <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage + 1 %>"><%= curantPage + 1 %></a></li>
+                <% } %>
+                <% if (curantPage !=  lastPage &&  curantPage + 1 != lastPage) { %>
+                <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= lastPage %>"><%= lastPage %></a></li>
+                <% } %>
+                <% if (curantPage != lastPage) { %>
+                <li id="DataTables_Table_0_next" class="paginate_button page-item next"><a class="page-link" href="?page=<%= curantPage + 1 %>">Next</a></li>  
+                <% } %>
+
+            </ul>
+            <%}%>
+        </div>
+    </div>
+</div>
+
+<!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+
+<!-- |||||||||||||||||||||| start comment test ||||||||||||||||||||| -->
+<div class="col-12 d-none commentTest" style="margin-bottom:20px">
+    <div class="main align-items-center row ">
+        <div class="image col-md-2">
+            <img src="" alt="">
+        </div>
+        <div class="comment col-md-9">
+            <div class="d-flex justify-content-between">
+                <a href=""><h4></h4></a>
+                <span>now</span>
+            </div>
+            <div class="text">
+                <div>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- |||||||||||||||||||||| end comment test ||||||||||||||||||||| -->
+
+<%- include("../inclueds/footer")  %>
+<%- include("../inclueds/footer_script.ejs")  %>
+<script src="/public/website/js/sweetalert.min.js"></script>
+<script>
+    var comments_header = document.querySelector(".comments_header div")
+    var select = comments_header.querySelectorAll("select")
+    var input = comments_header.querySelector("input")
+    comments_header.querySelector("button").onclick = function(e) {
+        var link = window.location.pathname + "?filter=" + select[0].value + "&type=" + select[1].value + "&search=" + input.value
+        window.location.href = link
+    }
+
+    var addComment = document.querySelector(".addComment");
+    function addCommentFunction (e) {
+        var comment = document.querySelector(".commentValue").value
+        if(comment.trim() == "") {
+               Swal.fire({
+                icon: 'error',
+                title: 'enter your comment',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        } else {         
+            $.ajax({
+                data : {
+                userId : "<%= userData? userData.id : 0 %>",
+                comment : comment,
+                productId : "<%= product.id %>"
+                },
+                type : "post",
+                url : "/dashboard/comments/create?_csrf="+'<%= csrf %>',
+                success(data) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'your comment added succesful',
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
+                    var allComments = document.querySelector(".productComments");
+                    var child = document.querySelector(".commentTest").cloneNode(true)
+                    child.classList.remove("d-none")
+                    child.querySelector(".main .comment .text div p").innerHTML = comment
+                    child.querySelector(".main .comment a h4").innerHTML = "<%= userData ? userData.fName + ' ' + userData.lName : '' %>"
+                    var img = child.querySelector(".main .image img")
+                    img.src = "/assets/dashboard/Users/<%= userData ? (userData.image ? userData.image.split('--')[0] : 'avatar.png') : '' %>"
+                    allComments.insertBefore(child , allComments.firstElementChild)
+                },
+                error() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: error,
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
+                }
+            })
+        }
+        document.querySelector(".commentValue").value = "" 
+    }
+</script>
+</body>
+    

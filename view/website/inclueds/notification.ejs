@@ -1,0 +1,8 @@
+<% if (notification.length) { %>
+<div
+  class="text-center alert alert-<%= notification[0] %>"
+  style="color: white !important; font-size: 20px; text-transform: capitalize"
+>
+  <%= notification[1] %>
+</div>
+<% } %>

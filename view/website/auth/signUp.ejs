@@ -1,0 +1,236 @@
+<%- include("../inclueds/head") %>
+
+<head>
+  <body>
+    <%- include("../inclueds/upperNavbare.ejs") %> <%-
+    include("../inclueds/lowerNavbare") %>
+
+    <!-- //////////////////////////////////////////////////// -->
+
+    <div class="signin">
+      <div class="container">
+        <%- include("../inclueds/notification") %>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="right p-4 mb-3">
+              <h4>welcome hir in <span class="main-color">company</span></h4>
+              <br />
+              <form method="post" enctype="multipart/form-data">
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="nameOne"
+                      >first name<span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="nameOne"
+                      name="fName"
+                    />
+                    <% if (validationError.fName) { %>
+                    <span class="text-danger"
+                      ><%=validationError.fName[0].msg %></span
+                    >
+                    <% } %>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="name2"
+                      >last name<span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="name2"
+                      name="lName"
+                    />
+                    <% if (validationError.lName) { %>
+                    <span class="text-danger"
+                      ><%=validationError.lName[0].msg %></span
+                    >
+                    <% } %>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="age"
+                      >age <span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="age"
+                      name="age"
+                    />
+                    <% if (validationError.age) { %>
+                    <span class="text-danger"
+                      ><%=validationError.age[0].msg %></span
+                    >
+                    <% } %>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="phone"
+                      >mobile <span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="phone"
+                      name="mobile"
+                    />
+                    <% if (validationError.number) { %>
+                    <span class="text-danger"
+                      ><%=validationError.number[0].msg %></span
+                    >
+                    <% } %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="addres"
+                    >address <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="text"
+                    readonly
+                    class="form-control addres"
+                    id="addres"
+                    name="address"
+                    value=""
+                  />
+                  <% if (validationError.addres) { %>
+                  <span class="text-danger"
+                    ><%=validationError.addres[0].msg %></span
+                  >
+                  <% } %>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1"
+                    >email address <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                    name="email"
+                  />
+                  <% if (validationError.email) { %>
+                  <span class="text-danger"
+                    ><%=validationError.email[0].msg %></span
+                  >
+                  <% } %>
+                </div>
+
+                <div class="form-group">
+                  <label for="exampleInputPassword1"
+                    >password<span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="exampleInputPassword1"
+                    name="password"
+                  />
+                  <% if (validationError.password) { %>
+                  <span class="text-danger"
+                    ><%=validationError.password[0].msg %></span
+                  >
+                  <% } %>
+                </div>
+
+                <div class="form-group">
+                  <label for="exampleInputPassword1"
+                    >password again <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="exampleInputPassword2"
+                    name="confirmPassword"
+                  />
+                  <% if (validationError.confirmPassword) { %>
+                  <span class="text-danger"
+                    ><%=validationError.confirmPassword[0].msg %></span
+                  >
+                  <% } %>
+                </div>
+
+                <div class="form-group">
+                  <label for="projectinput2"> profile image</label>
+                  <div class="custom-file">
+                    <input
+                      type="file"
+                      name="image"
+                      class="custom-file-input"
+                      id="inputGroupFile01"
+                    />
+                    <label class="custom-file-label" for="inputGroupFile01"
+                      >Choose Your Personal Image If You Wont</label
+                    >
+                  </div>
+                  <% if (validationError.image) { %>
+                  <span class="text-danger"
+                    ><%=validationError.image[0].msg %></span
+                  >
+                  <% } %>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                  sign up
+                </button>
+                <hr />
+              </form>
+
+              <p class="mb-0 mt-2">
+                if you have account ? <a href="signIn">sign in</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="left">
+              <img src="/assets/website/login.svg" class="img-fluid" alt="0" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+
+    <%- include("../inclueds/footer_script") %> <%-
+    include("../inclueds/footer") %>
+    <script>
+      window.onload = function () {
+        var alertNotification = document.querySelector(".alertNotification");
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+          console.log("Geolocation is not supported by this browser.");
+        }
+        function showPosition(position) {
+          $.get(
+            "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude" +
+              position.coords.latitude +
+              "&longitude" +
+              position.coords.longitude +
+              "&sensor=false&localityLanguage=en",
+            function (data) {
+              document.querySelector(
+                ".addres"
+              ).value = `${data.continent},${data.countryName},${data.locality}`;
+            }
+          );
+        }
+        if (alertNotification) {
+          alertNotification.classList.add("active");
+          console.log(alertNotification);
+          console.log(alertNotification.classList);
+          setTimeout(() => {
+            alertNotification.classList.remove("active");
+          }, 4000);
+        }
+      };
+    </script>
+  </body>
+</head>
