@@ -3,6 +3,8 @@ import { validationResult } from "express-validator";
 import { ValidationMessage } from "../../helpers/helper";
 import tbl_testmonials from "../../models/testmonials";
 import tbl_users from "../../models/users";
+import axios from "axios";
+
 export class TestmonialsController {
   constructor() {}
   // start show all testmonial
@@ -86,7 +88,6 @@ export class TestmonialsController {
     try {
       const validationMessage = new ValidationMessage();
       const body = req.body;
-      const lang = req.cookies.lang;
       body.active = body.active ? true : false;
       tbl_testmonials
         .update(body, {
@@ -95,8 +96,7 @@ export class TestmonialsController {
           },
         })
         .then((result) => {
-          const message =
-            lang != "en" ? "update successful" : "تم التعديل بنجاح";
+          const message = "update successful";
           validationMessage.returnWithMessage(
             req,
             res,
@@ -119,25 +119,37 @@ export class TestmonialsController {
   ): Promise<void> {
     try {
       const body = req.body;
-      const lang = req.cookies.lang;
-
-      tbl_testmonials
-        .create(body)
-        .then((result) => {
-          console.log("result");
-          console.log(result);
-          const message =
-            lang != "en"
-              ? "your testmonial created successful but not view in sit before admin active"
-              : "تم تسجيل رايك عن الموقع بنجاح ولاكن لن يظهر حتي يتم تفعيله من الادمن";
-          res.send({
-            status: true,
-            message: message,
+      if (!body.captcha) {
+        res.send({ status: false, message: req.t("selectCapetch") });
+        return;
+      }
+      let secretKey = process.env.recaptcherSitKey;
+      const verifyURL = `https://google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}`;
+      axios.get(verifyURL).then((data) => {
+        if (data.data.success != true) {
+          return res.json({
+            status: false,
+            message: req.t("FailedCaptcha"),
           });
-        })
-        .catch((error) => error);
+        } else {
+          return tbl_testmonials
+            .create(body)
+            .then((result) => {
+              const message = req.t("addTestMonial");
+              res.send({
+                status: true,
+                message: message,
+              });
+            })
+            .catch((error) => error);
+        }
+      });
     } catch (error) {
-      next(error);
+      console.log(error);
+      res.send({
+        status: false,
+        message: error.message,
+      });
     }
   }
   // end create testmonial post

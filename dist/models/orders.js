@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const config_1 = require("../config/config");
 const users_1 = __importDefault(require("./users"));
+const productsOrders_1 = __importDefault(require("./productsOrders"));
 const sequelize = new sequelize_1.Sequelize(...config_1.env.database);
 const tbl_orders = sequelize.define("tbl_orders", {
     id: {
@@ -15,14 +16,6 @@ const tbl_orders = sequelize.define("tbl_orders", {
         autoIncrement: true,
     },
     userId: { type: sequelize_1.DataTypes.INTEGER, allowNull: false },
-    productsId: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-    productsCount: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
     isSeen: {
         type: sequelize_1.DataTypes.BOOLEAN,
         defaultValue: false,
@@ -51,6 +44,12 @@ tbl_orders.sync();
 tbl_orders.belongsTo(users_1.default, {
     as: "orderUser",
     foreignKey: "userId",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
+tbl_orders.hasMany(productsOrders_1.default, {
+    as: "productOrderTable",
+    foreignKey: "orderId",
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
 });

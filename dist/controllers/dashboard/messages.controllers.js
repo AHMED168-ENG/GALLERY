@@ -123,7 +123,7 @@ class MessageController {
                 const lang = req.cookies.lang;
                 const body = req.body;
                 if (!body.captcha) {
-                    res.send({ status: false, message: "please select captcha" });
+                    res.send({ status: false, message: req.t("selectCapetch") });
                     return;
                 }
                 let secretKey = process.env.recaptcherSitKey;
@@ -134,7 +134,7 @@ class MessageController {
                     if (data.data.success != true) {
                         return res.json({
                             status: false,
-                            message: "Failed captcha verification",
+                            message: req.t("FailedCaptcha"),
                         });
                     }
                     else {
@@ -143,9 +143,7 @@ class MessageController {
                             .then((result) => {
                             res.send({
                                 status: true,
-                                message: lang != "en"
-                                    ? "your message send successful"
-                                    : "تم ارسال الرساله بنجاح",
+                                message: req.t("messageSent"),
                             });
                         })
                             .catch((error) => error);

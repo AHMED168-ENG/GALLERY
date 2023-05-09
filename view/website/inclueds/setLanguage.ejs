@@ -1,0 +1,30 @@
+<script>
+  const setLanguageBtn = document.querySelectorAll(".setLanguage");
+
+  setLanguageBtn.forEach((ele) => {
+    console.log(ele);
+    ele.onclick = () => {
+      const lng = ele.getAttribute("data_lang");
+      setLang(lng);
+    };
+  });
+
+  function setLang(lng) {
+    $.ajax({
+      url: "/language/set?_csrf=" + "<%= csrf %>",
+      method: "post",
+      data: { lng },
+      success({ data }) {
+        window.location.reload();
+      },
+      error(error) {
+        Swal.fire({
+          icon: "error",
+          title: error,
+          showConfirmButton: false,
+          timer: 2500,
+        });
+      },
+    });
+  }
+</script>

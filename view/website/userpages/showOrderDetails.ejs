@@ -1,0 +1,135 @@
+
+<%- include("../inclueds/head")  %>
+</head>
+<body>
+<%- include("../inclueds/upperNavbare")  %> 
+<%- include("../inclueds/lowerNavbare")  %> 
+<!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid"      
+        data-aos="fade-left"
+        data-aos-delay=""
+        data-aos-offset=""
+        data-aos-duration="1500">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="/home"><%= trans("home") %></a>
+                    <a class="breadcrumb-item text-dark" href="/all-products"><%= trans("products") %></a>
+                    <span class="breadcrumb-item active"><%= trans("favoritCart") %></span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Cart Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-lg-12">
+                <div style="background:#fff;padding:20px;box-shadow: 10px 10px 15px rgba(0, 0,0, 0.1);" class="mb-3" 
+                    data-aos="fade-right"
+                    data-aos-delay=""
+                    data-aos-offset=""
+                    data-aos-duration="1500">
+                    <h4 class="card-title supTitel"> <%= trans("productData") %></h4>
+                    <table 
+                        class="table display nowrap table-striped table-bordered scroll-horizontal table-responsive" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th><%= trans("productImage") %></th>
+                            <th><%= trans("productName") %></th>
+                            <th><%= trans("count") %></th>
+                            <th><%= trans("PriceForOne") %></th>
+                            <th><%= trans("Descount") %></th>
+                            <th><%= trans("Shipping") %></th>
+                            <th><%= trans("Structure") %></th>
+                            <th><%= trans("priceBeforeDescount") %></th>
+                            <th><%= trans("priceAfterDescount") %></th>                                                
+                            <th><%= trans("totlaPrice") %></th>                                                
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <% order.productOrderTable.forEach((element,index) => { %>
+                                <tr>   
+                                    <% if (element.productTable.productImage) { %>
+                                        <td><img style="width:40px ; height:40px" src="/assets/dashboard/Products/<%= element.productTable.productImage.split("--")[0] %>" alt=""></td>
+                                    <% } else { %>
+                                        <td><img style="width:40px ; height:40px" src="/assets/dashboard/defaultImages/avatar.png" alt=""></td>
+                                    <%}%>                                                        
+                                    <td class="chang"><p><a href="/product-Details/<%= element.productTable["slug_" + lang] %>"><%= element.productTable.productName_en %></a></p></td>
+                                    <td><%= getTotalPriceForOneProduct(element).count %></td>
+                                    <td><%= element.productTable.price %><%= trans("Eg") %></td>
+                                    <td><%= element.productTable.descount %>%</td>
+                                    <td><%= getTotalPriceForOneProduct(element).shipping %><%= trans("Eg") %></td>
+                                    <td><%= getTotalPriceForOneProduct(element).structure %><%= trans("Eg") %></td>
+                                    <td><%= getTotalPriceForOneProduct(element).price %><%= trans("Eg") %></td>
+                                    <td><%= getTotalPriceForOneProduct(element).afterDescount %><%= trans("Eg") %></td>
+                                    <td><%= getTotalPriceForOneProduct(element).totalPrice %><%= trans("Eg") %></td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="background:#fff;padding:20px;box-shadow: 10px 10px 15px rgba(0, 0,0, 0.1);"
+                    data-aos="fade-left"
+                    data-aos-delay=""
+                    data-aos-offset=""
+                    data-aos-duration="1500"
+                >
+                    <h4 class="card-title supTitel"><%= trans("finalPriceData") %></h4>
+                    <div class="row ">
+                        <div class="col-lg-12">
+                            <div class=" mb-5">
+                                <div class="border-bottom pb-2">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h6><%= trans("Structure") %></h6>
+                                        <h6><%= totalOfAll.structure %><%= trans("Eg") %></h6>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <h6 class=""><%= trans("Shipping") %></h6>
+                                        <h6 class=""><%= totalOfAll.shipping %><%= trans("Eg") %></h6>
+                                    </div>
+                                </div>
+                    
+                                <div class="pt-2">
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <h5><%= trans("totalPriceBeforeDescount") %></h5>
+                                        <h5><%= totalOfAll.price %><%= trans("Eg") %></h5>
+                                    </div>
+                                </div>
+                                <div class="pt-2">
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <h5><%= trans("totalPriceAfterDescount") %> </h5>
+                                        <h5><%= totalOfAll.afterDescount %><%= trans("Eg") %></h5>
+                                    </div>
+                                </div>
+                                <div class="pt-2">
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <h5><%= trans("finalBilling") %></h5>
+                                        <h5><%= totalOfAll.totalPrice %><%= trans("Eg") %></h5>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <div class="mb-2">
+                                <div class="bg-light ">
+                                    <a href="/download-order-pdf/<%= order.id %>" class="btn btn-block btn-primary "> <%= trans("DownloadInvoice") %> </a>
+                                </div>
+                            </div>   
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Cart End -->
+
+
+<%- include("../inclueds/footer")  %>
+<%- include("../inclueds/footer_script")  %>
+
+</body>
+    

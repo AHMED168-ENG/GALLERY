@@ -1,6 +1,4 @@
 <%- include("../inclueds/head")  %>
-<link rel="stylesheet" href="/public/website/css/testmonials.css">
-
 </head>
 <body>
 <%- include("../inclueds/upperNavbare")  %> 
@@ -10,7 +8,11 @@
     <!-- Carousel Start -->
     <div class="container-fluid mb-3">
         <div class="row px-xl-5">
-            <div class="col-lg-8">
+            <div class="col-lg-8"  
+            data-aos="fade-left"
+            data-aos-offset="0"
+            data-aos-duration="1500"
+            >
                 <div id="header-carousel" class="carousel slide carousel-fade mb-30 mb-lg-0" data-ride="carousel">
                     <div id="header-carousel" class="carousel slide carousel-fade mb-30 mb-lg-0" data-ride="carousel">
                         <ol class="carousel-indicators">
@@ -26,7 +28,7 @@
                                         <div class="p-3" style="max-width: 700px;">
                                             <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown " style="text-transform:capitalize"><%= element["header_" + lang] %></h1>
                                             <p class="mx-md-5 px-5 animate__animated animate__bounceIn"><%= element["description_" + lang] %></p>
-                                            <a href="<%= element["link"] %></a>" class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp"> shop now </a>
+                                            <a href="<%= element["link"] %></a>" class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp"> <%= trans("shopNow") %> </a>
                                         </div>
                                     </div>
                                 </div>
@@ -37,15 +39,19 @@
             </div>
             
             <div class="col-lg-4">
-                <% categoryWithHighDescount.slice(0 , 2).forEach(element => { %>
-                    <div class="product-offer mb-30" style="height: 200px;">
+                <% categoryWithHighDescount.slice(0 , 2).forEach((element , index) => { %>
+                    <div class="product-offer mb-30" style="height: 200px;" 
+                    data-aos="fade-right"
+                    data-aos-delay="<%= index * 500 %>"
+                    data-aos-offset=""
+                    data-aos-duration="1500" >
                         <img class="img-fluid" src="/assets/dashboard/Categorys/<%= element.ProductCategory.image.split("--")[0] %>" alt="">
                         <div class="offer-text">
                             <% if (element.descount) { %>
                             <h6 class="text-white text-uppercase">Save <%= element.descount %>%</h6>
                             <% } %>
-                            <h3 class="text-white mb-3"><%= element.ProductCategory["category_" + lang] %></h3>
-                            <a href="/all-products?category=<%= element.ProductCategory["slug_" + lang] %>" class="btn btn-primary">Shop Now</a>
+                            <h3 class="text-white mb-3"><%= element.ProductCategory["category_" + lang] %> </h3>
+                            <a href="/all-products?category=<%= element.ProductCategory["slug_" + lang] %>" class="btn btn-primary"><%= trans("shopNow") %></a>
                         </div>
                     </div>                
                 <% }) %>
@@ -58,27 +64,43 @@
 
     <!-- Featured Start -->
     <% if (statsSection) { %>
-    <div class="container-fluid pt-5">
+    <div class="container-fluid pt-5" >
         <div class="row px-xl-5 pb-3">
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1"  
+                    data-aos="zoom-in"
+                    data-aos-delay="0"
+                    data-aos-offset=""
+                    data-aos-duration="1200">
                 <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
                     <h1 class="<%- statsSection.icon_one %> text-primary m-0 mr-3"></h1>
                     <h5 class="font-weight-semi-bold m-0"><%= statsSection["text_one_" + lang] %></h5>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1"     
+                    data-aos="zoom-in"
+                    data-aos-delay="500"
+                    data-aos-offset=""
+                    data-aos-duration="1200">
                 <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
                     <h1 class="<%- statsSection.icon_tow %> text-primary m-0 mr-2"></h1>
                     <h5 class="font-weight-semi-bold m-0"><%= statsSection["text_tow_" + lang] %></h5>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1"     
+                    data-aos="zoom-in"
+                    data-aos-delay="1000"
+                    data-aos-offset=""
+                    data-aos-duration="1200">
                 <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
                     <h1 class="<%- statsSection.icon_three %> text-primary m-0 mr-3"></h1>
                     <h5 class="font-weight-semi-bold m-0"><%= statsSection["text_three_" + lang] %></h5>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1"     
+                    data-aos="zoom-in"
+                    data-aos-delay="1500"
+                    data-aos-offset=""
+                    data-aos-duration="1200">
                 <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
                     <h1 class="<%= statsSection.icon_four %> text-primary m-0 mr-3"></h1>
                     <h5 class="font-weight-semi-bold m-0"><%- statsSection["text_four_" + lang] %></h5>
@@ -93,11 +115,20 @@
     <% if (someTestmonials.length > 0) { %>
         <div class="testmonials" >
             <div class="">
-                <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Latest testmonial</span></h2>
+                <h2   
+                    data-aos="fade-left"
+                    data-aos-delay="1000"
+                    data-aos-offset=""
+                    data-aos-duration="1200" class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3"><%= trans("LATEST_TESTMONIAL") %></span></h2>
                 <div style="background:#eee" class=" table-responsive mb-2">
-                <div class=" px-xl-5 py-3 owl-carousel testmonial-carousel">
-                    <% someTestmonials.forEach(element => { %>
-                        <div >
+                <div class=" px-xl-5 py-3 owl-carousel testmonial-carousel"   
+                        data-aos="fade-up"
+                        data-aos-delay="1000"
+                        data-aos-offset=""
+                        data-aos-duration="1200">
+                    <% someTestmonials.forEach((element , index) => { %>
+                        <div   
+                          >
                             <div class=" testmonial">
                             <blockquote>
                                 <p><%= element["testmonial_" + lang]%></p>
@@ -127,10 +158,17 @@
     <% if (allCatigory.length > 0) { %>
     <!-- Categories Start -->
     <div class="container-fluid pt-5">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Latest Categories</span></h2>
+        <h2 data-aos="fade-left"
+            data-aos-delay=""
+            data-aos-offset=""
+            data-aos-duration="1200" class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3"><%= trans("Latest_Categories") %></span></h2>
         <div class="row px-xl-5 pb-3">
-            <% allCatigory.forEach(element => { %>
-            <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+            <% allCatigory.forEach((element , index) => { %>
+            <div 
+                data-aos="zoom-in"
+                data-aos-delay="3300"
+                data-aos-offset=""
+                data-aos-duration="1200" class="col-lg-3 col-md-4 col-sm-6 pb-1">
                 <a class="text-decoration-none latestCategoryLink" href="/all-products?category=<%= element["slug_" + lang] %>">
                     <div class="cat-item d-flex align-items-center mb-4">
                         <div class="overflow-hidden" style="width: 100px; height: 100px;">
@@ -138,14 +176,13 @@
                         </div>
                         <div class="flex-fill pl-3">
                             <h6><%= element["category_" + lang] %></h6>
-                            <small class="text-body"><%= element.products.length %> products</small>
+                            <small class="text-body"><%= element.products.length %> <%= trans("productsCount") %></small>
                         </div>
                     </div>
                 </a>
             </div>
             <% }) %>
-
-        <a href="/all-categorys" class="btn btn-primary btn-block">Show All</a>
+            <a href="/all-categorys" class="btn btn-primary btn-block"><%= trans("showAll") %></a>
 
         </div>
     </div>
@@ -155,14 +192,21 @@
 
     <!-- Products Start -->
     <div class="container-fluid pt-5 pb-3">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Latest Products</span></h2>
+        <h2 data-aos="fade-left"
+            data-aos-delay=""
+            data-aos-offset=""
+            data-aos-duration="1200" class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3"><%= trans("Latest_Products")  %></span></h2>
         <div class="row px-xl-5">
             <% latestProduct.forEach(element => { %>
-            <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+            <div 
+                data-aos="fade-up"
+                data-aos-delay=""
+                data-aos-offset=""
+                data-aos-duration="1200" class="col-lg-3 col-md-4 col-sm-6 pb-1">
                 <div class="product-item bg-light mb-4">
                     <div class="product-img position-relative overflow-hidden">
                         <% if (element.descount) { %>
-                            <div class="discount"><%= element.descount %>% off</div>
+                            <div class="discount"><%= trans("save") %> <%= element.descount %>% </div>
                         <% } %>                        <img class="img-fluid w-100" src="/assets/dashboard/Products/<%= element.productImage.split("--")[0] %>" alt="">
                         <div class="product-action">
                             <a data_attr="<%= element.id %>" class="btn btn-outline-dark btn-square addUserCart <%= shopingCart.includes(element.id) ? "active" : ""%>" href=""><i class="fa fa-shopping-cart"></i></a>
@@ -173,8 +217,8 @@
                     <div class="text-center py-4">
                         <a class="h6 text-decoration-none text-truncate" href="/product-Details/<%= element["slug_" + lang] %>"><%= element["productName_" + lang] %></a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5><%= element.price  %> Eg</h5><h6 class="text-muted ml-2"><% if (element.descount) { %>
-                             <del><%= element.price - ((element.descount * element.price) / 100) %> Eg</del>
+                            <h5><%= element.price  %> <%= trans("Eg") %></h5><h6 class="text-muted ml-2"><% if (element.descount) { %>
+                             <del><%= element.price - ((element.descount * element.price) / 100) %> <%= trans("Eg") %></del>
                             <% } %></h6>
                         </div>
                         <div class="text-primary d-flex align-items-center justify-content-center mb-1">
@@ -200,14 +244,18 @@
         <div class="row px-xl-5">
             <div class="col">
                 <div class="owl-carousel vendor-carousel">
-                    <% categoryWithHighDescount.slice(2).forEach(element => { %>
-                        <div class="bg-light p-4">
+                    <% categoryWithHighDescount.slice(2).forEach((element , index) => { %>
+                        <div class="bg-light p-4" 
+                            data-aos="fade-down"
+                            data-aos-delay=""
+                            data-aos-offset=""
+                            data-aos-duration="1200">
                             <div class="product-offer" style="height: 300px;">
                                 <img class="img-fluid" src="/assets/dashboard/Categorys/<%= element.ProductCategory.image.split("--")[0] %>" alt="">
                                 <div class="offer-text">
-                                    <h6 class="text-white text-uppercase">Save <%= element.descount %>%</h6>
+                                    <h6 class="text-white text-uppercase"><%= trans("save") %> <%= element.descount %>%</h6>
                                     <h3 class="text-white mb-3"><%= element.ProductCategory["category_" + lang] %></h3>
-                                    <a href="/all-products?category=<%= element.ProductCategory["slug_" + lang] %>" class="btn btn-primary">Shop Now</a>
+                                    <a href="/all-products?category=<%= element.ProductCategory["slug_" + lang] %>" class="btn btn-primary"><%= trans("shopNow") %></a>
                                 </div>
                             </div>
                         </div>
@@ -223,14 +271,22 @@
     <% if (productWithHighDescount.length != 0) { %>
    <!-- Products Start -->
     <div class="container-fluid pt-5 pb-3">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3"> Products higth Descount</span></h2>
+        <h2 
+            data-aos="fade-left"
+            data-aos-delay=""
+            data-aos-offset=""
+            data-aos-duration="1200" class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3"> <%= trans("ProductsHigthDescount")  %> </span></h2>
         <div class="row px-xl-5">
             <% productWithHighDescount.forEach(element => { %>
-             <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+             <div 
+                data-aos="fade-up"
+                data-aos-delay=""
+                data-aos-offset=""
+                data-aos-duration="1200"  class="col-lg-3 col-md-4 col-sm-6 pb-1">
                 <div class="product-item bg-light mb-4">
                     <div class="product-img position-relative overflow-hidden">
                         <% if (element.descount) { %>
-                        <div class="discount"><%= element.descount %>% off</div>
+                        <div class="discount"><%= trans("save") %> <%= element.descount %>% </div>
                         <% } %>
                         <img class="img-fluid w-100" src="/assets/dashboard/Products/<%= element.productImage.split("--")[0] %>" alt="">
                         <div class="product-action">
@@ -242,8 +298,8 @@
                     <div class="text-center py-4">
                         <a class="h6 text-decoration-none text-truncate" href="/product-Details/<%= element["slug_" + lang] %>"><%= element["productName_" + lang] %></a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5><%= element.price  %> Eg</h5><h6 class="text-muted ml-2"><% if (element.descount) { %>
-                             <del><%= element.price - ((element.descount * element.price) / 100) %> Eg</del>
+                            <h5><%= element.price  %> <%= trans("Eg") %></h5><h6 class="text-muted ml-2"><% if (element.descount) { %>
+                             <del><%= element.price - ((element.descount * element.price) / 100) %> <%= trans("Eg") %></del>
                             <% } %></h6>
                         </div>
                         <div class="text-primary d-flex align-items-center justify-content-center mb-1">
@@ -265,14 +321,22 @@
     <!-- Products with hight rate -->
     <% if (productWithHighRate.length != 0) { %>
     <div class="container-fluid pt-5 pb-3">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3"> Products higth Rate</span></h2>
+        <h2  
+            data-aos="fade-left"
+            data-aos-delay=""
+            data-aos-offset=""
+            data-aos-duration="1200" class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3"> <%= trans("PRODUCTS_HIGTH_RATE")  %></span></h2>
         <div class="row px-xl-5">
             <% productWithHighRate.forEach(element => { %>
-             <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+             <div 
+                data-aos="fade-up"
+                data-aos-delay=""
+                data-aos-offset=""
+                data-aos-duration="1200" class="col-lg-3 col-md-4 col-sm-6 pb-1">
                 <div class="product-item bg-light mb-4">
                     <div class="product-img position-relative overflow-hidden">
                         <% if (element.descount) { %>
-                        <div class="discount"><%= element.descount %>% off</div>
+                        <div class="discount"><%= trans("save") %> <%= element.descount %>% </div>
                         <% } %>
                         <img class="img-fluid w-100" src="/assets/dashboard/Products/<%= element.productImage.split("--")[0] %>" alt="">
                         <div class="product-action">
@@ -284,8 +348,8 @@
                     <div class="text-center py-4">
                         <a class="h6 text-decoration-none text-truncate" href="/product-Details/<%= element["slug_" + lang] %>"><%= element["productName_" + lang] %></a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5><%= element.price  %> Eg</h5><h6 class="text-muted ml-2"><% if (element.descount) { %>
-                             <del><%= element.price - ((element.descount * element.price) / 100) %> Eg</del>
+                            <h5><%= element.price  %> <%= trans("Eg") %></h5><h6 class="text-muted ml-2"><% if (element.descount) { %>
+                             <del><%= element.price - ((element.descount * element.price) / 100) %> <%= trans("Eg") %></del>
                             <% } %></h6>
                         </div>
                         <div class="text-primary d-flex align-items-center justify-content-center mb-1">

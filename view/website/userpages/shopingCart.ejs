@@ -1,18 +1,4 @@
-<style>
-    .category select , .category input {
-        width:100%;
-        padding:10px
-    }
-    .category input {
-        padding:7px
-    }
-    .category div {
-        padding:0 !important
-    }
-    .category label {
-        display: block !important;
-    }
-</style>
+
 <%- include("../inclueds/head")  %>
 </head>
 <body>
@@ -23,17 +9,25 @@
     <!-- Breadcrumb Start -->
     <div class="container-fluid">
         <div class="row px-xl-5">
-            <div class="col-12">
+            <div class="col-12"  
+                    data-aos="fade-left"
+                    data-aos-delay=""
+                    data-aos-offset=""
+                    data-aos-duration="1500">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="/home">Home</a>
-                    <a class="breadcrumb-item text-dark" href="/all-products">Shop</a>
-                    <span class="breadcrumb-item active">Shoping Cart</span>
+                    <a class="breadcrumb-item text-dark" href="/home"><%= trans("home") %></a>
+                    <a class="breadcrumb-item text-dark" href="/all-products"><%= trans("products") %></a>
+                    <span class="breadcrumb-item active"><%= trans("shopingCart") %></span>
                 </nav>
                 <%- include("../inclueds/notification.ejs") %> 
             </div>
             <% if (allShopingProducts.length > 0) { %>
-                <div class="col-12">
-                    <div class="alert alert-danger">Your Cart will Be Empty After <%= TIME_OF_PRODUCT_IN_CART %> houre</div>
+                <div class="col-12"  
+                    data-aos="fade-right"
+                    data-aos-delay=""
+                    data-aos-offset=""
+                    data-aos-duration="1500">
+                    <div class="alert alert-danger"> <%= trans("cartEmpty") %> <%= TIME_OF_PRODUCT_IN_CART %> <%= trans("houre") %></div>
                 </div>            
             <% } %>      
         </div>
@@ -43,19 +37,24 @@
 
     <!-- Cart Start -->
     <div class="container-fluid">
-        <div class="row px-xl-5">
-            <div class=" <%= allShopingProducts.length > 0 ? "col-lg-9" : "col-lg-12" %> table-responsive mb-5">
+        <div class="row px-xl-5" 
+            >
+            <div 
+                data-aos="fade-up"
+                data-aos-delay=""
+                data-aos-offset=""
+                data-aos-duration="1500" class=" <%= allShopingProducts.length > 0 ? "col-lg-9" : "col-lg-12" %> table-responsive mb-5">
                 <% if (allShopingProducts.length > 0) { %>
-                   <table class="table table-light table-borderless table-hover text-center mb-0">
+                    <table class=" mb-5 table display nowrap table-striped table-bordered" style="width:100% !important">
                     <thead class="thead-dark">
                         <tr>
-                            <th>Products</th>
-                            <th>Real Price</th>
-                            <th>quantity</th>
-                            <th>Descount</th>
-                            <th>Shipping</th>
-                            <th>Structure</th>
-                            <th>action</th>
+                            <th><%= trans("products") %></th>
+                            <th><%= trans("RealPrice") %></th>
+                            <th><%= trans("count") %></th>
+                            <th><%= trans("Descount") %></th>
+                            <th><%= trans("Shipping") %></th>
+                            <th><%= trans("Structure") %></th>
+                            <th><%= trans("Actions") %></th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
@@ -79,54 +78,27 @@
                                 </div>
                             </td>
                             <td class="align-middle"><%= element.cartProduct.descount %>%</td>
-                            <td class="align-middle"><%= element.cartProduct.shipping %>Eg</td>
-                            <td class="align-middle"><%= element.cartProduct.structure * element.count %>Eg</td>
-                            <td class="align-middle d-flex"> 
-                                <a id="<%= element.cartProduct.id %>" data_attr="<%= element.cartProduct.id %>" title="remove from shoping cart" class="btn btn-outline-dark btn-square addUserCart mx-2 active" href=""><i class="fa fa-shopping-cart"></i></a>
+                            <td class="align-middle"><%= element.cartProduct.shipping %><%= trans("Eg") %></td>
+                            <td class="align-middle"><%= element.cartProduct.structure * element.count %><%= trans("Eg") %></td>
+                            <td class="align-middle"> 
+                                <a id="<%= element.cartProduct.id %>" data_attr="<%= element.cartProduct.id %>" title="<%= trans("removeFromShoping") %>" class="btn btn-outline-dark btn-square addUserCart mx-2 active" href=""><i class="fa fa-shopping-cart"></i></a>
                             </td>
                         </tr>
                         <% }) %>
 
                     </tbody>
                 </table>
-                <div class="pagination row px-xl-5">
-                    <div class="col-md-4">
-                            <div class="dataTables_info">Showing <%=  (curantPage - 1) * elements %> to <%=  ((curantPage - 1) * elements) + elements %> of <%= allElementCount %> entries</div>
-                    </div>
-                    <div class="col-md-4 dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
-                            <% if ((hasPrevious || hasNext)) { %>
-                            <ul style="margin:0 ;justify-content: center;" class=" pagination">
-                                <% if (curantPage != 1) { %>
-                                <li id="DataTables_Table_0_previous" class="paginate_button page-item previous"><a class="page-link" href="?page=<%= curantPage - 1 %>">Previous</a></li>
-                                <% } %>
-                                <% if (curantPage != 1 &&  curantPage - 1 != 1) { %> 
-                                    <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= 1 %>">1</a></li>
-                                <% } %>
-                                <% if (hasPrevious) { %>
-                                    <li class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage - 1 %>"><%= curantPage - 1 %></a></li>
-                                <% } %>
-                                <li id="" class="paginate_button page-item active"><a class="page-link" href="?page=<%= curantPage %>"><%= curantPage %></a></li>
-                                <% if (hasNext) { %>
-                                <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage + 1 %>"><%= curantPage + 1 %></a></li>
-                                <% } %>
-                                <% if (curantPage !=  lastPage &&  curantPage + 1 != lastPage) { %>
-                                <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= lastPage %>"><%= lastPage %></a></li>
-                                <% } %>
-                                <% if (curantPage != lastPage) { %>
-                                <li id="DataTables_Table_0_next" class="paginate_button page-item next"><a class="page-link" href="?page=<%= curantPage + 1 %>">Next</a></li>  
-                                <% } %>
-
-                            </ul>
-                            <%}%>
-                    </div>
-                </div>
                 <% } else { %>
-                    <div class="alert alert-danger">No Product Hir In shoping Cart</div>
+                    <div class="alert alert-danger"><%= trans("noProductInShopCart") %></div>
                 <% } %>
               
             </div>
             <% if (allShopingProducts.length > 0) { %>
-                <div class="col-lg-3">
+                <div 
+                    data-aos="fade-right"
+                    data-aos-delay=""
+                    data-aos-offset=""
+                    data-aos-duration="1500" class="col-lg-3">
                     <!-- <form class="mb-30" action="">
                         <div class="input-group">
                             <input type="text" class="form-control border-0 p-4" placeholder="Coupon Code">
@@ -135,37 +107,39 @@
                             </div>
                         </div>
                     </form> -->
-                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart Summary</span></h5>
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3"><%= trans("CART_SUMMARY") %></span></h5>
                     <div class="bg-light p-30 mb-5">
                         <div class="border-bottom pb-2">
                             <div class="d-flex justify-content-between ">
-                                <h6> before descount</h6>
-                                <h6><%= Math.round(totalOfAll.price) %>Eg</h6>
+                                <h6> <%= trans("beforeDescount") %></h6>
+                                <h6><%= Math.round(totalOfAll.price) %> <%= trans("Eg") %></h6>
                             </div>
                             <div class="d-flex justify-content-between ">
-                                <h6> After descount</h6>
-                                <h6><%= Math.round(totalOfAll.afterDescount) %>Eg</h6>
+                                <h6> <%= trans("afterDescount") %></h6>
+                                <h6><%= Math.round(totalOfAll.afterDescount) %> <%= trans("Eg") %></h6>
                             </div>
                             <div class="d-flex justify-content-between">
-                                <h6 class="font-weight-medium">total Shipping</h6>
-                                <h6 class="font-weight-medium"><%= Math.round(totalOfAll.shipping) %>Eg</h6>
+                                <h6 class="font-weight-medium"><%= trans("totalShipping") %></h6>
+                                <h6 class="font-weight-medium"><%= Math.round(totalOfAll.shipping) %> <%= trans("Eg") %></h6>
                             </div>
                             <div class="d-flex justify-content-between">
-                                <h6 class="font-weight-medium">total structure</h6>
-                                <h6 class="font-weight-medium"><%= Math.round(totalOfAll.structure) %>Eg</h6>
+                                <h6 class="font-weight-medium"><%= trans("totalStructure") %></h6>
+                                <h6 class="font-weight-medium"><%= Math.round(totalOfAll.structure) %> <%= trans("Eg") %></h6>
                             </div>
                         </div>
                         <div class="pt-2">
                             <div class="d-flex justify-content-between mt-2">
-                                <h5>Total</h5>
-                                <h5><%= Math.round(totalOfAll.totalPrice) %> Eg</h5>
+                                <h5><%= trans("TotalPrice") %></h5>
+                                <h5><%= Math.round(totalOfAll.totalPrice) %> <%= trans("Eg") %></h5>
                             </div>
-                            <a href="/mack-order" class="btn btn-block btn-primary font-weight-bold my-3 py-3">Complate process</a>
+                            <a href="/mack-order" class="btn btn-block btn-primary font-weight-bold my-3 py-3"><%= trans("ComplateProcess") %></a>
                         </div>
                     </div>
                 </div>            
             <% } %>
         </div>
+        <%- include("../inclueds/pafination.ejs")  %>
+
     </div>
     <!-- Cart End -->
 

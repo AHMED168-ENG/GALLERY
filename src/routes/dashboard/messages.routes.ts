@@ -18,11 +18,7 @@ export class MessagesRoutes {
       this.isAuthonticate.isAuthonticate,
       this.messagesController.findAll
     );
-    this.Router.post(
-      "/create",
-      this.isAuthonticate.isAuthonticate,
-      this.messagesController.crearePost
-    );
+    this.Router.post("/create", this.messagesController.crearePost);
     this.Router.get(
       "/not-seen",
       this.isAuthonticate.isAuthonticate,

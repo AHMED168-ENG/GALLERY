@@ -18,6 +18,7 @@ const users_1 = __importDefault(require("../../models/users"));
 const helper_1 = require("../../helpers/helper");
 const userRate_1 = __importDefault(require("../../models/userRate"));
 const products_1 = __importDefault(require("../../models/products"));
+const axios_1 = __importDefault(require("axios"));
 class CommentsController {
     constructor() { }
     findAllForAdmin(req, res, next) {
@@ -100,13 +101,31 @@ class CommentsController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const body = req.body;
-                comments_1.default.create(body).then(() => {
-                    console.log(req.cookies.User);
-                    res.send({
-                        status: true,
-                        message: "comment added successful",
-                        userData: req.cookies.User,
-                    });
+                if (!body.captcha) {
+                    res.send({ status: false, message: req.t("selectCapetch") });
+                    return;
+                }
+                let secretKey = process.env.recaptcherSitKey;
+                const verifyURL = `https://google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}`;
+                axios_1.default.get(verifyURL).then((data) => {
+                    if (data.data.success != true) {
+                        return res.json({
+                            status: false,
+                            message: req.t("FailedCaptcha"),
+                        });
+                    }
+                    else {
+                        return comments_1.default
+                            .create(body)
+                            .then(() => {
+                            res.send({
+                                status: true,
+                                message: req.t("commentAdded"),
+                                userData: req.cookies.User,
+                            });
+                        })
+                            .catch((error) => error);
+                    }
                 });
             }
             catch (error) {
@@ -137,6 +156,7 @@ class CommentsController {
     activation(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const validationMessage = new helper_1.ValidationMessage();
                 const body = req.body;
                 const commentState = body.state;
                 comments_1.default
@@ -148,11 +168,13 @@ class CommentsController {
                     },
                 })
                     .then(() => {
-                    res.send({ status: true, message: true });
+                    validationMessage.returnWithMessage(req, res, "", commentState == "true"
+                        ? req.t("commentDeActive")
+                        : req.t("commentActive"), "success");
                 });
             }
             catch (error) {
-                res.send({ status: false, message: true });
+                next(error);
             }
         });
     }
@@ -239,13 +261,13 @@ class CommentsController {
                 if (isCreat) {
                     res.send({
                         status: true,
-                        message: "your rate added successful",
+                        message: req.t("rateAdd"),
                     });
                 }
                 else {
                     res.send({
                         status: true,
-                        message: "your rate update successful",
+                        message: req.t("rateUpdate"),
                     });
                 }
             }

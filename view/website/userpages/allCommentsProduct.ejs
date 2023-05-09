@@ -1,26 +1,16 @@
-<style>
-    .category select , .category input {
-        width:100%;
-        padding:10px
-    }
-    .category input {
-        padding:7px
-    }
-    .category div {
-        padding:0 !important
-    }
-    .category label {
-        display: block !important;
-    }
-</style>
+
 <%- include("../inclueds/head")  %>
 </head>
 <body>
 <%- include("../inclueds/upperNavbare")  %> 
 <%- include("../inclueds/lowerNavbare")  %> 
 <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
-<header class="d-flex comments_header justify-content-between">
-    <h2 style="font-size:19px">all comments on this product <a href="/product-Details/<%= product["slug_" + lang] %>">(<%= product["productName_" + lang] %>)</a></h2>
+<header class="d-flex comments_header justify-content-between" 
+    data-aos="fade-right"
+    data-aos-delay=""
+    data-aos-offset=""
+    data-aos-duration="1500">
+    <h2 style="font-size:19px"><%= trans("allCommentsOnProduct") %> <a href="/product-Details/<%= product["slug_" + lang] %>">(<%= product["productName_" + lang] %>)</a></h2>
     <div>
         <select class="filter">
             <option value="createdAt" <%= query.filter == "createdAt" ? "selected" : "" %> >date</option>
@@ -29,27 +19,37 @@
             <option value="asc" <%= query.type == "asc" ? "selected" : "" %> >Asc</option>
             <option value="desc" <%= query.type == "desc" ? "selected" : "" %> >desc</option>
         </select>
-        <input type="text" value="<%= query.search ? query.search : '' %>" placeholder="search for user">
-        <button>search</button>
+        <input type="text" value="<%= query.search ? query.search : '' %>" placeholder="<%= trans("searchForUser") %>">
+        <button><%= trans("search") %></button>
     </div>
 </header>
 <div class="container">
-    <% if (userData) { %>
-        <div class="enterComment col-9 offset-2">
-            <textarea placeholder="enter your comment" class="commentValue"></textarea>
-            <button type="button" class="bg-primary btn" onclick="addCommentFunction(event)" class="addComment">Add Comment</button>
-        </div>
-    <% } else { %>
-        <div class="enterComment col-9 offset-2">
-            <a class="btn bg-primary text-center" href="/signIn">Login Before</a>
-        </div>
-        
-    <% } %>
+    <div 
+        data-aos="fade-left"
+        data-aos-delay=""
+        data-aos-offset=""
+        data-aos-duration="1500">
+        <% if (userData) { %>
+            <div class="enterComment col-9 offset-2" >
+                <textarea placeholder="<%= trans("enterYourComment") %>" class="commentValue"></textarea>
+                <button type="button" class="bg-primary btn" onclick="addCommentFunction(event)" class="addComment"><%= trans("AddComment") %></button>
+            </div>
+        <% } else { %>
+            <div class="enterComment col-9 offset-2">
+                <a class="btn bg-primary text-center" href="/signIn"><%= trans("LoginBefore") %></a>
+            </div>
+            
+        <% } %>
+    </div>
     <div class=" productComments" style="padding:50px 0">
 
         <% if (allComments.length > 0) { %>
             <% allComments.forEach(element => { %>
-                <div style="margin-bottom:20px">
+                <div style="margin-bottom:20px" 
+                    data-aos="fade-up"
+                    data-aos-delay=""
+                    data-aos-offset=""
+                    data-aos-duration="1500">
                     <div class="main align-items-center row ">
                         <div class="image col-md-2">
                             <% if (element.commentUser.image) { %>
@@ -79,37 +79,9 @@
             </div>
         <% } %>
     </div>
-    <div class="pagination row px-xl-5">
-        <div class="col-md-4">
-            <div class="dataTables_info">Showing <%=  (curantPage - 1) * elements %> to <%=  ((curantPage - 1) * elements) + elements %> of <%= allElementCount %> entries</div>
-        </div>
-        <div class="col-md-4 dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
-            <% if ((hasPrevious || hasNext)) { %>
-            <ul style="margin:0 ;justify-content: center;" class=" pagination">
-                <% if (curantPage != 1) { %>
-                <li id="DataTables_Table_0_previous" class="paginate_button page-item previous"><a class="page-link" href="?page=<%= curantPage - 1 %>">Previous</a></li>
-                <% } %>
-                <% if (curantPage != 1 &&  curantPage - 1 != 1) { %> 
-                    <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= 1 %>">1</a></li>
-                <% } %>
-                <% if (hasPrevious) { %>
-                    <li class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage - 1 %>"><%= curantPage - 1 %></a></li>
-                <% } %>
-                <li id="" class="paginate_button page-item active"><a class="page-link" href="?page=<%= curantPage %>"><%= curantPage %></a></li>
-                <% if (hasNext) { %>
-                <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage + 1 %>"><%= curantPage + 1 %></a></li>
-                <% } %>
-                <% if (curantPage !=  lastPage &&  curantPage + 1 != lastPage) { %>
-                <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= lastPage %>"><%= lastPage %></a></li>
-                <% } %>
-                <% if (curantPage != lastPage) { %>
-                <li id="DataTables_Table_0_next" class="paginate_button page-item next"><a class="page-link" href="?page=<%= curantPage + 1 %>">Next</a></li>  
-                <% } %>
 
-            </ul>
-            <%}%>
-        </div>
-    </div>
+
+    <%- include("../inclueds/pafination.ejs")  %>
 </div>
 
 <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||| -->

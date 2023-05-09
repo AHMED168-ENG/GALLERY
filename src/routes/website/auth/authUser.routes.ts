@@ -6,18 +6,24 @@ import { SignInUserValidation } from "../../../validations/website/auth/signInUs
 import { SignUpUserValidation } from "../../../validations/website/auth/signUpUserValidation";
 import { FilesOperations } from "../../../helpers/helper";
 import { UserNotAuthonticat } from "../../../middelwares/websit/userNotAuthonticat";
+import { ResetPasswordValidation } from "../../../validations/website/auth/resetPassword.validation";
+import { UpdatePasswordValidation } from "../../../validations/website/auth/updatePasswordPassword.validation";
 class AuthUserRoutes {
   public Router: Router;
   private authUserController: AuthUserController;
   private userNotAuthonticat: UserNotAuthonticat;
   private userAuthonticat: UserAuthonticat;
   private signInUserValidation: SignInUserValidation;
+  private resetPasswordValidation: ResetPasswordValidation;
+  private updatePasswordValidation: UpdatePasswordValidation;
   private signUpUserValidation: SignUpUserValidation;
   private filesOperations: FilesOperations;
   constructor() {
     this.authUserController = new AuthUserController();
     this.userAuthonticat = new UserAuthonticat();
     this.userNotAuthonticat = new UserNotAuthonticat();
+    this.resetPasswordValidation = new ResetPasswordValidation();
+    this.updatePasswordValidation = new UpdatePasswordValidation();
     this.signInUserValidation = new SignInUserValidation();
     this.signUpUserValidation = new SignUpUserValidation();
     this.filesOperations = new FilesOperations();
@@ -32,8 +38,8 @@ class AuthUserRoutes {
     );
     this.Router.post(
       "/signIn",
-      this.signInUserValidation.validation(),
       this.userNotAuthonticat.isNotAuthonticate,
+      this.signInUserValidation.validation(),
       this.authUserController.signInPost
     );
     this.Router.get(
@@ -43,15 +49,37 @@ class AuthUserRoutes {
     );
     this.Router.post(
       "/signUp",
-      this.signUpUserValidation.validation(),
-      this.filesOperations.uploade_img("assets/dashboard/User", "image"),
       this.userNotAuthonticat.isNotAuthonticate,
+      this.filesOperations.uploade_img("assets/dashboard/Users", "image"),
+      this.signUpUserValidation.validation(),
       this.authUserController.signUpPost
     );
     this.Router.post(
       "/signOut",
       this.userAuthonticat.isAuthonticate,
       this.authUserController.signOut
+    );
+    this.Router.get(
+      "/reset-password",
+      this.userNotAuthonticat.isNotAuthonticate,
+      this.authUserController.resetPassword
+    );
+    this.Router.post(
+      "/reset-password",
+      this.userNotAuthonticat.isNotAuthonticate,
+      this.resetPasswordValidation.validation(),
+      this.authUserController.resetPasswordPost
+    );
+    this.Router.get(
+      "/update-password/:token",
+      this.userNotAuthonticat.isNotAuthonticate,
+      this.authUserController.updatePassword
+    );
+    this.Router.post(
+      "/update-password/:token",
+      this.userNotAuthonticat.isNotAuthonticate,
+      this.updatePasswordValidation.validation(),
+      this.authUserController.updatePasswordPost
     );
   }
 }

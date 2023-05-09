@@ -37,12 +37,12 @@ export class FavoritProductsController {
       if (isCreat) {
         res.send({
           status: true,
-          message: "this product added to favorit cart successful",
+          message: req.t("addFavorit"),
         });
       } else {
         res.send({
           status: true,
-          message: "this product removed from favorit cart successful",
+          message: req.t("removeFavorit"),
         });
       }
     } catch (error) {
@@ -61,7 +61,7 @@ export class FavoritProductsController {
   ): Promise<void> {
     try {
       const page: any = req.query.page || 1;
-      const PAGE_ITEMS: string | number = +process.env.elementPerPage;
+      const PAGE_ITEMS: string | number = +process.env.elementPerPageSite;
       const userData = req.cookies.User;
       let shopingCart = [];
       const myArrCart = await tbl_shopingcart.findAll({
@@ -116,6 +116,8 @@ export class FavoritProductsController {
             elements: +PAGE_ITEMS,
             lastPage: Math.ceil(result.count / PAGE_ITEMS),
             shopingCart,
+            metaKeywords: null,
+            metaDescription: null,
           });
         });
     } catch (error) {

@@ -9,10 +9,19 @@
 <% if (allCatigory.length > 0) { %>
     <!-- Categories Start -->
     <div class="container-fluid pt-5">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">All Categories</span></h2>
         <div class="row px-xl-5 pb-3">
+            <div class="col-12">
+                <h2  data-aos="fade-left"
+                    data-aos-delay=""
+                    data-aos-offset=""
+                    data-aos-duration="1200" class="section-title position-relative text-uppercase"><span class="bg-secondary pr-3"><%= trans("ALLCATEGORIES") %></span></h2>
+            </div>
             <% allCatigory.forEach(element => { %>
-            <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+            <div class="col-lg-3 col-md-4 col-sm-6 pb-1"  
+                    data-aos="zoom-in"
+                    data-aos-delay=""
+                    data-aos-offset=""
+                    data-aos-duration="1200">
                 <a class="text-decoration-none latestCategoryLink" href="/all-products?category=<%= element["slug_" + lang] %>">
                     <div class="cat-item d-flex align-items-center mb-4">
                         <div class="overflow-hidden" style="width: 100px; height: 100px;">
@@ -20,7 +29,7 @@
                         </div>
                         <div class="flex-fill pl-3">
                             <h6><%= element["category_" + lang] %></h6>
-                            <small class="text-body"><%= element.products.length %> products</small>
+                            <small class="text-body"><%= element.products.length %> <%= trans("productsCount") %></small>
                         </div>
                     </div>
                 </a>
@@ -28,42 +37,11 @@
             <% }) %>
 
         </div>
-        <div class="pagination row px-xl-5">
-            <div class="col-md-4">
-                    <div class="dataTables_info">Showing <%=  (curantPage - 1) * elements %> to <%=  ((curantPage - 1) * elements) + elements %> of <%= allElementCount %> entries</div>
-            </div>
-            <div class="col-md-4 dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
-                    <% if ((hasPrevious || hasNext)) { %>
-                    <ul style="margin:0 ;justify-content: center;" class=" pagination">
-                        <% if (curantPage != 1) { %>
-                        <li id="DataTables_Table_0_previous" class="paginate_button page-item previous"><a class="page-link" href="?page=<%= curantPage - 1 %>">Previous</a></li>
-                        <% } %>
-                        <% if (curantPage != 1 &&  curantPage - 1 != 1) { %> 
-                            <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= 1 %>">1</a></li>
-                        <% } %>
-                        <% if (hasPrevious) { %>
-                            <li class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage - 1 %>"><%= curantPage - 1 %></a></li>
-                        <% } %>
-                        <li id="" class="paginate_button page-item active"><a class="page-link" href="?page=<%= curantPage %>"><%= curantPage %></a></li>
-                        <% if (hasNext) { %>
-                        <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage + 1 %>"><%= curantPage + 1 %></a></li>
-                        <% } %>
-                        <% if (curantPage !=  lastPage &&  curantPage + 1 != lastPage) { %>
-                        <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= lastPage %>"><%= lastPage %></a></li>
-                        <% } %>
-                        <% if (curantPage != lastPage) { %>
-                        <li id="DataTables_Table_0_next" class="paginate_button page-item next"><a class="page-link" href="?page=<%= curantPage + 1 %>">Next</a></li>  
-                        <% } %>
-
-                    </ul>
-                    <%}%>
-            </div>
-        </div>
-</div>
- 
+        <%- include("../inclueds/pafination.ejs")  %>
+    </div>
 <% } else { %>
     <div class="container">
-        <div class="alert alert-danger" style="background:#f8cb27;text-align: center;text-transform: capitalize;">there is no categorys</div>
+        <div class="alert alert-danger" style="background:#f8cb27;text-align: center;text-transform: capitalize;"><%= trans("noCategorys") %></div>
     </div>
 <% } %>
 

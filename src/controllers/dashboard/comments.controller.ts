@@ -4,6 +4,7 @@ import tbl_users from "../../models/users";
 import { Outhers, ValidationMessage } from "../../helpers/helper";
 import tbl_rate from "../../models/userRate";
 import tbl_products from "../../models/products";
+import axios from "axios";
 
 export class CommentsController {
   constructor() {}
@@ -47,7 +48,7 @@ export class CommentsController {
       next(error);
     }
   }
-  
+
   // all comment to product
   public async findAllForUser(
     req: Request,
@@ -97,14 +98,30 @@ export class CommentsController {
   ): Promise<void> {
     try {
       const body = req.body;
-
-      tbl_comments.create(body).then(() => {
-        console.log(req.cookies.User);
-        res.send({
-          status: true,
-          message: "comment added successful",
-          userData: req.cookies.User,
-        });
+      if (!body.captcha) {
+        res.send({ status: false, message:req.t("selectCapetch") });
+        return;
+      }
+      let secretKey = process.env.recaptcherSitKey;
+      const verifyURL = `https://google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}`;
+      axios.get(verifyURL).then((data) => {
+        if (data.data.success != true) {
+          return res.json({
+            status: false,
+            message: req.t("FailedCaptcha"),
+          });
+        } else {
+          return tbl_comments
+            .create(body)
+            .then(() => {
+              res.send({
+                status: true,
+                message: req.t("commentAdded"),
+                userData: req.cookies.User,
+              });
+            })
+            .catch((error) => error);
+        }
       });
     } catch (error) {
       res.send({ status: false, message: error.message });
@@ -139,6 +156,7 @@ export class CommentsController {
     next: NextFunction
   ): Promise<void> {
     try {
+      const validationMessage = new ValidationMessage();
       const body = req.body;
       const commentState = body.state;
       tbl_comments
@@ -153,10 +171,18 @@ export class CommentsController {
           }
         )
         .then(() => {
-          res.send({ status: true, message: true });
+          validationMessage.returnWithMessage(
+            req,
+            res,
+            "",
+            commentState == "true"
+              ? req.t("commentDeActive")
+              : req.t("commentActive"),
+            "success"
+          );
         });
     } catch (error) {
-      res.send({ status: false, message: true });
+      next(error);
     }
   }
 
@@ -259,12 +285,12 @@ export class CommentsController {
       if (isCreat) {
         res.send({
           status: true,
-          message: "your rate added successful",
+          message: req.t("rateAdd"),
         });
       } else {
         res.send({
           status: true,
-          message: "your rate update successful",
+          message: req.t("rateUpdate"),
         });
       }
     } catch (error) {

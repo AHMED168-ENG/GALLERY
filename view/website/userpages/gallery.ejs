@@ -1,0 +1,102 @@
+
+<%- include("../inclueds/head")  %>
+</head>
+<body>
+<%- include("../inclueds/upperNavbare")  %> 
+<%- include("../inclueds/lowerNavbare")  %> 
+<!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid"
+          data-aos="fade-left"
+          data-aos-delay=""
+          data-aos-offset=""
+          data-aos-duration="1500">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="/home"><%= trans("home") %></a>
+                    <a class="breadcrumb-item text-dark" href="/all-products"><%= trans("products") %></a>
+                    <span class="breadcrumb-item active"><%= trans("ProductsGallery") %></span>
+                </nav>
+                <%- include("../inclueds/notification.ejs") %> 
+            </div>    
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- faqs Start -->
+    <div class="all_faqs">
+      <div class="container-fluid">
+          <% if (gallerys.length > 0) { %>
+            <div class="row px-xl-5">
+                <div class="col-12 mb-3" 
+                    data-aos="fade-right"
+                    data-aos-delay=""
+                    data-aos-offset=""
+                    data-aos-duration="1500">
+                    <h2 class="section-title position-relative text-uppercase"><span class="bg-secondary pr-3"><%= trans("ProductsGallery") %></span></h2>
+                </div>
+                <div class="col-12">
+                    <div class="accordion">
+                      <div class="gallery " id="my-gallery">
+                      <% gallerys.forEach(element => { %>
+                        <!-- Grid column -->
+                            <div class="imageBlock" 
+                              data-aos="zoom-in"
+                              data-aos-delay=""
+                              data-aos-offset=""
+                              data-aos-duration="1500"> 
+                              <a href="/assets/dashboard/Gallery/<%= element.image.split("--")[0] %>" style="display:block" class="mb-3 pics productImage animation all 2" data-pswp-width="1875" data-pswp-height="2500"
+                                  target="_blank">
+                                  <img  class="img-fluid" style="width:100%"  src="/assets/dashboard/Gallery/<%= element.image.split("--")[0] %>" title=" <%= element["title_" + lang] %> " alt="Card image cap">
+                              </a>
+                              <a href="/product-Details/<%= element.galleryProduct["slug_" + lang] %>" class="btn btn-dark ">Go To Product</a>
+                            </div>
+
+                        <!-- Grid column -->
+                      <% }) %>
+                    </div>  
+                  </div>
+                </div>
+            </div>
+            <br>
+            <%- include("../inclueds/pafination.ejs")  %>
+          <% } else { %>
+            <div class="row px-xl-5 ">
+                <div class="col-12">
+                        <div class="alert alert-danger " style="background:#f8cb27;text-align: center;text-transform: capitalize;"><%= trans("noProductImages") %></div>
+                </div>
+            </div>
+          <% } %>
+        </div>
+    </div>    
+
+    <!-- faqs End -->
+
+
+<%- include("../inclueds/footer")  %>
+<%- include("../inclueds/footer_script")  %>
+<script src="/public/website/js/sweetalert.min.js"></script>
+<script type="module">
+    import PhotoSwipeLightbox from 'https://unpkg.com/photoswipe/dist/photoswipe-lightbox.esm.js';
+
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: '#my-gallery',
+      children: 'a.productImage',
+      pswpModule: () => import('https://unpkg.com/photoswipe'),
+    });
+
+    lightbox.init();
+</script>
+</body>
+    
+
+
+
+
+
+
+
+

@@ -18,6 +18,7 @@ const csurf_1 = __importDefault(require("csurf"));
 const sequelize_1 = require("sequelize");
 const allDashboard_routes_1 = __importDefault(require("./routes/dashboard/allDashboard.routes"));
 const allSite_routes_1 = __importDefault(require("./routes/website/allSite.routes"));
+const init_language_1 = __importDefault(require("./routes/language/init.language"));
 class App {
     constructor() {
         this.PORT = +config_1.env.port | +process.env.NODE_SERVER_PORT;
@@ -63,8 +64,14 @@ class App {
     }
     routes() {
         this.myApp.use((0, csurf_1.default)());
+        new init_language_1.default(this.myApp).router();
         new allDashboard_routes_1.default(this.myApp).router();
         new allSite_routes_1.default(this.myApp).router();
+        this.myApp.use((error, req, res, next) => {
+            console.log(error);
+            this.logging.loggerOperationError().error(error.message);
+            res.send(error.message);
+        });
         this.myApp.use((req, res, next) => {
             res.status(404).render("pageNotFound", { title: "page not found" });
         });

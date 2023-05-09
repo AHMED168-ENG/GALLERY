@@ -102,7 +102,7 @@ data-open="click" data-menu="vertical-menu" data-col="2-columns">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label for="projectinput1">button link  </label>
-                                                            <textarea type="text" class="form-control " placeholder="enter button link" name="link"><%- bodyData ? bodyData.link : sliderData.link_ar %></textarea>
+                                                            <textarea type="text" class="form-control " placeholder="enter button link" name="link"><%- bodyData ? bodyData.link : sliderData.link %></textarea>
                                                             <% if (validationError) { %>
                                                                 <% if (validationError["link"]) { %>
                                                                     <span class="text-danger"><%=validationError["link"][0].msg %></span>

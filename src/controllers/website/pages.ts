@@ -3,7 +3,10 @@ import tbl_categorys from "../../models/categorys";
 import tbl_products from "../../models/products";
 import tbl_userSearch from "../../models/userSearch";
 import { Op } from "sequelize";
+import translate from "translate-google";
 import tbl_sliders from "../../models/sliders";
+import fs from "fs";
+import path from "path";
 import {
   FilesOperations,
   Outhers,
@@ -17,6 +20,7 @@ import tbl_shopingcart from "../../models/shopingCart";
 import tbl_testmonials from "../../models/testmonials";
 import tbl_faqs from "../../models/faqs";
 import tbl_stats_section from "../../models/statsSection";
+import tbl_gallery from "../../models/gallery";
 
 class SitePagesController {
   constructor() {}
@@ -154,7 +158,7 @@ class SitePagesController {
       let statsSection = await tbl_stats_section.findOne({});
 
       res.render("website/userpages/home", {
-        title: "Home",
+        title: "home",
         notification: req.flash("notification"),
         allCatigory: allCatigory,
         latestProduct: latestProduct,
@@ -170,6 +174,8 @@ class SitePagesController {
         shopingCart,
         someTestmonials,
         statsSection,
+        metaKeywords: null,
+        metaDescription: null,
       });
     } catch (error) {
       next(error);
@@ -210,7 +216,7 @@ class SitePagesController {
         .scope("active")
         .findAndCountAll({});
       res.render("website/userpages/allCategorys", {
-        title: "All Categorys",
+        title: "ALLCATEGORIES",
         notification: req.flash("notification"),
         allCatigory: allCatigory,
         hasPrevious: page > 1,
@@ -221,6 +227,8 @@ class SitePagesController {
         allElementCount: allCatigoryCount.count,
         elements: +PAGE_ITEMS,
         lastPage: Math.ceil(allCatigoryCount.count / PAGE_ITEMS),
+        metaDescription: null,
+        metaKeywords: null,
       });
     } catch (error) {
       next(error);
@@ -353,7 +361,7 @@ class SitePagesController {
 
       let allCategorys = await tbl_categorys.scope("active").findAll({});
       res.render("website/userpages/allProducts", {
-        title: "All Categorys",
+        title: "ALLPRODUCTS",
         notification: req.flash("notification"),
         allProducts: allProducts.rows,
         hasPrevious: page > 1,
@@ -368,6 +376,8 @@ class SitePagesController {
         favoritProducts: favoritProducts,
         shopingCart: shopingCart,
         Query: Query,
+        metaDescription: null,
+        metaKeywords: null,
       });
     } catch (error) {
       next(error);
@@ -411,8 +421,9 @@ class SitePagesController {
           },
         ],
       });
+
       res.render("website/userpages/allCommentsProduct", {
-        title: "All Comments",
+        title: "allComments",
         notification: req.flash("notification"),
         allComments: allComments.rows,
         hasPrevious: page > 1,
@@ -426,6 +437,8 @@ class SitePagesController {
         query: Query,
         formateDate: othersFn.formateDate,
         product,
+        metaDescription: null,
+        metaKeywords: null,
       });
     } catch (error) {
       next(error);
@@ -443,6 +456,7 @@ class SitePagesController {
       const validationMessage = new ValidationMessage();
       const othersFn = new Outhers();
       const userData = req.cookies.User;
+      const lng = req.cookies.lng;
       // ================ find the product
       let product: any = await tbl_products.scope("active").findOne({
         where: {
@@ -547,7 +561,7 @@ class SitePagesController {
       });
 
       res.render("website/userpages/productDetails", {
-        title: "Product Details",
+        title: product["slug_" + lng],
         notification: req.flash("notification"),
         product: product,
         allComments: allComments,
@@ -555,8 +569,11 @@ class SitePagesController {
         userRate: userRate,
         productRelated: productRelated,
         sumOfRate: othersFn.getSumeOfArray,
+        secretKey: process.env.recaptcherSecretKey,
         favoritProducts,
         shopingCart,
+        metaDescription: product["metaDescription_" + lng],
+        metaKeywords: product["metaKeywords_" + lng],
       });
     } catch (error) {
       next(error);
@@ -571,11 +588,12 @@ class SitePagesController {
     next: NextFunction
   ): Promise<void> {
     try {
-      console.log(process.env.recaptcherSecretKey);
       res.render("website/userpages/contactUs", {
         title: "contactUs",
         notification: req.flash("notification"),
         secretKey: process.env.recaptcherSecretKey,
+        metaDescription: null,
+        metaKeywords: null,
       });
     } catch (error) {
       next(error);
@@ -607,9 +625,10 @@ class SitePagesController {
             },
           ],
         })
-        .then((result) => {
+
+        .then(async (result) => {
           res.render("website/userpages/testmonialsPage", {
-            title: "All testmonials",
+            title: "allTestmonials",
             notification: req.flash("notification"),
             allTestmonials: result.rows,
             hasPrevious: page > 1,
@@ -622,6 +641,9 @@ class SitePagesController {
             lastPage: Math.ceil(result.count / PAGE_ITEMS),
             query: Query,
             numberOfLetters: +process.env.NUMBER_OF_LETTERS_OF_TESTMONIAL,
+            secretKey: process.env.recaptcherSecretKey,
+            metaDescription: null,
+            metaKeywords: null,
           });
         });
     } catch (error) {
@@ -647,9 +669,9 @@ class SitePagesController {
           limit: PAGE_ITEMS,
           order: [["createdAt", "desc"]],
         })
-        .then((result) => {
+        .then(async (result) => {
           res.render("website/userpages/faqs", {
-            title: "All faqs",
+            title: "allFaqs",
             notification: req.flash("notification"),
             allfaqs: result.rows,
             hasPrevious: page > 1,
@@ -661,7 +683,8 @@ class SitePagesController {
             elements: +PAGE_ITEMS,
             lastPage: Math.ceil(result.count / PAGE_ITEMS),
             query: Query,
-            numberOfLetters: +process.env.NUMBER_OF_LETTERS_OF_TESTMONIAL,
+            metaDescription: null,
+            metaKeywords: null,
           });
         });
     } catch (error) {
@@ -669,6 +692,83 @@ class SitePagesController {
     }
   }
   // faqs page
+  // gallery page
+  public async gallery(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const Query = req.query;
+      const page: any = Query.page || 1;
+      const PAGE_ITEMS: string | number = +process.env.elementPerPageSite;
+      tbl_gallery
+        .scope("active")
+        .findAndCountAll({
+          offset: +((page - 1) * PAGE_ITEMS),
+          limit: PAGE_ITEMS,
+          order: [["createdAt", "desc"]],
+          include: [
+            {
+              model: tbl_products,
+              as: "galleryProduct",
+              attributes: ["slug_ar", "slug_en"],
+            },
+          ],
+        })
+        .then(async (result) => {
+          res.render("website/userpages/gallery", {
+            title: "ProductsGallery",
+            notification: req.flash("notification"),
+            gallerys: result.rows,
+            hasPrevious: page > 1,
+            hasNext: PAGE_ITEMS * page < result.count,
+            nextPage: page + 1,
+            previousPage: page - 1,
+            curantPage: +page,
+            allElementCount: result.count,
+            elements: +PAGE_ITEMS,
+            lastPage: Math.ceil(result.count / PAGE_ITEMS),
+            query: Query,
+            metaDescription: null,
+            metaKeywords: null,
+          });
+        });
+    } catch (error) {
+      next(error);
+    }
+  }
+  // gallery page
+  // update personal information
+  public async personalInformation(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      tbl_users
+        .scope("active")
+        .findOne({
+          where: {
+            id: req.cookies.User.id,
+          },
+        })
+        .then(async (result) => {
+          res.render("website/userpages/personalInformation", {
+            title: "editPersonalInformation",
+            notification: req.flash("notification"),
+            validationError: req.flash("validationError")[0] || {},
+            user: result,
+            bodyData: req.flash("bodyData")[0],
+            metaDescription: null,
+            metaKeywords: null,
+          });
+        });
+    } catch (error) {
+      next(error);
+    }
+  }
+  // update personal information
 }
 // end show dashboard page
 

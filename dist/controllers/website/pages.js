@@ -26,6 +26,7 @@ const shopingCart_1 = __importDefault(require("../../models/shopingCart"));
 const testmonials_1 = __importDefault(require("../../models/testmonials"));
 const faqs_1 = __importDefault(require("../../models/faqs"));
 const statsSection_1 = __importDefault(require("../../models/statsSection"));
+const gallery_1 = __importDefault(require("../../models/gallery"));
 class SitePagesController {
     constructor() { }
     home(req, res, next) {
@@ -140,7 +141,7 @@ class SitePagesController {
                 });
                 let statsSection = yield statsSection_1.default.findOne({});
                 res.render("website/userpages/home", {
-                    title: "Home",
+                    title: "home",
                     notification: req.flash("notification"),
                     allCatigory: allCatigory,
                     latestProduct: latestProduct,
@@ -156,6 +157,8 @@ class SitePagesController {
                     shopingCart,
                     someTestmonials,
                     statsSection,
+                    metaKeywords: null,
+                    metaDescription: null,
                 });
             }
             catch (error) {
@@ -193,7 +196,7 @@ class SitePagesController {
                     .scope("active")
                     .findAndCountAll({});
                 res.render("website/userpages/allCategorys", {
-                    title: "All Categorys",
+                    title: "ALLCATEGORIES",
                     notification: req.flash("notification"),
                     allCatigory: allCatigory,
                     hasPrevious: page > 1,
@@ -204,6 +207,8 @@ class SitePagesController {
                     allElementCount: allCatigoryCount.count,
                     elements: +PAGE_ITEMS,
                     lastPage: Math.ceil(allCatigoryCount.count / PAGE_ITEMS),
+                    metaDescription: null,
+                    metaKeywords: null,
                 });
             }
             catch (error) {
@@ -327,7 +332,7 @@ class SitePagesController {
                 }
                 let allCategorys = yield categorys_1.default.scope("active").findAll({});
                 res.render("website/userpages/allProducts", {
-                    title: "All Categorys",
+                    title: "ALLPRODUCTS",
                     notification: req.flash("notification"),
                     allProducts: allProducts.rows,
                     hasPrevious: page > 1,
@@ -342,6 +347,8 @@ class SitePagesController {
                     favoritProducts: favoritProducts,
                     shopingCart: shopingCart,
                     Query: Query,
+                    metaDescription: null,
+                    metaKeywords: null,
                 });
             }
             catch (error) {
@@ -383,7 +390,7 @@ class SitePagesController {
                     ],
                 });
                 res.render("website/userpages/allCommentsProduct", {
-                    title: "All Comments",
+                    title: "allComments",
                     notification: req.flash("notification"),
                     allComments: allComments.rows,
                     hasPrevious: page > 1,
@@ -397,6 +404,8 @@ class SitePagesController {
                     query: Query,
                     formateDate: othersFn.formateDate,
                     product,
+                    metaDescription: null,
+                    metaKeywords: null,
                 });
             }
             catch (error) {
@@ -410,6 +419,7 @@ class SitePagesController {
                 const validationMessage = new helper_1.ValidationMessage();
                 const othersFn = new helper_1.Outhers();
                 const userData = req.cookies.User;
+                const lng = req.cookies.lng;
                 let product = yield products_1.default.scope("active").findOne({
                     where: {
                         [sequelize_1.Op.or]: [
@@ -495,7 +505,7 @@ class SitePagesController {
                     include: [{ model: userRate_1.default, as: "allRate" }],
                 });
                 res.render("website/userpages/productDetails", {
-                    title: "Product Details",
+                    title: product["slug_" + lng],
                     notification: req.flash("notification"),
                     product: product,
                     allComments: allComments,
@@ -503,8 +513,11 @@ class SitePagesController {
                     userRate: userRate,
                     productRelated: productRelated,
                     sumOfRate: othersFn.getSumeOfArray,
+                    secretKey: process.env.recaptcherSecretKey,
                     favoritProducts,
                     shopingCart,
+                    metaDescription: product["metaDescription_" + lng],
+                    metaKeywords: product["metaKeywords_" + lng],
                 });
             }
             catch (error) {
@@ -515,11 +528,12 @@ class SitePagesController {
     contactUs(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log(process.env.recaptcherSecretKey);
                 res.render("website/userpages/contactUs", {
                     title: "contactUs",
                     notification: req.flash("notification"),
                     secretKey: process.env.recaptcherSecretKey,
+                    metaDescription: null,
+                    metaKeywords: null,
                 });
             }
             catch (error) {
@@ -546,9 +560,9 @@ class SitePagesController {
                         },
                     ],
                 })
-                    .then((result) => {
+                    .then((result) => __awaiter(this, void 0, void 0, function* () {
                     res.render("website/userpages/testmonialsPage", {
-                        title: "All testmonials",
+                        title: "allTestmonials",
                         notification: req.flash("notification"),
                         allTestmonials: result.rows,
                         hasPrevious: page > 1,
@@ -561,8 +575,11 @@ class SitePagesController {
                         lastPage: Math.ceil(result.count / PAGE_ITEMS),
                         query: Query,
                         numberOfLetters: +process.env.NUMBER_OF_LETTERS_OF_TESTMONIAL,
+                        secretKey: process.env.recaptcherSecretKey,
+                        metaDescription: null,
+                        metaKeywords: null,
                     });
-                });
+                }));
             }
             catch (error) {
                 next(error);
@@ -582,9 +599,9 @@ class SitePagesController {
                     limit: PAGE_ITEMS,
                     order: [["createdAt", "desc"]],
                 })
-                    .then((result) => {
+                    .then((result) => __awaiter(this, void 0, void 0, function* () {
                     res.render("website/userpages/faqs", {
-                        title: "All faqs",
+                        title: "allFaqs",
                         notification: req.flash("notification"),
                         allfaqs: result.rows,
                         hasPrevious: page > 1,
@@ -596,9 +613,81 @@ class SitePagesController {
                         elements: +PAGE_ITEMS,
                         lastPage: Math.ceil(result.count / PAGE_ITEMS),
                         query: Query,
-                        numberOfLetters: +process.env.NUMBER_OF_LETTERS_OF_TESTMONIAL,
+                        metaDescription: null,
+                        metaKeywords: null,
                     });
-                });
+                }));
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    gallery(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const Query = req.query;
+                const page = Query.page || 1;
+                const PAGE_ITEMS = +process.env.elementPerPageSite;
+                gallery_1.default
+                    .scope("active")
+                    .findAndCountAll({
+                    offset: +((page - 1) * PAGE_ITEMS),
+                    limit: PAGE_ITEMS,
+                    order: [["createdAt", "desc"]],
+                    include: [
+                        {
+                            model: products_1.default,
+                            as: "galleryProduct",
+                            attributes: ["slug_ar", "slug_en"],
+                        },
+                    ],
+                })
+                    .then((result) => __awaiter(this, void 0, void 0, function* () {
+                    res.render("website/userpages/gallery", {
+                        title: "ProductsGallery",
+                        notification: req.flash("notification"),
+                        gallerys: result.rows,
+                        hasPrevious: page > 1,
+                        hasNext: PAGE_ITEMS * page < result.count,
+                        nextPage: page + 1,
+                        previousPage: page - 1,
+                        curantPage: +page,
+                        allElementCount: result.count,
+                        elements: +PAGE_ITEMS,
+                        lastPage: Math.ceil(result.count / PAGE_ITEMS),
+                        query: Query,
+                        metaDescription: null,
+                        metaKeywords: null,
+                    });
+                }));
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    personalInformation(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                users_1.default
+                    .scope("active")
+                    .findOne({
+                    where: {
+                        id: req.cookies.User.id,
+                    },
+                })
+                    .then((result) => __awaiter(this, void 0, void 0, function* () {
+                    res.render("website/userpages/personalInformation", {
+                        title: "editPersonalInformation",
+                        notification: req.flash("notification"),
+                        validationError: req.flash("validationError")[0] || {},
+                        user: result,
+                        bodyData: req.flash("bodyData")[0],
+                        metaDescription: null,
+                        metaKeywords: null,
+                    });
+                }));
             }
             catch (error) {
                 next(error);

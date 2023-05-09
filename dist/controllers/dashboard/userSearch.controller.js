@@ -19,7 +19,6 @@ class UserSearch {
     constructor() { }
     addUserSearch(req, res, next) {
         try {
-            console.log("ahmed reda alsahed");
             const body = req.body;
             userSearch_1.default
                 .findOne({

@@ -18,117 +18,10 @@ const products_1 = __importDefault(require("../../models/products"));
 const shopingCart_1 = __importDefault(require("../../models/shopingCart"));
 const orders_1 = __importDefault(require("../../models/orders"));
 const users_1 = __importDefault(require("../../models/users"));
-const sequelize_1 = require("sequelize");
+const productsOrders_1 = __importDefault(require("../../models/productsOrders"));
+const appSeting_1 = __importDefault(require("../../models/appSeting"));
 class Orders {
     constructor() { }
-    showOrderPage(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const others = new helper_1.Outhers();
-                const userData = req.cookies.User;
-                shopingCart_1.default
-                    .findAll({
-                    where: {
-                        userId: userData.id,
-                    },
-                    include: [
-                        {
-                            model: products_1.default,
-                            as: "cartProduct",
-                            attributes: [
-                                "id",
-                                "slug_ar",
-                                "slug_en",
-                                "price",
-                                "productName_ar",
-                                "productName_en",
-                                "shipping",
-                                "descount",
-                                "structure",
-                            ],
-                        },
-                    ],
-                })
-                    .then((result) => {
-                    if (result.length == 0) {
-                        res.redirect("/home");
-                        return;
-                    }
-                    const totalOfAll = others.finalPrice(result);
-                    res.render("website/userpages/mackOrder", {
-                        title: " Mack Order",
-                        notification: req.flash("notification"),
-                        allFavoritProducts: result,
-                        totalOfAll,
-                        allProductCart: result,
-                    });
-                });
-            }
-            catch (error) {
-                next(error);
-            }
-        });
-    }
-    addOrderPost(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const validationMessage = new helper_1.ValidationMessage();
-                const userData = req.cookies.User;
-                const lang = req.cookies.lang;
-                shopingCart_1.default
-                    .findAll({
-                    include: [
-                        {
-                            model: products_1.default,
-                            as: "cartProduct",
-                            attributes: [
-                                "id",
-                                "slug_ar",
-                                "slug_en",
-                                "price",
-                                "productName_ar",
-                                "productName_en",
-                                "shipping",
-                                "descount",
-                                "structure",
-                            ],
-                        },
-                    ],
-                    where: {
-                        userId: userData.id,
-                    },
-                })
-                    .then((result) => {
-                    let productId = "";
-                    let productCount = "";
-                    result.forEach((ele) => {
-                        productId += ele.cartProduct.id + ",";
-                        productCount += ele.count + ",";
-                    });
-                    orders_1.default
-                        .create({
-                        userId: userData.id,
-                        productsId: productId,
-                        productsCount: productCount,
-                    })
-                        .then(() => __awaiter(this, void 0, void 0, function* () {
-                        yield shopingCart_1.default.destroy({
-                            where: {
-                                userId: userData.id,
-                            },
-                        });
-                        const message = lang != "en"
-                            ? "your order is creating now and the admin will contact you in 48 houre and we empty your cart"
-                            : "الطلب الخاص بك تم انشاءه انتظر حتي يتم الاتصال بك ومتابعه التفاصيل وتم تفريغ الكارت الخاص بيك";
-                        validationMessage.returnWithMessage(req, res, "/shoping-cart", message, "success");
-                    }));
-                });
-            }
-            catch (error) {
-                next(error);
-            }
-        });
-    }
     allOrders(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -175,7 +68,6 @@ class Orders {
                         id: req.params.id,
                     },
                 });
-                let productIdOrder;
                 orders_1.default
                     .findOne({
                     order: [["createdAt", "desc"]],
@@ -187,35 +79,22 @@ class Orders {
                             model: users_1.default,
                             as: "orderUser",
                         },
+                        {
+                            model: productsOrders_1.default,
+                            as: "productOrderTable",
+                            include: [{ model: products_1.default, as: "productTable" }],
+                        },
                     ],
                 })
                     .then((result) => __awaiter(this, void 0, void 0, function* () {
                     if (!result) {
                         return validationMessage.returnWithMessage(req, res, "/dashboard/orders/", "this order not registed hir", "danger");
                     }
-                    productIdOrder = result.productsId.split(",");
-                    const allProducts = yield products_1.default.findAll({
-                        attributes: [
-                            "productName_en",
-                            "id",
-                            "price",
-                            "shipping",
-                            "descount",
-                            "structure",
-                            "productImage",
-                        ],
-                        where: {
-                            id: {
-                                [sequelize_1.Op.in]: productIdOrder,
-                            },
-                        },
-                    });
-                    const totalOfAll = others.finalPriceForAdmin(allProducts, result);
+                    const totalOfAll = others.finalPriceForAdmin(result.productOrderTable);
                     res.render("dashboard/orders/showOrder", {
                         title: " Dashboard | Show Order",
                         notification: req.flash("notification"),
                         order: result,
-                        allProducts,
                         totalOfAll,
                         getTotalPriceForOneProduct: others.priceForOneProduct,
                     });
@@ -381,6 +260,216 @@ class Orders {
                     const message = "the order has deleted successful";
                     validationMessage.returnWithMessage(req, res, "/dashboard/orders/", message, "success");
                 })
+                    .catch((error) => error);
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    showOrderPage(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const others = new helper_1.Outhers();
+                const userData = req.cookies.User;
+                shopingCart_1.default
+                    .findAll({
+                    where: {
+                        userId: userData.id,
+                    },
+                    include: [
+                        {
+                            model: products_1.default,
+                            as: "cartProduct",
+                            attributes: [
+                                "id",
+                                "slug_ar",
+                                "slug_en",
+                                "price",
+                                "productName_ar",
+                                "productName_en",
+                                "shipping",
+                                "descount",
+                                "structure",
+                            ],
+                        },
+                    ],
+                })
+                    .then((result) => {
+                    if (result.length == 0) {
+                        res.redirect("/home");
+                        return;
+                    }
+                    const totalOfAll = others.finalPrice(result);
+                    res.render("website/userpages/mackOrder", {
+                        title: "mackOrder",
+                        notification: req.flash("notification"),
+                        totalOfAll,
+                        allProductCart: result,
+                        metaKeywords: null,
+                        metaDescription: null,
+                    });
+                });
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    addOrderPost(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const ordersPdf = new helper_1.OrdersPdf();
+                const userData = req.cookies.User;
+                const lng = req.cookies.lng;
+                shopingCart_1.default
+                    .findAll({
+                    where: {
+                        userId: userData.id,
+                    },
+                })
+                    .then((result) => {
+                    orders_1.default
+                        .create({
+                        userId: userData.id,
+                    })
+                        .then((order) => __awaiter(this, void 0, void 0, function* () {
+                        for (var x = 0; x < result.length; x++) {
+                            yield productsOrders_1.default.create({
+                                orderId: order.id,
+                                productId: result[x].productId,
+                                productCount: result[x].count,
+                            });
+                        }
+                        const orderData = yield orders_1.default.findOne({
+                            where: {
+                                id: order.id,
+                            },
+                            include: [
+                                {
+                                    model: productsOrders_1.default,
+                                    as: "productOrderTable",
+                                    include: [{ model: products_1.default, as: "productTable" }],
+                                },
+                            ],
+                        });
+                        console.log(orderData.productOrderTable);
+                        const app_setting = yield appSeting_1.default.findOne({
+                            attributes: ["sitName_en"],
+                        });
+                        ordersPdf.createPdf(res, app_setting, orderData, req.t, lng, req.cookies.User);
+                        res.send({
+                            status: true,
+                            message: req.t("orderCreate"),
+                        });
+                    }))
+                        .catch((error) => error);
+                })
+                    .catch((error) => error);
+            }
+            catch (error) {
+                res.send({
+                    status: false,
+                    message: error.message,
+                });
+            }
+        });
+    }
+    userOrders(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const othersFn = new helper_1.Outhers();
+                const page = req.query.page || 1;
+                const PAGE_ITEMS = +process.env.elementPerPageSite;
+                orders_1.default
+                    .findAndCountAll({
+                    distinct: true,
+                    order: [["createdAt", "desc"]],
+                })
+                    .then((result) => {
+                    res.render("website/userpages/userOrders", {
+                        title: "yourOrders",
+                        notification: req.flash("notification"),
+                        allOrders: result.rows,
+                        hasPrevious: page > 1,
+                        hasNext: PAGE_ITEMS * page < result.count,
+                        nextPage: page + 1,
+                        previousPage: page - 1,
+                        curantPage: +page,
+                        allElementCount: result.count,
+                        elements: +PAGE_ITEMS,
+                        lastPage: Math.ceil(result.count / PAGE_ITEMS),
+                        metaKeywords: null,
+                        metaDescription: null,
+                        formateDate: othersFn.formateDate,
+                    });
+                });
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    showOrderDetailsForUser(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const others = new helper_1.Outhers();
+                const userData = req.cookies.User;
+                orders_1.default
+                    .findOne({
+                    order: [["createdAt", "desc"]],
+                    where: {
+                        id: req.params.id,
+                        userId: userData.id,
+                    },
+                    include: [
+                        {
+                            model: productsOrders_1.default,
+                            as: "productOrderTable",
+                            include: [{ model: products_1.default, as: "productTable" }],
+                        },
+                    ],
+                })
+                    .then((result) => __awaiter(this, void 0, void 0, function* () {
+                    if (!result) {
+                        return res.redirect("/your-orders");
+                    }
+                    const totalOfAll = others.finalPriceForAdmin(result.productOrderTable);
+                    res.render("website/userpages/showOrderDetails", {
+                        title: " Dashboard | Show Order",
+                        notification: req.flash("notification"),
+                        order: result,
+                        totalOfAll,
+                        getTotalPriceForOneProduct: others.priceForOneProduct,
+                        metaKeywords: null,
+                        metaDescription: null,
+                    });
+                }));
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    downloadOrderPdf(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const ordersPdf = new helper_1.OrdersPdf();
+                const params = req.params;
+                const userData = req.cookies.User;
+                orders_1.default
+                    .findOne({
+                    where: {
+                        id: params.id,
+                        userId: userData.id,
+                    },
+                })
+                    .then((result) => __awaiter(this, void 0, void 0, function* () {
+                    const app_setting = yield appSeting_1.default.findOne({
+                        attributes: ["sitName_en"],
+                    });
+                    ordersPdf.downloadPdf(res, app_setting, params.id);
+                }))
                     .catch((error) => error);
             }
             catch (error) {

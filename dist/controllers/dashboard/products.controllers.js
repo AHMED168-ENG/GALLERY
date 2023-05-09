@@ -165,14 +165,14 @@ class ProductController {
                 const elementWithArSlug = yield products_1.default.findOne({
                     where: { slug_ar: body.slug_ar },
                 });
-                const elementWithenSlug = yield products_1.default.findOne({
+                const elementWithEnSlug = yield products_1.default.findOne({
                     where: { slug_en: body.slug_en },
                 });
                 if (elementWithArSlug) {
-                    body.slug_ar = body.slug_ar + "-" + Date.now();
+                    body.slug_ar = body.slug_ar + "-" + (Date.now() - 10000);
                 }
-                if (elementWithenSlug) {
-                    body.slug_en = body.slug_en + "-" + Date.now();
+                if (elementWithEnSlug) {
+                    body.slug_en = body.slug_en + "-" + (Date.now() - 10000);
                 }
                 body.active = body.active ? true : false;
                 body.productImage = files["productImage"];
@@ -264,14 +264,14 @@ class ProductController {
                 const elementWithArSlug = yield products_1.default.findOne({
                     where: { slug_ar: body.slug_ar, id: { [sequelize_1.Op.ne]: req.params.id } },
                 });
-                const elementWithenSlug = yield products_1.default.findOne({
+                const elementWithEnSlug = yield products_1.default.findOne({
                     where: { slug_en: body.slug_en, id: { [sequelize_1.Op.ne]: req.params.id } },
                 });
                 if (elementWithArSlug) {
-                    body.slug_ar = body.slug_ar + "-" + Date.now();
+                    body.slug_ar = body.slug_ar + "-" + (Date.now() - 10000);
                 }
-                if (elementWithenSlug) {
-                    body.slug_en = body.slug_en + "-" + Date.now();
+                if (elementWithEnSlug) {
+                    body.slug_en = body.slug_en + "-" + (Date.now() - 10000);
                 }
                 body.category =
                     body.category[0] != ""

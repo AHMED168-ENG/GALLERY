@@ -107,22 +107,22 @@ data-open="click" data-menu="vertical-menu" data-col="2-columns">
                                             </tr>
                                             </thead>
                                             <tbody>
-                                                <% allProducts.forEach((element,index) => { %>
+                                                <% order.productOrderTable.forEach((element,index) => { %>
                                                  <tr>   
-                                                        <% if (element.productImage) { %>
-                                                            <td><img style="width:40px ; height:40px" src="/assets/dashboard/Products/<%= element.productImage.split("--")[0] %>" alt=""></td>
+                                                        <% if (element.productTable.productImage) { %>
+                                                            <td><img style="width:40px ; height:40px" src="/assets/dashboard/Products/<%= element.productTable.productImage.split("--")[0] %>" alt=""></td>
                                                         <% } else { %>
                                                             <td><img style="width:40px ; height:40px" src="/assets/dashboard/defaultImages/avatar.png" alt=""></td>
                                                         <%}%>                                                        
-                                                        <td class="chang"><p><a href="/dashboard/products/update/<%= element.id %>"><%= element.productName_en %></a></p></td>
-                                                        <td><%= getTotalPriceForOneProduct(element , order).count %></td>
-                                                        <td><%= element.price %>Eg</td>
-                                                        <td><%= element.descount %>%</td>
-                                                        <td><%= getTotalPriceForOneProduct(element , order).shipping %>Eg</td>
-                                                        <td><%= getTotalPriceForOneProduct(element , order).structure %>Eg</td>
-                                                        <td><%= getTotalPriceForOneProduct(element , order).price %>Eg</td>
-                                                        <td><%= getTotalPriceForOneProduct(element , order).afterDescount %>Eg</td>
-                                                        <td><%= getTotalPriceForOneProduct(element , order).totalPrice %>Eg</td>
+                                                        <td class="chang"><p><a href="/dashboard/products/update/<%= element.productTable.id %>"><%= element.productTable.productName_en %></a></p></td>
+                                                        <td><%= getTotalPriceForOneProduct(element).count %></td>
+                                                        <td><%= element.productTable.price %>Eg</td>
+                                                        <td><%= element.productTable.descount %>%</td>
+                                                        <td><%= getTotalPriceForOneProduct(element).shipping %>Eg</td>
+                                                        <td><%= getTotalPriceForOneProduct(element).structure %>Eg</td>
+                                                        <td><%= getTotalPriceForOneProduct(element).price %>Eg</td>
+                                                        <td><%= getTotalPriceForOneProduct(element).afterDescount %>Eg</td>
+                                                        <td><%= getTotalPriceForOneProduct(element).totalPrice %>Eg</td>
                                                     </tr>
                                                 <% }) %>
                                             </tbody>
@@ -187,10 +187,7 @@ data-open="click" data-menu="vertical-menu" data-col="2-columns">
     <script src="https://cdn.ckshowor.com/ckshowor5/36.0.0/classic/ckshowor.js"></script>
     <script type="text/javascript">
         const allshowor = document.querySelectorAll( '.showor' )
-        console.log( allshowor[0])
-        document.onclick = function() {
-            console.log( allshowor[0].value)
-        }
+        
         allshowor.forEach(ele => {
         Classicshowor
         .create( ele, {

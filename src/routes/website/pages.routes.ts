@@ -9,25 +9,36 @@ import { Orders } from "../../controllers/dashboard/orders.controller";
 import { ProductController } from "../../controllers/dashboard/products.controllers";
 import { UserSearch } from "../../controllers/dashboard/userSearch.controller";
 import { TestmonialsController } from "../../controllers/dashboard/testmonials.controllers";
+import { UserController } from "../../controllers/dashboard/users.controllers";
+import { UpdatePersonalDataForUserValidation } from "../../validations/dashboard/users/updatePersonalDataForUserValidation";
+import { FilesOperations } from "../../helpers/helper";
 class SitePageRoutes {
   public Router: Router;
   private sitePagesController: SitePagesController;
   private favoritProductsController: FavoritProductsController;
   private shopingCartController: ShopingCartController;
   private productController: ProductController;
+  private userController: UserController;
   private userSearch: UserSearch;
   private orders: Orders;
   private testmonialsController: TestmonialsController;
+  private updatePersonalDataForUserValidation: UpdatePersonalDataForUserValidation;
   private userAuthonticat: UserAuthonticat;
+  private filesOperations: FilesOperations;
+
   constructor() {
     this.sitePagesController = new SitePagesController();
     this.favoritProductsController = new FavoritProductsController();
     this.shopingCartController = new ShopingCartController();
     this.productController = new ProductController();
+    this.userController = new UserController();
     this.userSearch = new UserSearch();
     this.orders = new Orders();
     this.testmonialsController = new TestmonialsController();
     this.userAuthonticat = new UserAuthonticat();
+    this.filesOperations = new FilesOperations();
+    this.updatePersonalDataForUserValidation =
+      new UpdatePersonalDataForUserValidation();
     this.Router = Router();
     this.routes();
   }
@@ -37,6 +48,27 @@ class SitePageRoutes {
     this.Router.get("/all-products", this.sitePagesController.allProducts);
     this.Router.get("/contact-us", this.sitePagesController.contactUs);
     this.Router.get("/faqs", this.sitePagesController.faqs);
+    this.Router.get("/gallery", this.sitePagesController.gallery);
+    this.Router.get(
+      "/personal-information",
+      this.userAuthonticat.isAuthonticate,
+      this.sitePagesController.personalInformation
+    );
+    this.Router.post(
+      "/personal-information",
+      this.userAuthonticat.isAuthonticate,
+      this.filesOperations.uploade_img("assets/dashboard/Users", "image"),
+      this.updatePersonalDataForUserValidation.validation(),
+      this.userController.updatePersonalDataPostForUser
+    );
+    // this route about show testmonials
+    this.Router.get("/testmonials", this.sitePagesController.showTestmonials);
+    // this route about add testmonials
+    this.Router.post(
+      "/add-testmonials",
+      this.userAuthonticat.isAuthonticate,
+      this.testmonialsController.crearePost
+    );
     // product details page with hir slug
     this.Router.get(
       "/search-product",
@@ -100,14 +132,26 @@ class SitePageRoutes {
       this.userAuthonticat.isAuthonticate,
       this.orders.addOrderPost
     );
-    // this route about show testmonials
-    this.Router.get("/testmonials", this.sitePagesController.showTestmonials);
-    // this route about add testmonials
-    this.Router.post(
-      "/add-testmonials",
+    this.Router.get(
+      "/your-orders",
       this.userAuthonticat.isAuthonticate,
-      this.testmonialsController.crearePost
+      this.orders.userOrders
     );
+    this.Router.get(
+      "/show-order/:id",
+      this.userAuthonticat.isAuthonticate,
+      this.orders.showOrderDetailsForUser
+    );
+    this.Router.get(
+      "/download-order-pdf/:id",
+      this.userAuthonticat.isAuthonticate,
+      this.orders.downloadOrderPdf
+    );
+    // this.Router.get(
+    //   "/test",
+    //   this.userAuthonticat.isAuthonticate,
+    //   this.orders.test
+    // );
   }
 }
 

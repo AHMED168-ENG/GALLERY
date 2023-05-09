@@ -1,137 +1,16 @@
 import { NextFunction, Request, Response } from "express";
-import { ValidationMessage, Outhers } from "../../helpers/helper";
+import { ValidationMessage, Outhers, OrdersPdf } from "../../helpers/helper";
 import tbl_products from "../../models/products";
 import tbl_shopingcart from "../../models/shopingCart";
 import tbl_orders from "../../models/orders";
 import tbl_users from "../../models/users";
 import { Op } from "sequelize";
+import tbl_productsOrder from "../../models/productsOrders";
+import tbl_app_settings from "../../models/appSeting";
 
 export class Orders {
   constructor() {}
 
-  // start websit part
-
-  // show Order Page
-  public async showOrderPage(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    try {
-      const others = new Outhers();
-      const userData = req.cookies.User;
-      tbl_shopingcart
-        .findAll({
-          where: {
-            userId: userData.id,
-          },
-          include: [
-            {
-              model: tbl_products,
-              as: "cartProduct",
-              attributes: [
-                "id",
-                "slug_ar",
-                "slug_en",
-                "price",
-                "productName_ar",
-                "productName_en",
-                "shipping",
-                "descount",
-                "structure",
-              ],
-            },
-          ],
-        })
-        .then((result) => {
-          if (result.length == 0) {
-            res.redirect("/home");
-            return;
-          }
-          const totalOfAll = others.finalPrice(result);
-          res.render("website/userpages/mackOrder", {
-            title: " Mack Order",
-            notification: req.flash("notification"),
-            allFavoritProducts: result,
-            totalOfAll,
-            allProductCart: result,
-          });
-        });
-    } catch (error) {
-      next(error);
-    }
-  }
-  // add order post
-  public async addOrderPost(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    try {
-      const validationMessage = new ValidationMessage();
-      const userData = req.cookies.User;
-      const lang = req.cookies.lang;
-      tbl_shopingcart
-        .findAll({
-          include: [
-            {
-              model: tbl_products,
-              as: "cartProduct",
-              attributes: [
-                "id",
-                "slug_ar",
-                "slug_en",
-                "price",
-                "productName_ar",
-                "productName_en",
-                "shipping",
-                "descount",
-                "structure",
-              ],
-            },
-          ],
-          where: {
-            userId: userData.id,
-          },
-        })
-        .then((result) => {
-          let productId: string = "";
-          let productCount: string = "";
-          result.forEach((ele: any) => {
-            productId += ele.cartProduct.id + ",";
-            productCount += ele.count + ",";
-          });
-          tbl_orders
-            .create({
-              userId: userData.id,
-              productsId: productId,
-              productsCount: productCount,
-            })
-            .then(async () => {
-              await tbl_shopingcart.destroy({
-                where: {
-                  userId: userData.id,
-                },
-              });
-              const message =
-                lang != "en"
-                  ? "your order is creating now and the admin will contact you in 48 houre and we empty your cart"
-                  : "الطلب الخاص بك تم انشاءه انتظر حتي يتم الاتصال بك ومتابعه التفاصيل وتم تفريغ الكارت الخاص بيك";
-              validationMessage.returnWithMessage(
-                req,
-                res,
-                "/shoping-cart",
-                message,
-                "success"
-              );
-            });
-        });
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  // start dashboard part
   // show all Order Page
   public async allOrders(
     req: Request,
@@ -170,7 +49,6 @@ export class Orders {
       next(error);
     }
   }
-
   // show order
   public async showOrder(
     req: Request,
@@ -191,7 +69,6 @@ export class Orders {
       );
       // end mack order seen
 
-      let productIdOrder: string[];
       tbl_orders
         .findOne({
           order: [["createdAt", "desc"]],
@@ -202,6 +79,11 @@ export class Orders {
             {
               model: tbl_users,
               as: "orderUser",
+            },
+            {
+              model: tbl_productsOrder,
+              as: "productOrderTable",
+              include: [{ model: tbl_products, as: "productTable" }],
             },
           ],
         })
@@ -215,32 +97,15 @@ export class Orders {
               "danger"
             );
           }
-          productIdOrder = result.productsId.split(",");
-          // get all product
-          const allProducts = await tbl_products.findAll({
-            attributes: [
-              "productName_en",
-              "id",
-              "price",
-              "shipping",
-              "descount",
-              "structure",
-              "productImage",
-            ],
-            where: {
-              id: {
-                [Op.in]: productIdOrder,
-              },
-            },
-          });
           // git all price for every thing for order
-          const totalOfAll = others.finalPriceForAdmin(allProducts, result);
+          const totalOfAll = others.finalPriceForAdmin(
+            result.productOrderTable
+          );
 
           res.render("dashboard/orders/showOrder", {
             title: " Dashboard | Show Order",
             notification: req.flash("notification"),
             order: result,
-            allProducts,
             totalOfAll,
             getTotalPriceForOneProduct: others.priceForOneProduct,
           });
@@ -437,4 +302,245 @@ export class Orders {
       next(error);
     }
   }
+
+  // ============================ this part belong to front end view =========================
+  // show Order Page from user from front (view)
+  public async showOrderPage(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const others = new Outhers();
+      const userData = req.cookies.User;
+      tbl_shopingcart
+        .findAll({
+          where: {
+            userId: userData.id,
+          },
+          include: [
+            {
+              model: tbl_products,
+              as: "cartProduct",
+              attributes: [
+                "id",
+                "slug_ar",
+                "slug_en",
+                "price",
+                "productName_ar",
+                "productName_en",
+                "shipping",
+                "descount",
+                "structure",
+              ],
+            },
+          ],
+        })
+        .then((result) => {
+          if (result.length == 0) {
+            res.redirect("/home");
+            return;
+          }
+          const totalOfAll = others.finalPrice(result);
+          res.render("website/userpages/mackOrder", {
+            title: "mackOrder",
+            notification: req.flash("notification"),
+            // allFavoritProducts: result,
+            totalOfAll,
+            allProductCart: result,
+            metaKeywords: null,
+            metaDescription: null,
+          });
+        });
+    } catch (error) {
+      next(error);
+    }
+  }
+  // add order post from user from front (view)
+  public async addOrderPost(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const ordersPdf = new OrdersPdf();
+      const userData = req.cookies.User;
+      const lng = req.cookies.lng;
+      tbl_shopingcart
+        .findAll({
+          where: {
+            userId: userData.id,
+          },
+        })
+        .then((result: any) => {
+          tbl_orders
+            .create({
+              userId: userData.id,
+            })
+            .then(async (order: any) => {
+              for (var x = 0; x < result.length; x++) {
+                await tbl_productsOrder.create({
+                  orderId: order.id,
+                  productId: result[x].productId,
+                  productCount: result[x].count,
+                });
+              }
+              const orderData: any = await tbl_orders.findOne({
+                where: {
+                  id: order.id,
+                },
+                include: [
+                  {
+                    model: tbl_productsOrder,
+                    as: "productOrderTable",
+                    include: [{ model: tbl_products, as: "productTable" }],
+                  },
+                ],
+              });
+              console.log(orderData.productOrderTable);
+
+              // await tbl_shopingcart.destroy({
+              //   where: {
+              //     userId: userData.id,
+              //   },
+              // });
+              // ============== get app name for use in pdf name
+              const app_setting = await tbl_app_settings.findOne({
+                attributes: ["sitName_en"],
+              });
+
+              // ============== create pdf =================
+              ordersPdf.createPdf(res, app_setting, orderData, req.t, lng , req.cookies.User);
+              res.send({
+                status: true,
+                message: req.t("orderCreate"),
+              });
+            })
+            .catch((error) => error);
+        })
+        .catch((error) => error);
+    } catch (error) {
+      res.send({
+        status: false,
+        message: error.message,
+      });
+    }
+  }
+  // show all Orders that belong to user
+  public async userOrders(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const othersFn = new Outhers();
+      const page: any = req.query.page || 1;
+      const PAGE_ITEMS: string | number = +process.env.elementPerPageSite;
+      tbl_orders
+        .findAndCountAll({
+          distinct: true,
+          order: [["createdAt", "desc"]],
+        })
+        .then((result) => {
+          res.render("website/userpages/userOrders", {
+            title: "yourOrders",
+            notification: req.flash("notification"),
+            allOrders: result.rows,
+            hasPrevious: page > 1,
+            hasNext: PAGE_ITEMS * page < result.count,
+            nextPage: page + 1,
+            previousPage: page - 1,
+            curantPage: +page,
+            allElementCount: result.count,
+            elements: +PAGE_ITEMS,
+            lastPage: Math.ceil(result.count / PAGE_ITEMS),
+            metaKeywords: null,
+            metaDescription: null,
+            formateDate: othersFn.formateDate,
+          });
+        });
+    } catch (error) {
+      next(error);
+    }
+  }
+  // show all Orders that belong to user
+  // show Orders that belong to user
+  public async showOrderDetailsForUser(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const others: Outhers = new Outhers();
+      const userData = req.cookies.User;
+      tbl_orders
+        .findOne({
+          order: [["createdAt", "desc"]],
+          where: {
+            id: req.params.id,
+            userId: userData.id,
+          },
+          include: [
+            {
+              model: tbl_productsOrder,
+              as: "productOrderTable",
+              include: [{ model: tbl_products, as: "productTable" }],
+            },
+          ],
+        })
+        .then(async (result: any) => {
+          if (!result) {
+            return res.redirect("/your-orders");
+          }
+          // git all price for every thing for order
+          const totalOfAll = others.finalPriceForAdmin(
+            result.productOrderTable
+          );
+
+          res.render("website/userpages/showOrderDetails", {
+            title: " Dashboard | Show Order",
+            notification: req.flash("notification"),
+            order: result,
+            totalOfAll,
+            getTotalPriceForOneProduct: others.priceForOneProduct,
+            metaKeywords: null,
+            metaDescription: null,
+          });
+        });
+    } catch (error) {
+      next(error);
+    }
+  }
+  // show Orders that belong to user
+  // download order pdf
+  public async downloadOrderPdf(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const ordersPdf = new OrdersPdf();
+      const params = req.params;
+      const userData = req.cookies.User;
+
+      tbl_orders
+        .findOne({
+          where: {
+            id: params.id,
+            userId: userData.id,
+          },
+        })
+        .then(async (result) => {
+          // ============== get app name for use in pdf name
+          const app_setting = await tbl_app_settings.findOne({
+            attributes: ["sitName_en"],
+          });
+          ordersPdf.downloadPdf(res, app_setting, params.id);
+        })
+        .catch((error) => error);
+    } catch (error) {
+      next(error);
+    }
+  }
+  // ============================ this part belong to front end view =========================
 }

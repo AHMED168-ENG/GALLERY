@@ -16,6 +16,7 @@ exports.TestmonialsController = void 0;
 const helper_1 = require("../../helpers/helper");
 const testmonials_1 = __importDefault(require("../../models/testmonials"));
 const users_1 = __importDefault(require("../../models/users"));
+const axios_1 = __importDefault(require("axios"));
 class TestmonialsController {
     constructor() { }
     findAll(req, res, next) {
@@ -89,7 +90,6 @@ class TestmonialsController {
             try {
                 const validationMessage = new helper_1.ValidationMessage();
                 const body = req.body;
-                const lang = req.cookies.lang;
                 body.active = body.active ? true : false;
                 testmonials_1.default
                     .update(body, {
@@ -98,7 +98,7 @@ class TestmonialsController {
                     },
                 })
                     .then((result) => {
-                    const message = lang != "en" ? "update successful" : "تم التعديل بنجاح";
+                    const message = "update successful";
                     validationMessage.returnWithMessage(req, res, "/dashboard/testmonials/show/" + req.params.id, message, "success");
                 });
             }
@@ -111,24 +111,39 @@ class TestmonialsController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const body = req.body;
-                const lang = req.cookies.lang;
-                testmonials_1.default
-                    .create(body)
-                    .then((result) => {
-                    console.log("result");
-                    console.log(result);
-                    const message = lang != "en"
-                        ? "your testmonial created successful but not view in sit before admin active"
-                        : "تم تسجيل رايك عن الموقع بنجاح ولاكن لن يظهر حتي يتم تفعيله من الادمن";
-                    res.send({
-                        status: true,
-                        message: message,
-                    });
-                })
-                    .catch((error) => error);
+                if (!body.captcha) {
+                    res.send({ status: false, message: req.t("selectCapetch") });
+                    return;
+                }
+                let secretKey = process.env.recaptcherSitKey;
+                const verifyURL = `https://google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}`;
+                axios_1.default.get(verifyURL).then((data) => {
+                    if (data.data.success != true) {
+                        return res.json({
+                            status: false,
+                            message: req.t("FailedCaptcha"),
+                        });
+                    }
+                    else {
+                        return testmonials_1.default
+                            .create(body)
+                            .then((result) => {
+                            const message = req.t("addTestMonial");
+                            res.send({
+                                status: true,
+                                message: message,
+                            });
+                        })
+                            .catch((error) => error);
+                    }
+                });
             }
             catch (error) {
-                next(error);
+                console.log(error);
+                res.send({
+                    status: false,
+                    message: error.message,
+                });
             }
         });
     }

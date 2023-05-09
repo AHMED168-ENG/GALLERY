@@ -1,0 +1,80 @@
+
+<%- include("../inclueds/head")  %>
+</head>
+<body>
+<%- include("../inclueds/upperNavbare")  %> 
+<%- include("../inclueds/lowerNavbare")  %> 
+<!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid"      
+        data-aos="fade-left"
+        data-aos-delay=""
+        data-aos-offset=""
+        data-aos-duration="1500">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="/home"><%= trans("home") %></a>
+                    <a class="breadcrumb-item text-dark" href="/all-products"><%= trans("products") %></a>
+                    <span class="breadcrumb-item active"><%= trans("favoritCart") %></span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Cart Start -->
+    <div class="container-fluid" 
+        data-aos="fade-right"
+        data-aos-delay=""
+        data-aos-offset=""
+        data-aos-duration="1500">
+        <div class="row px-xl-5">
+            <% if (allOrders.length > 0) { %>
+                <div class="col-lg-12">
+                    <table class=" mb-5 table display nowrap table-striped table-bordered" style="width:100% !important">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th><%= trans("orderNumber") %></th>
+                                <th><%= trans("orderDate") %></th>
+                                <th><%= trans("orderHoure") %></th>
+                                <th><%= trans("Actions") %></th>
+                            </tr>
+                        </thead>
+                        <tbody class="align-middle">
+                            <% allOrders.forEach((element, index) => { %>
+                            <tr>
+                                <td class="align-middle">#<%= element.id %></td>
+                                <td class="align-middle"><%= formateDate(element.createdAt , "date")  %> <small><i class="fa-regular fa-calendar-days"></i></small> </td>
+                                <td class="align-middle"><%= formateDate(element.createdAt , "houre") %> <small><i class="fa-sharp fa-regular fa-clock"></i></small> </td>
+                                <td class="align-middle"> 
+                                    <div class="d-flex">
+                                        <a class="btn btn-outline-dark btn-square mx-2" href="/download-order-pdf/<%= element.id %>"><i class="fa fa-download"></i></a>
+                                        <a class="btn btn-outline-dark btn-square " href="/show-order/<%= element.id %>"><i class="fa fa-search"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }) %>
+
+                        </tbody>
+                    </table>
+                    <%- include("../inclueds/pafination.ejs")  %>
+       
+                </div>
+            <% } else { %>
+                <div class="col-lg-12">
+                    <div class="alert alert-danger"><%= trans("noOrders") %></div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+    <!-- Cart End -->
+
+
+<%- include("../inclueds/footer")  %>
+<%- include("../inclueds/footer_script")  %>
+
+</body>
+    

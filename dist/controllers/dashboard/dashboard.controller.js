@@ -8,16 +8,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const orders_1 = __importDefault(require("../../models/orders"));
+const productsOrders_1 = __importDefault(require("../../models/productsOrders"));
+const products_1 = __importDefault(require("../../models/products"));
+const helper_1 = require("../../helpers/helper");
 class DashboardController {
     constructor() { }
     dashboard(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                res.render("dashboard/dashboard", {
-                    title: "Dashboard",
-                    notification: req.flash("notification"),
-                    webSeting: {},
+                const others = new helper_1.Outhers();
+                orders_1.default
+                    .findAll({
+                    order: [["createdAt", "desc"]],
+                    limit: 10,
+                    include: [
+                        {
+                            model: productsOrders_1.default,
+                            as: "productOrderTable",
+                            include: [{ model: products_1.default, as: "productTable" }],
+                        },
+                    ],
+                })
+                    .then((orders) => {
+                    res.render("dashboard/dashboard", {
+                        title: "Dashboard",
+                        notification: req.flash("notification"),
+                        webSeting: {},
+                        orders: orders,
+                        finalPriceForAdmin: others.finalPriceForAdmin,
+                    });
                 });
             }
             catch (error) {

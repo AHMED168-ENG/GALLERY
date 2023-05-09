@@ -7,9 +7,21 @@ export class SignInUserValidation {
     return [
       check("email")
         .notEmpty()
-        .withMessage("you should enter email")
+        .withMessage((value, { req }) => {
+          if (req.cookies.lng == "ar") {
+            return "يجب ادخال الايميل";
+          } else {
+            return "you should enter email";
+          }
+        })
         .isEmail()
-        .withMessage("this feild accept email")
+        .withMessage((value, { req }) => {
+          if (req.cookies.lng == "ar") {
+            return "هذا الحقل يستقبل ايميل";
+          } else {
+            return "this feild accept email";
+          }
+        })
         .trim()
         .escape()
         .toLowerCase()
@@ -28,20 +40,42 @@ export class SignInUserValidation {
               }
             });
         })
-        .withMessage("your email not registed")
-        .custom((value, { req }) => {
-          if (!value.active) {
+        .withMessage((value, { req }) => {
+          if (req.cookies.lng == "ar") {
+            return "الايميل غير مسجل";
+          } else {
+            return "your email not registed";
+          }
+        })
+        .custom(async (value, { req }) => {
+          const user: any = await tbl_users.findOne({
+            where: {
+              email: value,
+            },
+          });
+
+          if (!user.active) {
             throw new Error("");
           }
           return true;
         })
-        .withMessage(
-          "your account not active call the admin or check the your gmail for resone"
-        ),
+        .withMessage((value, { req }) => {
+          if (req.cookies.lng == "ar") {
+            return "حسابك ليس نشطًا ، اتصل بالمسؤول أو تحقق من gmail الخاص بك للحصول على إعادة تشغيل";
+          } else {
+            return "your account not active call the admin or check the your gmail for resone";
+          }
+        }),
 
       check("password")
         .notEmpty()
-        .withMessage("you shold enter password")
+        .withMessage((value, { req }) => {
+          if (req.cookies.lng == "ar") {
+            return "ادخل الرقم السري";
+          } else {
+            return "you shold enter password";
+          }
+        })
         .custom(async (value, { req }) => {
           const user: any = await tbl_users.findOne({
             where: {
@@ -56,7 +90,13 @@ export class SignInUserValidation {
           }
           return true;
         })
-        .withMessage("your password not correct")
+        .withMessage((value, { req }) => {
+          if (req.cookies.lng == "ar") {
+            return "الرقم السري غير صحيح";
+          } else {
+            return "your password not correct";
+          }
+        })
         .trim()
         .escape(),
     ];

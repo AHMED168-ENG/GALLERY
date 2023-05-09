@@ -44,13 +44,13 @@ class FavoritProductsController {
                 if (isCreat) {
                     res.send({
                         status: true,
-                        message: "this product added to favorit cart successful",
+                        message: req.t("addFavorit"),
                     });
                 }
                 else {
                     res.send({
                         status: true,
-                        message: "this product removed from favorit cart successful",
+                        message: req.t("removeFavorit"),
                     });
                 }
             }
@@ -66,7 +66,7 @@ class FavoritProductsController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const page = req.query.page || 1;
-                const PAGE_ITEMS = +process.env.elementPerPage;
+                const PAGE_ITEMS = +process.env.elementPerPageSite;
                 const userData = req.cookies.User;
                 let shopingCart = [];
                 const myArrCart = yield shopingCart_1.default.findAll({
@@ -120,6 +120,8 @@ class FavoritProductsController {
                         elements: +PAGE_ITEMS,
                         lastPage: Math.ceil(result.count / PAGE_ITEMS),
                         shopingCart,
+                        metaKeywords: null,
+                        metaDescription: null,
                     });
                 });
             }

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 import path from "path";
 import multer from "multer";
@@ -13,6 +13,8 @@ import tbl_favorits from "../models/favorits";
 import tbl_shopingcart from "../models/shopingCart";
 import tbl_testmonials from "../models/testmonials";
 import tbl_orders from "../models/orders";
+import tbl_app_settings from "../models/appSeting";
+import pdfkit from "pdfkit-table";
 export class ValidationMessage {
   constructor() {}
   // about return to eny url with message
@@ -205,10 +207,10 @@ export class StartActions {
       orderCount: order.count,
       orderNotActive: orderNotSeen.count,
     };
-    //   homeLocalization.setLocale(lang);
-    //   res.locals.lang = lang == "eng" ? "en" : "gr";
+    let sitSetting = await tbl_app_settings.findOne({});
 
     res.locals.URL = url;
+    res.locals.sitSetting = sitSetting;
     res.locals.adminData = req.cookies.Admin;
     res.locals.FeaturesNumber = FeaturesNumber;
 
@@ -222,14 +224,7 @@ export class StartActions {
     csrfToken: string
   ): Promise<void> {
     const userData = req.cookies.User;
-    const lang = req.cookies.lang ? req.cookies.lang : "en";
-    // res.cookie("lang", lang);
-    // asideLocalization.setLocale(lang);
-    // navLocalization.setLocale(lang);
-    // res.locals.asideLocalization = asideLocalization.translate;
-    // res.locals.navLocalization = navLocalization.translate;
-
-    // all categorys for navbare
+    const lang = req.cookies.lng || "en";
 
     let allUserFavorit: any = [];
     let cartAllProduct: any = [];
@@ -286,18 +281,20 @@ export class StartActions {
           },
         ],
       });
-    //   homeLocalization.setLocale(lang);
-    //   res.locals.lang = lang == "eng" ? "en" : "gr";
-
+    let sitSetting = await tbl_app_settings.findOne({});
     res.locals.URL = url;
     res.locals.userData = userData;
     res.locals.allUserFavorit = allUserFavorit.count || 0;
     res.locals.cartAllProduct = cartAllProduct.count || 0;
     res.locals.lang = lang;
+    res.locals.trans = req.t;
+    res.locals.sitSetting = sitSetting;
     res.locals.allCatigoryForNave = allCatigoryForNave;
-
     //   res.locals.webSeting = webSeting;
     res.locals.csrf = csrfToken;
+    // console.log("lang");
+    // console.log(lang);
+    // console.log("lang");
   }
 }
 /*------------------------------------ class start function -------------------------------*/
@@ -323,7 +320,7 @@ export class Outhers {
   public formateDate(date: string, type: string = "date") {
     if (type == "date") {
       return moment(date).format("YYYY-MM-DD");
-    } else {
+    } else if ("houre") {
       return moment(date).format("hh-mm-ss");
     }
   }
@@ -341,14 +338,12 @@ export class Outhers {
       structure: number;
       shipping: number;
       afterDescount: number;
-      beforeDescount: number;
       totalPrice: number;
     } = {
       price: 0,
       structure: 0,
       shipping: 0,
       afterDescount: 0,
-      beforeDescount: 0,
       totalPrice: 0,
     };
     let totalPriceWithCount: number = 0;
@@ -371,10 +366,7 @@ export class Outhers {
   }
   /*--------------------- end get final price ---------------------*/
   /*--------------------- start get final price for admin ---------------------*/
-  public finalPriceForAdmin(
-    product: any,
-    order: any
-  ): {
+  public finalPriceForAdmin(products: any): {
     price: number;
     structure: number;
     shipping: number;
@@ -386,47 +378,39 @@ export class Outhers {
       structure: number;
       shipping: number;
       afterDescount: number;
-      beforeDescount: number;
       totalPrice: number;
     } = {
       price: 0,
       structure: 0,
       shipping: 0,
       afterDescount: 0,
-      beforeDescount: 0,
       totalPrice: 0,
     };
     let totalPriceWithCount: number = 0;
     let count: number = 0;
-    product.forEach((element) => {
-      count = 0;
-      count = this.getCountOfEachProduct(
-        order.productsId,
-        order.productsCount,
-        element.id
-      );
+    products.forEach((element) => {
+      count = element.productCount;
       // get price before descount
-      totalOfAll.price += count * element.price;
+      totalOfAll.price += count * element.productTable.price;
       // get price after descount
-      totalPriceWithCount = count * element.price;
+      totalPriceWithCount = count * element.productTable.price;
       totalOfAll.afterDescount +=
-        totalPriceWithCount - (element.descount * totalPriceWithCount) / 100;
+        totalPriceWithCount -
+        (element.productTable.descount * totalPriceWithCount) / 100;
       // get price of structure
-      totalOfAll.structure += count * element.structure;
+      totalOfAll.structure += count * element.productTable.structure;
       // get total shipping
-      totalOfAll.shipping += element.shipping;
+      totalOfAll.shipping += element.productTable.shipping;
     });
     totalOfAll.totalPrice +=
       totalOfAll.afterDescount + totalOfAll.structure + totalOfAll.shipping;
+    console.log(totalOfAll);
     return totalOfAll;
   }
   /*--------------------- start get final price for admin ---------------------*/
 
   /*--------------------- start get final price for one product ---------------------*/
-  public priceForOneProduct(
-    product: any,
-    order: any
-  ): {
+  public priceForOneProduct(order: any): {
     price: number;
     structure: number;
     shipping: number;
@@ -439,7 +423,6 @@ export class Outhers {
       structure: number;
       shipping: number;
       afterDescount: number;
-      beforeDescount: number;
       totalPrice: number;
       count: number;
     } = {
@@ -447,17 +430,11 @@ export class Outhers {
       structure: 0,
       shipping: 0,
       afterDescount: 0,
-      beforeDescount: 0,
       totalPrice: 0,
       count: 0,
     };
-
-    let count = new Outhers().getCountOfEachProduct(
-      order.productsId,
-      order.productsCount,
-      product.id
-    );
-
+    let count = order.productCount;
+    let product = order.productTable;
     // get price before descount
     totalPrice.count = count;
     totalPrice.price += count * product.price;
@@ -473,19 +450,93 @@ export class Outhers {
     return totalPrice;
   }
   /*--------------------- start get final price for one product ---------------------*/
-
-  /*--------------------- start get Count Of Each Product ---------------------*/
-  public getCountOfEachProduct(
-    productsId: any,
-    productCount: any,
-    productId: number
-  ) {
-    let count = 0;
-    productsId = productsId.split(",");
-    productCount = productCount.split(",");
-    count = productCount[productsId.indexOf(productId + "")];
-    return count; // get price before descount
-  }
-  /*--------------------- end get Count Of Each Product ---------------------*/
 }
 /*------------------------------------ class start function -------------------------------*/
+
+/*------------------------------------ class download file -------------------------------*/
+export class OrdersPdf {
+  // ============ start create pdf ================
+  public async createPdf(
+    res: Response,
+    app_setting: any,
+    order: any,
+    trans: any,
+    lng: string,
+    userData: any
+  ) {
+    const pdfName = `${app_setting.sitName_en}_order_${order.id}.pdf`;
+    const pdfDirPath = path.join(__dirname, "../ordersPdf/");
+    const pdfPath = path.join(__dirname, "../ordersPdf/" + pdfName);
+    const pdfDoc = new pdfkit();
+    // check if pdf dir not exist create it
+    if (!fs.existsSync(pdfDirPath)) {
+      fs.mkdirSync(pdfDirPath);
+    }
+    const writeStream = fs.createWriteStream(pdfPath, {
+      encoding: "utf8",
+    });
+    pdfDoc.pipe(writeStream);
+    // start body of pdf
+    pdfDoc
+      .text(`Hello Mr ( ${userData.fName + " " + userData.lName} )`, {
+        align: "center",
+      })
+      .moveDown();
+    let productsData: [string, string, string][] = [];
+    order.productOrderTable.forEach((ele: any) => {
+      productsData.push([
+        ele.productTable["productName_" + lng],
+        ele.productCount.toString(),
+        ele.productTable.price + trans("Eg"),
+      ]);
+    });
+    const table = {
+      title: trans("Bill"),
+      subtitle: trans("ProductsData"),
+      headers: [trans("products"), trans("count"), trans("RealPrice")],
+      rows: productsData,
+    };
+    pdfDoc.table(table);
+    pdfDoc.moveDown();
+    // =============================
+    const getFinalPrice = new Outhers().finalPriceForAdmin(
+      order.productOrderTable
+    );
+    const finalPriceTable = {
+      title: "",
+      subtitle: trans("finalPriceData"),
+
+      headers: [
+        trans("Structure"),
+        trans("Shipping"),
+        trans("totalPriceBeforeDescount"),
+        trans("TotalAfterDescount"),
+        trans("TotalAfterDescountWith"),
+      ],
+      rows: [
+        [
+          getFinalPrice.structure + " " + trans("Eg"),
+          getFinalPrice.shipping + " " + trans("Eg"),
+          getFinalPrice.price + " " + trans("Eg"),
+          getFinalPrice.afterDescount + " " + trans("Eg"),
+          getFinalPrice.totalPrice + " " + trans("Eg"),
+        ],
+      ],
+    };
+    pdfDoc.table(finalPriceTable);
+    pdfDoc.end();
+    // end body of pdf
+  }
+
+  // ============ start download pdf ================
+  public async downloadPdf(res: Response, app_setting: any, orderId: string) {
+    const pdfName = `${app_setting.sitName_en}_order_${orderId}.pdf`;
+    const pdfPath = path.join(__dirname, "../ordersPdf/" + pdfName);
+    if (!fs.existsSync(pdfPath)) return res.redirect("/your-orders");
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment;filename="${pdfName}"`);
+    const readStream = fs.createReadStream(path.join(pdfPath));
+    readStream.pipe(res);
+  }
+}
+/*------------------------------------ class download file -------------------------------*/

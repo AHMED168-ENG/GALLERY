@@ -16,6 +16,7 @@ import { Sequelize } from "sequelize";
 import AllDashboardRoutes from "./routes/dashboard/allDashboard.routes";
 import { StartActions } from "./helpers/helper";
 import AllSiteRoutes from "./routes/website/allSite.routes";
+import InitLanguage from "./routes/language/init.language";
 
 class App {
   private PORT: number = +env.port | +process.env.NODE_SERVER_PORT;
@@ -97,14 +98,16 @@ class App {
   private routes(): void {
     this.myApp.use(csurf());
 
+    new InitLanguage(this.myApp).router();
     new AllDashboardRoutes(this.myApp).router();
     new AllSiteRoutes(this.myApp).router();
-    // this.myApp.use(
-    //   (error: Error, req: Request, res: Response, next: NextFunction) => {
-    //     this.logging.loggerOperationError().error(error.message);
-    //     res.send(error.message);
-    //   }
-    // );
+    this.myApp.use(
+      (error: Error, req: Request, res: Response, next: NextFunction) => {
+        console.log(error);
+        this.logging.loggerOperationError().error(error.message);
+        res.send(error.message);
+      }
+    );
     this.myApp.use((req: Request, res: Response, next: NextFunction) => {
       res.status(404).render("pageNotFound", { title: "page not found" });
     });

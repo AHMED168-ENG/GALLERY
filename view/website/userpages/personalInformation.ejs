@@ -1,0 +1,131 @@
+
+<%- include("../inclueds/head")  %>
+<link rel="stylesheet" href="/public/website/css/personalInfo.css">
+</head>
+<body>
+<%- include("../inclueds/upperNavbare")  %> 
+<%- include("../inclueds/lowerNavbare")  %> 
+<!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="/home"><%= trans("home") %></a>
+                    <a class="breadcrumb-item text-dark" href="/all-products"><%= trans("products") %></a>
+                    <span class="breadcrumb-item active"><%= trans("personalInformation") %></span>
+                </nav>
+                <%- include("../inclueds/notification.ejs") %> 
+            </div>    
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <form enctype="multipart/form-data" method="post" action="?_csrf=<%= csrf %>" class="form"  >
+                    <div class="form-body">
+                        <div class=" main">
+                            <div class=" pairantImage">
+                                <div class=" userImage">
+                                    <% if (user.image) { %>
+                                        <img src="/assets/dashboard/Users/<%= user.image.split("--")[0] %>" alt="">
+                                    <% } else { %>
+                                        <img src="/assets/dashboard/defaultImages/avatar.png" alt="">
+                                    <% } %>
+                                        <input type="hidden" value="<%=  user.image %>" name="oldImage" >
+                                        <input type="file" name="image" class="custom-file-input">                                                        </div>
+                                <% if (validationError.image) { %>
+                                    <span class="text-danger"><%=validationError.image[0].msg %></span>
+                                <% } %>
+                            </div>
+                            <div class="">
+                                <div class="form-group">
+                                    <label for="projectinput1"> first name</label>
+                                    <input type="text" value="<%= bodyData ? bodyData.fName : user.fName %>" class="form-control" placeholder="enter first name" name="fName">
+                                        <% if (validationError.fName) { %>
+                                            <span class="text-danger"><%=validationError.fName[0].msg %></span>
+                                        <% } %>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <div class="form-group">
+                                    <label for="projectinput1"> last name</label>
+                                    <input type="text" value="<%= bodyData ? bodyData.lName : user.lName %>" class="form-control" placeholder="enter last name" name="lName">
+                                        <% if (validationError.lName) { %>
+                                            <span class="text-danger"><%=validationError.lName[0].msg %></span>
+                                        <% } %>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <div class="form-group">
+                                    <label for="projectinput1"> age </label>
+                                    <input type="number"  value="<%= bodyData ? bodyData.age : user.age %>" class="form-control" placeholder="enter age" name="age">
+                                        <% if (validationError.age) { %>
+                                            <span class="text-danger"><%=validationError.age[0].msg %></span>
+                                        <% } %>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <div class="form-group">
+                                    <label for="projectinput1"> email </label>
+                                    <input type="text" value="<%= bodyData ? bodyData.email : user.email%>" class="form-control" placeholder="enter your email" name="email">
+                                        <% if (validationError.email) { %>
+                                            <span class="text-danger"><%=validationError.email[0].msg %></span>
+                                        <% } %>
+                                </div>
+                            </div>
+
+    
+                            <div class="">
+                                <div class="form-group">
+                                    <label for="projectinput1"> address </label>
+                                    <input type="text" value="<%= bodyData ? bodyData.address : user.address  %>"  class="form-control" placeholder="enter address" name="address">
+                                        <% if (validationError.address) { %>
+                                            <span class="text-danger"><%=validationError.address[0].msg %></span>
+                                        <% } %>
+                                </div>
+                            </div>
+                            
+                            <div class="">
+                                <div class="form-group">
+                                    <label for="projectinput1"> mobile </label>
+                                    <input type="number" value="<%= bodyData ? bodyData.mobile : user.mobile %>" class="form-control" placeholder="enter your mobile" name="mobile">
+                                        <% if (validationError.mobile) { %>
+                                            <span class="text-danger"><%=validationError.mobile[0].msg %></span>
+                                        <% } %>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                
+                    <button type="submit" class="btn btn-primary col-12">
+                        <i class="la la-check-square-o"></i> save
+                    </button>
+                    
+                </form>
+            </div>
+        </div>
+   </div>
+
+
+
+<%- include("../inclueds/footer")  %>
+<%- include("../inclueds/footer_script")  %>
+<script src="/public/website/js/sweetalert.min.js"></script>
+<script src="/public/website/js/faqs.js"></script>
+</body>
+    
+
+
+
+
+
+
+
+

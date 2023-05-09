@@ -134,7 +134,11 @@ data-open="click" data-menu="vertical-menu" data-col="2-columns">
                                                         </div>
                                                     </div>
                                                     <div class="image col-12" >
-                                                        <img style="width:300px;height:300px" src="/assets/dashboard/Users/<%= userData.image.split("--")[0] %>" alt="">
+                                                        <% if (userData.image) { %>
+                                                            <img style="width:300px;height:300px" src="/assets/dashboard/Users/<%= userData.image.split("--")[0] %>" alt="">
+                                                        <% } else { %>
+                                                            <img style="width:300px;height:300px" src="/assets/dashboard/defaultImages/avatar.png" alt="">
+                                                        <%}%>
                                                     </div>                                               
                                                     <div class="col-md-12">
                                                         <div class="form-group">

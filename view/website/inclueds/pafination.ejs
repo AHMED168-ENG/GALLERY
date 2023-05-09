@@ -1,0 +1,60 @@
+<div class="pagination row px-xl-5">
+  <div class="col-md-4">
+    <div class="dataTables_info">
+      <%= trans("Showing") %> <%= (curantPage - 1) * elements %> <%= trans("to")
+      %> <%= ((curantPage - 1) * elements) + elements %> <%= trans("of") %> <%=
+      allElementCount %> <%= trans("entries") %>
+    </div>
+  </div>
+  <div
+    class="col-md-4 dataTables_paginate paging_simple_numbers"
+    id="DataTables_Table_0_paginate"
+  >
+    <% if ((hasPrevious || hasNext)) { %>
+    <ul style="margin: 0; justify-content: center" class="pagination">
+      <% if (curantPage != 1) { %>
+      <li
+        id="DataTables_Table_0_previous"
+        class="paginate_button page-item previous"
+      >
+        <a class="page-link" href="?page=<%= curantPage - 1 %>">
+          <%= trans("Previous") %></a
+        >
+      </li>
+      <% } %> <% if (curantPage != 1 && curantPage - 1 != 1) { %>
+      <li id="" class="paginate_button page-item">
+        <a class="page-link" href="?page=<%= 1 %>">1</a>
+      </li>
+      <% } %> <% if (hasPrevious) { %>
+      <li class="paginate_button page-item">
+        <a class="page-link" href="?page=<%= curantPage - 1 %>"
+          ><%= curantPage - 1 %></a
+        >
+      </li>
+      <% } %>
+      <li id="" class="paginate_button page-item active">
+        <a class="page-link" href="?page=<%= curantPage %>"
+          ><%= curantPage %></a
+        >
+      </li>
+      <% if (hasNext) { %>
+      <li id="" class="paginate_button page-item">
+        <a class="page-link" href="?page=<%= curantPage + 1 %>"
+          ><%= curantPage + 1 %></a
+        >
+      </li>
+      <% } %> <% if (curantPage != lastPage && curantPage + 1 != lastPage) { %>
+      <li id="" class="paginate_button page-item">
+        <a class="page-link" href="?page=<%= lastPage %>"><%= lastPage %></a>
+      </li>
+      <% } %> <% if (curantPage != lastPage) { %>
+      <li id="DataTables_Table_0_next" class="paginate_button page-item next">
+        <a class="page-link" href="?page=<%= curantPage + 1 %>"
+          ><%= trans("next") %></a
+        >
+      </li>
+      <% } %>
+    </ul>
+    <%}%>
+  </div>
+</div>

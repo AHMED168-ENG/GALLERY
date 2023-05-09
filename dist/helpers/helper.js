@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Outhers = exports.StartActions = exports.FilesOperations = exports.ValidationMessage = void 0;
+exports.OrdersPdf = exports.Outhers = exports.StartActions = exports.FilesOperations = exports.ValidationMessage = void 0;
 const path_1 = __importDefault(require("path"));
 const multer_1 = __importDefault(require("multer"));
 const fs_1 = __importDefault(require("fs"));
@@ -26,6 +26,8 @@ const favorits_1 = __importDefault(require("../models/favorits"));
 const shopingCart_1 = __importDefault(require("../models/shopingCart"));
 const testmonials_1 = __importDefault(require("../models/testmonials"));
 const orders_1 = __importDefault(require("../models/orders"));
+const appSeting_1 = __importDefault(require("../models/appSeting"));
+const pdfkit_table_1 = __importDefault(require("pdfkit-table"));
 class ValidationMessage {
     constructor() { }
     returnWithMessage(req, res, url, message, type) {
@@ -163,7 +165,9 @@ class StartActions {
                 orderCount: order.count,
                 orderNotActive: orderNotSeen.count,
             };
+            let sitSetting = yield appSeting_1.default.findOne({});
             res.locals.URL = url;
+            res.locals.sitSetting = sitSetting;
             res.locals.adminData = req.cookies.Admin;
             res.locals.FeaturesNumber = FeaturesNumber;
             res.locals.csrf = csrfToken;
@@ -172,7 +176,7 @@ class StartActions {
     startFunctionForSite(req, res, url, csrfToken) {
         return __awaiter(this, void 0, void 0, function* () {
             const userData = req.cookies.User;
-            const lang = req.cookies.lang ? req.cookies.lang : "en";
+            const lang = req.cookies.lng || "en";
             let allUserFavorit = [];
             let cartAllProduct = [];
             if (userData) {
@@ -225,11 +229,14 @@ class StartActions {
                     },
                 ],
             });
+            let sitSetting = yield appSeting_1.default.findOne({});
             res.locals.URL = url;
             res.locals.userData = userData;
             res.locals.allUserFavorit = allUserFavorit.count || 0;
             res.locals.cartAllProduct = cartAllProduct.count || 0;
             res.locals.lang = lang;
+            res.locals.trans = req.t;
+            res.locals.sitSetting = sitSetting;
             res.locals.allCatigoryForNave = allCatigoryForNave;
             res.locals.csrf = csrfToken;
         });
@@ -255,7 +262,7 @@ class Outhers {
         if (type == "date") {
             return (0, moment_1.default)(date).format("YYYY-MM-DD");
         }
-        else {
+        else if ("houre") {
             return (0, moment_1.default)(date).format("hh-mm-ss");
         }
     }
@@ -265,7 +272,6 @@ class Outhers {
             structure: 0,
             shipping: 0,
             afterDescount: 0,
-            beforeDescount: 0,
             totalPrice: 0,
         };
         let totalPriceWithCount = 0;
@@ -282,42 +288,42 @@ class Outhers {
             totalOfAll.afterDescount + totalOfAll.structure + totalOfAll.shipping;
         return totalOfAll;
     }
-    finalPriceForAdmin(product, order) {
+    finalPriceForAdmin(products) {
         const totalOfAll = {
             price: 0,
             structure: 0,
             shipping: 0,
             afterDescount: 0,
-            beforeDescount: 0,
             totalPrice: 0,
         };
         let totalPriceWithCount = 0;
         let count = 0;
-        product.forEach((element) => {
-            count = 0;
-            count = this.getCountOfEachProduct(order.productsId, order.productsCount, element.id);
-            totalOfAll.price += count * element.price;
-            totalPriceWithCount = count * element.price;
+        products.forEach((element) => {
+            count = element.productCount;
+            totalOfAll.price += count * element.productTable.price;
+            totalPriceWithCount = count * element.productTable.price;
             totalOfAll.afterDescount +=
-                totalPriceWithCount - (element.descount * totalPriceWithCount) / 100;
-            totalOfAll.structure += count * element.structure;
-            totalOfAll.shipping += element.shipping;
+                totalPriceWithCount -
+                    (element.productTable.descount * totalPriceWithCount) / 100;
+            totalOfAll.structure += count * element.productTable.structure;
+            totalOfAll.shipping += element.productTable.shipping;
         });
         totalOfAll.totalPrice +=
             totalOfAll.afterDescount + totalOfAll.structure + totalOfAll.shipping;
+        console.log(totalOfAll);
         return totalOfAll;
     }
-    priceForOneProduct(product, order) {
+    priceForOneProduct(order) {
         const totalPrice = {
             price: 0,
             structure: 0,
             shipping: 0,
             afterDescount: 0,
-            beforeDescount: 0,
             totalPrice: 0,
             count: 0,
         };
-        let count = new Outhers().getCountOfEachProduct(order.productsId, order.productsCount, product.id);
+        let count = order.productCount;
+        let product = order.productTable;
         totalPrice.count = count;
         totalPrice.price += count * product.price;
         totalPrice.afterDescount +=
@@ -328,12 +334,79 @@ class Outhers {
             totalPrice.afterDescount + totalPrice.structure + totalPrice.shipping;
         return totalPrice;
     }
-    getCountOfEachProduct(productsId, productCount, productId) {
-        let count = 0;
-        productsId = productsId.split(",");
-        productCount = productCount.split(",");
-        count = productCount[productsId.indexOf(productId + "")];
-        return count;
-    }
 }
 exports.Outhers = Outhers;
+class OrdersPdf {
+    createPdf(res, app_setting, order, trans, lng, userData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const pdfName = `${app_setting.sitName_en}_order_${order.id}.pdf`;
+            const pdfDirPath = path_1.default.join(__dirname, "../ordersPdf/");
+            const pdfPath = path_1.default.join(__dirname, "../ordersPdf/" + pdfName);
+            const pdfDoc = new pdfkit_table_1.default();
+            if (!fs_1.default.existsSync(pdfDirPath)) {
+                fs_1.default.mkdirSync(pdfDirPath);
+            }
+            const writeStream = fs_1.default.createWriteStream(pdfPath, {
+                encoding: "utf8",
+            });
+            pdfDoc.pipe(writeStream);
+            pdfDoc
+                .text(`Hello Mr ( ${userData.fName + " " + userData.lName} )`, {
+                align: "center",
+            })
+                .moveDown();
+            let productsData = [];
+            order.productOrderTable.forEach((ele) => {
+                productsData.push([
+                    ele.productTable["productName_" + lng],
+                    ele.productCount.toString(),
+                    ele.productTable.price + trans("Eg"),
+                ]);
+            });
+            const table = {
+                title: trans("Bill"),
+                subtitle: trans("ProductsData"),
+                headers: [trans("products"), trans("count"), trans("RealPrice")],
+                rows: productsData,
+            };
+            pdfDoc.table(table);
+            pdfDoc.moveDown();
+            const getFinalPrice = new Outhers().finalPriceForAdmin(order.productOrderTable);
+            const finalPriceTable = {
+                title: "",
+                subtitle: trans("finalPriceData"),
+                headers: [
+                    trans("Structure"),
+                    trans("Shipping"),
+                    trans("totalPriceBeforeDescount"),
+                    trans("TotalAfterDescount"),
+                    trans("TotalAfterDescountWith"),
+                ],
+                rows: [
+                    [
+                        getFinalPrice.structure + " " + trans("Eg"),
+                        getFinalPrice.shipping + " " + trans("Eg"),
+                        getFinalPrice.price + " " + trans("Eg"),
+                        getFinalPrice.afterDescount + " " + trans("Eg"),
+                        getFinalPrice.totalPrice + " " + trans("Eg"),
+                    ],
+                ],
+            };
+            pdfDoc.table(finalPriceTable);
+            pdfDoc.end();
+        });
+    }
+    downloadPdf(res, app_setting, orderId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const pdfName = `${app_setting.sitName_en}_order_${orderId}.pdf`;
+            const pdfPath = path_1.default.join(__dirname, "../ordersPdf/" + pdfName);
+            if (!fs_1.default.existsSync(pdfPath))
+                return res.redirect("/your-orders");
+            res.setHeader("Content-Type", "application/pdf");
+            res.setHeader("Content-Disposition", `attachment;filename="${pdfName}"`);
+            const readStream = fs_1.default.createReadStream(path_1.default.join(pdfPath));
+            readStream.pipe(res);
+        });
+    }
+}
+exports.OrdersPdf = OrdersPdf;

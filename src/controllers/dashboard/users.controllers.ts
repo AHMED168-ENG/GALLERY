@@ -295,7 +295,8 @@ export class UserController {
       }
       const file = filesOperations.Rename_uploade_img(req);
       if (file) {
-        filesOperations.removeImg(req, "Users", body.oldImage);
+        if (body.oldImage)
+          filesOperations.removeImg(req, "Users", body.oldImage);
         body.image = file;
       } else {
         body.image = body.oldImage;
@@ -327,6 +328,62 @@ export class UserController {
     }
   }
   // end updatePersonalData post
+
+  // start updatePersonalData for user in front post
+  public async updatePersonalDataPostForUser(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const { lng } = req.cookies;
+      const { id } = req.cookies.User;
+      const error = validationResult(req);
+      const body = req.body;
+      const filesOperations: FilesOperations = new FilesOperations();
+      const validationMessage: ValidationMessage = new ValidationMessage();
+      if (!error.isEmpty()) {
+        filesOperations.removeImg(req, "Users");
+        validationMessage.handel_validation_errors(
+          req,
+          res,
+          error.errors,
+          "/personal-information"
+        );
+        return;
+      }
+      const file = filesOperations.Rename_uploade_img(req);
+      if (file) {
+        if (body.oldImage)
+          filesOperations.removeImg(req, "Users", body.oldImage);
+        body.image = file;
+      } else {
+        body.image = body.oldImage;
+      }
+
+      tbl_users
+        .update(body, {
+          where: {
+            id: id,
+          },
+        })
+        .then((result) => {
+          res.clearCookie("User");
+          validationMessage.returnWithMessage(
+            req,
+            res,
+            "/signIn",
+            lng == "ar"
+              ? "تم تعديل بياناتك بنجاح سجل من جديد منفضلك"
+              : "Your information has been modified successfully, please register again.",
+            "success"
+          );
+        });
+    } catch (error) {
+      next(error);
+    }
+  }
+  // end updatePersonalData for user in front post
 
   // start activation user
   public async activation(

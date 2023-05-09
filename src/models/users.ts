@@ -40,6 +40,14 @@ const tbl_users = sequelize.define(
     image: {
       type: DataTypes.STRING,
     },
+    resetToken: {
+      type: DataTypes.STRING,
+      defaultValue: null,
+    },
+    resetTokenExpiration: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
     active: {
       type: DataTypes.BOOLEAN,
     },

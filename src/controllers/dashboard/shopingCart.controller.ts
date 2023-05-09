@@ -43,12 +43,12 @@ export class ShopingCartController {
       if (isCreat) {
         res.send({
           status: true,
-          message: "this product added to shoping cart successful",
+          message: req.t("productAddToShopingCart"),
         });
       } else {
         res.send({
           status: true,
-          message: "this product removed from shoping cart successful",
+          message: req.t("productRemoveToShopingCart"),
         });
       }
     } catch (error) {
@@ -102,7 +102,7 @@ export class ShopingCartController {
         .then((result: any) => {
           const totalOfAll = others.finalPrice(result.rows);
           res.render("website/userpages/shopingCart", {
-            title: " All Shoping Product",
+            title: "shopingCart",
             notification: req.flash("notification"),
             allShopingProducts: result.rows,
             hasPrevious: page > 1,
@@ -115,6 +115,8 @@ export class ShopingCartController {
             lastPage: Math.ceil(result.count / PAGE_ITEMS),
             totalOfAll,
             TIME_OF_PRODUCT_IN_CART: +process.env.TIME_OF_PRODUCT_IN_CART,
+            metaKeywords: null,
+            metaDescription: null,
           });
         });
     } catch (error) {
@@ -130,7 +132,7 @@ export class ShopingCartController {
   ): Promise<void> {
     try {
       const body = req.body;
-      const lang = req.cookies.lang;
+      const lng = req.cookies.lng;
       const TIME_OF_PRODUCT_IN_CART = +process.env.TIME_OF_PRODUCT_IN_CART;
       body.finishingTime =
         Date.now() + TIME_OF_PRODUCT_IN_CART * 60 * 60 * 1000;
@@ -157,18 +159,12 @@ export class ShopingCartController {
                 }
               )
               .then((result) => {
-                let message =
-                  lang != "en"
-                    ? "your product count changed"
-                    : "تم تغير كميه المنتج بنجاح";
+                let message = req.t("productCount");
                 res.send({ status: true, message: message, isCreate: false });
               });
           } else {
             tbl_shopingcart.create(body).then((result) => {
-              let message =
-                lang != "en"
-                  ? "your product add to cart successful"
-                  : "تم اضافه المنتج الي سله المشتريات بنجاح";
+              let message = req.t("addToCart");
               res.send({ status: true, message: message, isCreate: true });
             });
           }

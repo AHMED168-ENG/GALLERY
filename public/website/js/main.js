@@ -38,6 +38,7 @@
     loop: true,
     margin: 15,
     nav: false,
+    rtl: true,
     autoplay: true,
     smartSpeed: 1000,
     responsive: {
@@ -63,6 +64,7 @@
     loop: true,
     margin: 15,
     nav: false,
+    rtl: true,
     autoplay: true,
     smartSpeed: 1000,
     responsive: {
@@ -91,6 +93,7 @@
     nav: false,
     autoplay: true,
     smartSpeed: 1000,
+    rtl: true,
     responsive: {
       0: {
         items: 1,

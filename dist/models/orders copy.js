@@ -23,18 +23,39 @@ const tbl_orders = sequelize.define("tbl_orders", {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    orderState: {
-        type: sequelize_1.DataTypes.INTEGER,
-        defaultValue: 1,
-        allowNull: false,
+    isSeen: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
+    isFinished: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        defaultValue: false,
     },
 }, {
     charset: "utf8",
     collate: "utf8_general_ci",
+    scopes: {
+        NotSeen: {
+            where: {
+                isSeen: false,
+            },
+        },
+        notActive: {
+            where: {
+                active: false,
+            },
+        },
+    },
 });
 tbl_orders.sync();
 tbl_orders.belongsTo(users_1.default, {
     as: "orderUser",
+    foreignKey: "userId",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
+users_1.default.hasMany(tbl_orders, {
+    as: "userOrders",
     foreignKey: "userId",
 });
 exports.default = tbl_orders;

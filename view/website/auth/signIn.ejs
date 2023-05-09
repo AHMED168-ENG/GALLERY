@@ -10,9 +10,18 @@
       <div class="container">
         <%- include("../inclueds/notification") %>
         <div class="row">
-          <div class="col-md-6">
+          <div
+            class="col-md-6"
+            data-aos="fade-left"
+            data-aos-delay=""
+            data-aos-offset=""
+            data-aos-duration="1500"
+          >
             <div class="right p-4 mb-3">
-              <h4>welcome back to site!</h4>
+              <h4>
+                <%= trans("welcomeHir") %> <%= sitSetting ?
+                sitSetting["sitName_" + lang] : "" %> !
+              </h4>
               <br />
 
               <form
@@ -22,7 +31,8 @@
               >
                 <div class="form-group">
                   <label for="exampleInputEmail1"
-                    >email <span class="text-danger">*</span></label
+                    ><%= trans("Email") %>
+                    <span class="text-danger">*</span></label
                   >
                   <input
                     type="email"
@@ -40,7 +50,8 @@
                 </div>
                 <div class="form-group pass_show">
                   <label for="PASS"
-                    >password <span class="text-danger">*</span></label
+                    ><%= trans("Password") %>
+                    <span class="text-danger">*</span></label
                   >
                   <input
                     type="password"
@@ -65,21 +76,36 @@
                     id="exampleCheck1"
                   />
                   <label class="form-check-label" for="exampleCheck1"
-                    >remember me</label
+                    ><%= trans("RememberMe") %></label
                   >
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">
-                  sign in
+                  <%= trans("SignIn") %>
                 </button>
               </form>
 
               <p class="mb-0 mt-2">
-                i dont have acount? <a href="signUp">sign up</a>
+                <%= trans("dontHaveAcount") %>?
+                <a href="signUp"><%= trans("SignUp") %></a>
               </p>
+              <small class="mb-0 mt-2">
+                <a
+                  class="text-dark"
+                  style="text-decoration: underline"
+                  href="/reset-password"
+                  ><%= trans("resetPassword") %> !</a
+                >
+              </small>
             </div>
           </div>
 
-          <div class="col-md-6">
+          <div
+            class="col-md-6"
+            data-aos="fade-right"
+            data-aos-delay=""
+            data-aos-offset=""
+            data-aos-duration="1500"
+          >
             <div class="left">
               <img src="/assets/website/login.svg" class="img-fluid" alt="0" />
             </div>

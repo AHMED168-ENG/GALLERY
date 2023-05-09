@@ -234,7 +234,7 @@ data-open="click" data-menu="vertical-menu" data-col="2-columns">
           <div class="col-xl-4 col-lg-12">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title">New Orders</h4>
+                <h4 class="card-title">last Orders</h4>
                 <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                 <div class="heading-elements">
                   <ul class="list-inline mb-0">
@@ -248,131 +248,33 @@ data-open="click" data-menu="vertical-menu" data-col="2-columns">
                     <table id="new-orders-table" class="table table-hover table-xl mb-0">
                       <thead>
                         <tr>
-                          <th class="border-top-0">Product</th>
-                          <th class="border-top-0">Customers</th>
+                          <th class="border-top-0">Number</th>
+                          <th class="border-top-0">products</th>
                           <th class="border-top-0">Total</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td class="text-truncate">iPhone X</td>
+                        <% orders.forEach(element => { %>
+                         <tr>
+                          <td class="text-truncate">#<%= element.id %></td>
                           <td class="text-truncate p-1">
                             <ul class="list-unstyled users-list m-0">
-                              <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="John Doe"
-                              class="avatar avatar-sm pull-up">
-                                <img class="media-object rounded-circle" src="/public/dashboard/app-assets/images/portrait/small/avatar-s-19.png"
-                                alt="Avatar">
+                              <% element.productOrderTable.slice(0 , 5).forEach(element1 => { %>
+                                <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="<%= element1.productTable.productName_en %>"
+                                  class="avatar avatar-sm pull-up">
+                                  <a href="/dashboard/products/update/<%= element1.productTable.id %>">
+                                    <img class="media-object rounded-circle" src="/assets/dashboard/Products/<%= element1.productTable.productImage.split("--")[0] %>"
+                                    alt="Avatar">
+                                  </a>
                               </li>
-                              <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Katherine Nichols"
-                              class="avatar avatar-sm pull-up">
-                                <img class="media-object rounded-circle" src="/public/dashboard/app-assets/images/portrait/small/avatar-s-18.png"
-                                alt="Avatar">
-                              </li>
-                              <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Joseph Weaver"
-                              class="avatar avatar-sm pull-up">
-                                <img class="media-object rounded-circle" src="/public/dashboard/app-assets/images/portrait/small/avatar-s-17.png"
-                                alt="Avatar">
-                              </li>
-                              <li class="avatar avatar-sm">
-                                <span class="badge badge-info">+4 more</span>
-                              </li>
+                              <% }) %>
+ 
                             </ul>
                           </td>
-                          <td class="text-truncate">$8999</td>
+                          <td class="text-truncate"><%= finalPriceForAdmin(element.productOrderTable).totalPrice %> Eg</td>
                         </tr>
-                        <tr>
-                          <td class="text-truncate">Pixel 2</td>
-                          <td class="text-truncate p-1">
-                            <ul class="list-unstyled users-list m-0">
-                              <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Alice Scott"
-                              class="avatar avatar-sm pull-up">
-                                <img class="media-object rounded-circle" src="/public/dashboard/app-assets/images/portrait/small/avatar-s-16.png"
-                                alt="Avatar">
-                              </li>
-                              <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Charles Miller"
-                              class="avatar avatar-sm pull-up">
-                                <img class="media-object rounded-circle" src="/public/dashboard/app-assets/images/portrait/small/avatar-s-15.png"
-                                alt="Avatar">
-                              </li>
-                            </ul>
-                          </td>
-                          <td class="text-truncate">$5550</td>
-                        </tr>
-                        <tr>
-                          <td class="text-truncate">OnePlus</td>
-                          <td class="text-truncate p-1">
-                            <ul class="list-unstyled users-list m-0">
-                              <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Christine Ramos"
-                              class="avatar avatar-sm pull-up">
-                                <img class="media-object rounded-circle" src="/public/dashboard/app-assets/images/portrait/small/avatar-s-11.png"
-                                alt="Avatar">
-                              </li>
-                              <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Thomas Brewer"
-                              class="avatar avatar-sm pull-up">
-                                <img class="media-object rounded-circle" src="/public/dashboard/app-assets/images/portrait/small/avatar-s-10.png"
-                                alt="Avatar">
-                              </li>
-                              <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Alice Chapman"
-                              class="avatar avatar-sm pull-up">
-                                <img class="media-object rounded-circle" src="/public/dashboard/app-assets/images/portrait/small/avatar-s-9.png"
-                                alt="Avatar">
-                              </li>
-                              <li class="avatar avatar-sm">
-                                <span class="badge badge-info">+3 more</span>
-                              </li>
-                            </ul>
-                          </td>
-                          <td class="text-truncate">$9000</td>
-                        </tr>
-                        <tr>
-                          <td class="text-truncate">Galaxy</td>
-                          <td class="text-truncate p-1">
-                            <ul class="list-unstyled users-list m-0">
-                              <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Ryan Schneider"
-                              class="avatar avatar-sm pull-up">
-                                <img class="media-object rounded-circle" src="/public/dashboard/app-assets/images/portrait/small/avatar-s-14.png"
-                                alt="Avatar">
-                              </li>
-                              <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Tiffany Oliver"
-                              class="avatar avatar-sm pull-up">
-                                <img class="media-object rounded-circle" src="/public/dashboard/app-assets/images/portrait/small/avatar-s-13.png"
-                                alt="Avatar">
-                              </li>
-                              <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Joan Reid"
-                              class="avatar avatar-sm pull-up">
-                                <img class="media-object rounded-circle" src="/public/dashboard/app-assets/images/portrait/small/avatar-s-12.png"
-                                alt="Avatar">
-                              </li>
-                            </ul>
-                          </td>
-                          <td class="text-truncate">$7500</td>
-                        </tr>
-                        <tr>
-                          <td class="text-truncate">Moto Z2</td>
-                          <td class="text-truncate p-1">
-                            <ul class="list-unstyled users-list m-0">
-                              <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Kimberly Simmons"
-                              class="avatar avatar-sm pull-up">
-                                <img class="media-object rounded-circle" src="/public/dashboard/app-assets/images/portrait/small/avatar-s-8.png"
-                                alt="Avatar">
-                              </li>
-                              <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Willie Torres"
-                              class="avatar avatar-sm pull-up">
-                                <img class="media-object rounded-circle" src="/public/dashboard/app-assets/images/portrait/small/avatar-s-7.png"
-                                alt="Avatar">
-                              </li>
-                              <li data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Rebecca Jones"
-                              class="avatar avatar-sm pull-up">
-                                <img class="media-object rounded-circle" src="/public/dashboard/app-assets/images/portrait/small/avatar-s-6.png"
-                                alt="Avatar">
-                              </li>
-                              <li class="avatar avatar-sm">
-                                <span class="badge badge-info">+1 more</span>
-                              </li>
-                            </ul>
-                          </td>
-                          <td class="text-truncate">$8500</td>
-                        </tr>
+                        <% }) %>
+
                       </tbody>
                     </table>
                   </div>
@@ -620,89 +522,7 @@ data-open="click" data-menu="vertical-menu" data-col="2-columns">
         </div>
         <!--/ Recent Transactions -->
        
-        <!--/Recent Orders & Monthly Sales -->
-        <div id="crypto-stats-3" class="row">
-          <div class="col-xl-4 col-12">
-            <div class="card crypto-card-3 pull-up">
-              <div class="card-content">
-                <div class="card-body pb-0">
-                  <div class="row">
-                    <div class="col-2">
-                      <h1><i class="cc BTC warning font-large-2" title="BTC"></i></h1>
-                    </div>
-                    <div class="col-5 pl-2">
-                      <h4>BTC</h4>
-                      <h6 class="text-muted">Bitcoin</h6>
-                    </div>
-                    <div class="col-5 text-right">
-                      <h4>$9,980</h4>
-                      <h6 class="success darken-4">31% <i class="la la-arrow-up"></i></h6>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12">
-                    <canvas id="btc-chartjs" class="height-75"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-4 col-12">
-            <div class="card crypto-card-3 pull-up">
-              <div class="card-content">
-                <div class="card-body pb-0">
-                  <div class="row">
-                    <div class="col-2">
-                      <h1><i class="cc ETH blue-grey lighten-1 font-large-2" title="ETH"></i></h1>
-                    </div>
-                    <div class="col-5 pl-2">
-                      <h4>ETH</h4>
-                      <h6 class="text-muted">Ethereum</h6>
-                    </div>
-                    <div class="col-5 text-right">
-                      <h4>$944</h4>
-                      <h6 class="success darken-4">12% <i class="la la-arrow-up"></i></h6>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12">
-                    <canvas id="eth-chartjs" class="height-75"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-4 col-12">
-            <div class="card crypto-card-3 pull-up">
-              <div class="card-content">
-                <div class="card-body pb-0">
-                  <div class="row">
-                    <div class="col-2">
-                      <h1><i class="cc XRP info font-large-2" title="XRP"></i></h1>
-                    </div>
-                    <div class="col-5 pl-2">
-                      <h4>XRP</h4>
-                      <h6 class="text-muted">Balance</h6>
-                    </div>
-                    <div class="col-5 text-right">
-                      <h4>$1.2</h4>
-                      <h6 class="danger">20% <i class="la la-arrow-down"></i></h6>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12">
-                    <canvas id="xrp-chartjs" class="height-75"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Candlestick Multi Level Control Chart -->
-    
+      
         <!-- Active Orders -->
         <div class="row">
           <div class="col-12">

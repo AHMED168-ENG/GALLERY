@@ -252,7 +252,8 @@ class UserController {
                 }
                 const file = filesOperations.Rename_uploade_img(req);
                 if (file) {
-                    filesOperations.removeImg(req, "Users", body.oldImage);
+                    if (body.oldImage)
+                        filesOperations.removeImg(req, "Users", body.oldImage);
                     body.image = file;
                 }
                 else {
@@ -273,6 +274,47 @@ class UserController {
                     .then((result) => {
                     res.clearCookie("Admin");
                     validationMessage.returnWithMessage(req, res, "/dashboard/login", "your data updated successful login again", "success");
+                });
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    updatePersonalDataPostForUser(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { lng } = req.cookies;
+                const { id } = req.cookies.User;
+                const error = (0, express_validator_1.validationResult)(req);
+                const body = req.body;
+                const filesOperations = new helper_1.FilesOperations();
+                const validationMessage = new helper_1.ValidationMessage();
+                if (!error.isEmpty()) {
+                    filesOperations.removeImg(req, "Users");
+                    validationMessage.handel_validation_errors(req, res, error.errors, "/personal-information");
+                    return;
+                }
+                const file = filesOperations.Rename_uploade_img(req);
+                if (file) {
+                    if (body.oldImage)
+                        filesOperations.removeImg(req, "Users", body.oldImage);
+                    body.image = file;
+                }
+                else {
+                    body.image = body.oldImage;
+                }
+                users_1.default
+                    .update(body, {
+                    where: {
+                        id: id,
+                    },
+                })
+                    .then((result) => {
+                    res.clearCookie("User");
+                    validationMessage.returnWithMessage(req, res, "/signIn", lng == "ar"
+                        ? "تم تعديل بياناتك بنجاح سجل من جديد منفضلك"
+                        : "Your information has been modified successfully, please register again.", "success");
                 });
             }
             catch (error) {

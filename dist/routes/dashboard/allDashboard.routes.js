@@ -37,7 +37,6 @@ class AllDashboardRoutes {
     }
     router() {
         this.myApp.use("/dashboard", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            console.log(req.url);
             yield this.startFunction.startFunctionForDashboard(req, res, req.url, req.csrfToken());
             next();
         }));

@@ -8,7 +8,6 @@ export class UserSearch {
   // start add user search
   public addUserSearch(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log("ahmed reda alsahed");
       const body = req.body;
       tbl_user_search
         .findOne({

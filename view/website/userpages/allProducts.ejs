@@ -1,19 +1,6 @@
-<style>
-    .category select , .category input {
-        width:100%;
-        padding:10px
-    }
-    .category input {
-        padding:7px
-    }
-    .category div {
-        padding:0 !important
-    }
-    .category label {
-        display: block !important;
-    }
-</style>
+
 <%- include("../inclueds/head")  %>
+
 </head>
 <body>
 <%- include("../inclueds/upperNavbare")  %> 
@@ -21,38 +8,41 @@
 <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
 
     <!-- Shop Start -->
-    <div class="container-fluid">
+    <div class="container-fluid allProductsPage">
         <div class="row px-xl-5">
             <!-- Shop Sidebar Start -->
-            <div class="col-lg-3 col-md-4">
+            <div class="col-lg-3 col-md-4" data-aos="fade-left"
+                    data-aos-delay=""
+                    data-aos-offset=""
+                    data-aos-duration="1200">
                 <!-- Price Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by category</span></h5>
+                <h5  class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3"><%= trans("FILTERBYCATEGORY") %></span></h5>
                 <div class="bg-light p-4 mb-30">
                     <div class="category"> 
                         <div class="custom-control custom-checkbox  mb-3">
-                            <label  for="color-1">Search with category</label>
+                            <label > <%= trans("SearchWithCategory") %></label>
                             <select name="category" class="form-controle" id="">
-                                <option value="">All Category</option>
+                                <option value=""><%= trans("ALLCATEGORIES") %></option>
                                 <% allCategorys.forEach(element => { %>
                                     <option <%=  Query.category == element["slug_" + lang] ? "selected"  : "" %> value="<%= element["slug_" + lang] %>"><%= element["category_" + lang] %></option>
                                 <% }) %>
                             </select>
                         </div>
                         <div class="custom-control custom-checkbox  mb-3">
-                            <label  for="color-1">Search with Product</label>
-                            <input value="<%= Query.products %>" type="text" class="form-controle" placeholder="Product Name" name="productName" id="">
+                            <label ><%= trans("SearchwithProduct") %></label>
+                            <input value="<%= Query.products %>" type="text" class="form-controle" placeholder="<%= trans("productName") %>" name="productName" id="">
                         </div>
 
                     </div>
                 </div>
                 <!-- Price End -->
                 <!-- Price Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3"><%= trans("FILTERBYPRICE") %></span></h5>
                 <div class="bg-light p-4 mb-30">
                     <div class="price"> 
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="radio" name="price" <%= !Query.priceMin && !Query.priceMax ? "checked" : "" %> class="custom-control-input" min="" max=""  id="price-all">
-                            <label class="custom-control-label" for="price-all">All Price</label>
+                            <label class="custom-control-label" for="price-all"><%= trans("AllPrice") %></label>
                             <span class="badge border font-weight-normal">1000</span>
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
@@ -81,15 +71,15 @@
                             <span class="badge border font-weight-normal">168</span>
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center" style="padding:10px 0 !important">
-                            <input style="width:25%" type="number" value="<%= Query.priceMin %>" placeholder="Min" min="custom" class="form-controle" >
-                            <input style="width:25%;margin:0 10px" value="<%= Query.priceMax %>" type="number" max="custom" placeholder="Max" class="form-controle" >
+                            <input style="width:25%" type="number" value="<%= Query.priceMin %>" placeholder="<%= trans("min") %>" min="custom" class="form-controle" >
+                            <input style="width:25%;margin:0 10px" value="<%= Query.priceMax %>" type="number" max="custom" placeholder="<%= trans("max") %>" class="form-controle" >
                         </div>
                     </div>
                 </div>
                 <!-- Price End -->
                 
                 <!-- Color Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Rate</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3"><%= trans("FILTERBYRATE") %></span></h5>
                 <div class="bg-light p-4 mb-30">
                     <form class="rate"> 
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
@@ -152,17 +142,17 @@
                 <!-- Color End -->
 
                 <!-- Size Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by descount</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3"><%= trans("FILTERBYDESCOUNT") %></span></h5>
                 <div class="bg-light p-4 mb-30">
                     <form class="descount">
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="radio" <%=  Query.descount == "true" ? "checked" : "" %>  name="descount" data-attr="true" class="custom-control-input" id="size-all">
-                            <label class="custom-control-label" for="size-all">with descount</label>
+                            <label class="custom-control-label" for="size-all"><%= trans("WithDescount") %></label>
                             <span class="badge border font-weight-normal">1000</span>
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="radio"  <%=  Query.descount == "false" ? "checked" : "" %> name="descount" data-attr="false" class="custom-control-input" id="size-1">
-                            <label class="custom-control-label" for="size-1">without descount</label>
+                            <label class="custom-control-label" for="size-1"><%= trans("WithoutDescount") %></label>
                             <span class="badge border font-weight-normal">150</span>
                         </div>
  
@@ -170,32 +160,32 @@
                 </div>
                 <!-- Size End -->
                 <!-- Size Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by shipping</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3"><%= trans("FILTERBYSHIPPING") %></span></h5>
                 <div class="bg-light p-4 mb-30">
                     <form class="shipping">
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="radio" <%=  Query.shipping == "true" ? "checked" : "" %> name="shipping1" data-attr="true" class="custom-control-input"  id="shipping1">
-                            <label class="custom-control-label" for="shipping1">with shipping</label>
+                            <label class="custom-control-label" for="shipping1"><%= trans("WithShipping") %></label>
                             <span class="badge border font-weight-normal">1000</span>
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="radio" <%=  Query.shipping == "false" ? "checked" : "" %> name="shipping1" data-attr="false" class="custom-control-input" id="shipping2">
-                            <label class="custom-control-label" for="shipping2">without shipping</label>
+                            <label class="custom-control-label" for="shipping2"><%= trans("WithoutShipping") %></label>
                             <span class="badge border font-weight-normal">150</span>
                         </div>
  
                     </form>
                 </div>
-                <button class="btn btn-block btn-primary searchFilter">Search</button>
+                <button class="btn btn-block btn-primary searchFilter"><%= trans("search") %></button>
                 <!-- Size End -->
             </div>
             <!-- Shop Sidebar End -->
 
 
             <!-- Shop Product Start -->
-            <div class="col-lg-9 col-md-8">
+            <div class="col-lg-9 col-md-8" >
                 <div class="row pb-3">
-                    <div class="col-12 pb-1">
+                    <div class="col-12">
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             <div>
                                 <button class="btn btn-sm btn-light"><i class="fa fa-th-large"></i></button>
@@ -204,12 +194,12 @@
                             <div class="ml-2">
                                 <div class="btn-group">
                                     <select name="" id="" class="filter2" style="width:140px;height:30px">
-                                        <option value="">Sorting</option>
-                                        <option <%= Query.sort ? (Query.sort.indexOf("sumRate,asc") != -1 ? "selected" : "") : "" %> value="sumRate,asc">Rate Up</option>
-                                        <option <%= Query.sort ? (Query.sort.indexOf("sumRate,desc") != -1 ? "selected" : "") : "" %> value="sumRate,desc">Rate Down</option>
-                                        <option <%= Query.sort ? (Query.sort.indexOf("price,asc") != -1 ? "selected" : "") : "" %> value="price,asc">Price Up</option>
-                                        <option <%= Query.sort ? (Query.sort.indexOf("price,desc") != -1 ? "selected" : "") : "" %> value="price,desc">Price Down</option>
-                                        <option <%= Query.sort ? (Query.sort.indexOf("createdAt,desc") != -1 ? "selected" : "") : "" %> value="createdAt,desc">Last Product</option>
+                                        <option value=""><%= trans("sorting") %></option>
+                                        <option <%= Query.sort ? (Query.sort.indexOf("sumRate,asc") != -1 ? "selected" : "") : "" %> value="sumRate,asc"><%= trans("rateUp") %></option>
+                                        <option <%= Query.sort ? (Query.sort.indexOf("sumRate,desc") != -1 ? "selected" : "") : "" %> value="sumRate,desc"><%= trans("rateDown") %></option>
+                                        <option <%= Query.sort ? (Query.sort.indexOf("price,asc") != -1 ? "selected" : "") : "" %> value="price,asc"><%= trans("priceUp") %></option>
+                                        <option <%= Query.sort ? (Query.sort.indexOf("price,desc") != -1 ? "selected" : "") : "" %> value="price,desc"><%= trans("priceDown") %></option>
+                                        <option <%= Query.sort ? (Query.sort.indexOf("createdAt,desc") != -1 ? "selected" : "") : "" %> value="createdAt,desc"><%= trans("lastProducts") %></option>
                                     </select>
                                 </div>
                             </div>
@@ -220,11 +210,17 @@
                     </div>
                     <% if (allProducts.length > 0) { %>
                     <!-- Categories Start -->
-                        <div class="container-fluid pt-5">
-                            <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">All Products</span></h2>
-                            <div class="row px-xl-5 pb-3">
+                        <div class="container-fluid">
+                            <h2 data-aos="fade-right"
+                            data-aos-delay=""
+                            data-aos-offset=""
+                            data-aos-duration="1200" class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3"><%= trans("ALLPRODUCTS") %></span></h2>
+                            <div class="row pb-3">
                                 <% allProducts.forEach(element => { %>
-                                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1" data-aos="fade-up"
+                                        data-aos-delay=""
+                                        data-aos-offset=""
+                                        data-aos-duration="1200">
                                         <div class="product-item bg-light mb-4">
                                             <div class="product-img position-relative overflow-hidden">
                                                 <img class="img-fluid w-100" src="/assets/dashboard/Products/<%= element.productImage.split("--")[0] %>" alt="">
@@ -237,8 +233,8 @@
                                             <div class="text-center py-4">
                                                 <a class="h6 text-decoration-none text-truncate" href="/product-Details/<%= element["slug_" + lang] %>"><%= element["productName_" + lang] %></a>
                                                 <div class="d-flex align-items-center justify-content-center mt-2">
-                                                <h5><%= element.price  %> Eg</h5><h6 class="text-muted ml-2"><% if (element.descount) { %>
-                                                    <del><%= element.price - ((element.descount * element.price) / 100) %> Eg</del>
+                                                <h5><%= element.price  %> <%= trans("Eg") %></h5><h6 class="text-muted ml-2"><% if (element.descount) { %>
+                                                    <del><%= element.price - ((element.descount * element.price) / 100) %> <%= trans("Eg") %></del>
                                                 <% } %></h6>                                                
                                             </div>
                                                 <div class="d-flex align-items-center text-primary justify-content-center mb-1">
@@ -253,42 +249,12 @@
                                 <% }) %>
 
                             </div>
-                            <div class="pagination row px-xl-5">
-                                <div class="col-md-4">
-                                        <div class="dataTables_info">Showing <%=  (curantPage - 1) * elements %> to <%=  ((curantPage - 1) * elements) + elements %> of <%= allElementCount %> entries</div>
-                                </div>
-                                <div class="col-md-4 dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
-                                        <% if ((hasPrevious || hasNext)) { %>
-                                        <ul style="margin:0 ;justify-content: center;" class=" pagination">
-                                            <% if (curantPage != 1) { %>
-                                            <li id="DataTables_Table_0_previous" class="paginate_button page-item previous"><a class="page-link" href="?page=<%= curantPage - 1 %>">Previous</a></li>
-                                            <% } %>
-                                            <% if (curantPage != 1 &&  curantPage - 1 != 1) { %> 
-                                                <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= 1 %>">1</a></li>
-                                            <% } %>
-                                            <% if (hasPrevious) { %>
-                                                <li class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage - 1 %>"><%= curantPage - 1 %></a></li>
-                                            <% } %>
-                                            <li id="" class="paginate_button page-item active"><a class="page-link" href="?page=<%= curantPage %>"><%= curantPage %></a></li>
-                                            <% if (hasNext) { %>
-                                            <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= curantPage + 1 %>"><%= curantPage + 1 %></a></li>
-                                            <% } %>
-                                            <% if (curantPage !=  lastPage &&  curantPage + 1 != lastPage) { %>
-                                            <li id="" class="paginate_button page-item "><a class="page-link" href="?page=<%= lastPage %>"><%= lastPage %></a></li>
-                                            <% } %>
-                                            <% if (curantPage != lastPage) { %>
-                                            <li id="DataTables_Table_0_next" class="paginate_button page-item next"><a class="page-link" href="?page=<%= curantPage + 1 %>">Next</a></li>  
-                                            <% } %>
-
-                                        </ul>
-                                        <%}%>
-                                </div>
-                            </div>
+                            <%- include("../inclueds/pafination.ejs")  %>
                     </div>
                     
                     <% } else { %>
                         <div class="container">
-                            <div class="alert alert-danger" style="background:#f8cb27;text-align: center;text-transform: capitalize;">there is no categorys</div>
+                            <div class="alert alert-danger" style="background:#f8cb27;text-align: center;text-transform: capitalize;"><%= trans("noProducts") %></div>
                         </div>
                     <% } %>
 

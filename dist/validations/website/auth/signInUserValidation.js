@@ -21,9 +21,23 @@ class SignInUserValidation {
         return [
             (0, express_validator_1.check)("email")
                 .notEmpty()
-                .withMessage("you should enter email")
+                .withMessage((value, { req }) => {
+                if (req.cookies.lng == "ar") {
+                    return "يجب ادخال الايميل";
+                }
+                else {
+                    return "you should enter email";
+                }
+            })
                 .isEmail()
-                .withMessage("this feild accept email")
+                .withMessage((value, { req }) => {
+                if (req.cookies.lng == "ar") {
+                    return "هذا الحقل يستقبل ايميل";
+                }
+                else {
+                    return "this feild accept email";
+                }
+            })
                 .trim()
                 .escape()
                 .toLowerCase()
@@ -43,17 +57,43 @@ class SignInUserValidation {
                     }
                 });
             })
-                .withMessage("your email not registed")
-                .custom((value, { req }) => {
-                if (!value.active) {
+                .withMessage((value, { req }) => {
+                if (req.cookies.lng == "ar") {
+                    return "الايميل غير مسجل";
+                }
+                else {
+                    return "your email not registed";
+                }
+            })
+                .custom((value, { req }) => __awaiter(this, void 0, void 0, function* () {
+                const user = yield users_1.default.findOne({
+                    where: {
+                        email: value,
+                    },
+                });
+                if (!user.active) {
                     throw new Error("");
                 }
                 return true;
-            })
-                .withMessage("your account not active call the admin or check the your gmail for resone"),
+            }))
+                .withMessage((value, { req }) => {
+                if (req.cookies.lng == "ar") {
+                    return "حسابك ليس نشطًا ، اتصل بالمسؤول أو تحقق من gmail الخاص بك للحصول على إعادة تشغيل";
+                }
+                else {
+                    return "your account not active call the admin or check the your gmail for resone";
+                }
+            }),
             (0, express_validator_1.check)("password")
                 .notEmpty()
-                .withMessage("you shold enter password")
+                .withMessage((value, { req }) => {
+                if (req.cookies.lng == "ar") {
+                    return "ادخل الرقم السري";
+                }
+                else {
+                    return "you shold enter password";
+                }
+            })
                 .custom((value, { req }) => __awaiter(this, void 0, void 0, function* () {
                 const user = yield users_1.default.findOne({
                     where: {
@@ -68,7 +108,14 @@ class SignInUserValidation {
                 }
                 return true;
             }))
-                .withMessage("your password not correct")
+                .withMessage((value, { req }) => {
+                if (req.cookies.lng == "ar") {
+                    return "الرقم السري غير صحيح";
+                }
+                else {
+                    return "your password not correct";
+                }
+            })
                 .trim()
                 .escape(),
         ];

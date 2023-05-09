@@ -25,7 +25,6 @@ class AllDashboardRoutes {
     this.myApp.use(
       "/dashboard",
       async (req: Request, res: Response, next: NextFunction) => {
-        console.log(req.url);
         await this.startFunction.startFunctionForDashboard(
           req,
           res,
