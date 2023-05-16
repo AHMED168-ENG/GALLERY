@@ -19,6 +19,7 @@ class OrdersRoutes {
         this.Router.post("/finishOrder", this.isAuthonticate.isAuthonticate, this.orders.finishOrder);
         this.Router.post("/delete", this.isAuthonticate.isAuthonticate, this.orders.deleteOrder);
         this.Router.get("/:id", this.isAuthonticate.isAuthonticate, this.orders.showOrder);
+        this.Router.get("/download-order-pdf/:id", this.isAuthonticate.isAuthonticate, this.orders.downloadOrderPdf);
     }
 }
 exports.OrdersRoutes = OrdersRoutes;

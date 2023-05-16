@@ -364,7 +364,7 @@ class OrdersPdf {
                 ]);
             });
             const table = {
-                title: trans("Bill"),
+                title: trans("Bill") + ("#" + order.id),
                 subtitle: trans("ProductsData"),
                 headers: [trans("products"), trans("count"), trans("RealPrice")],
                 rows: productsData,

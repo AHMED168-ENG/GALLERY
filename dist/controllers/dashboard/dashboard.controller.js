@@ -13,9 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const orders_1 = __importDefault(require("../../models/orders"));
+const users_1 = __importDefault(require("../../models/users"));
 const productsOrders_1 = __importDefault(require("../../models/productsOrders"));
 const products_1 = __importDefault(require("../../models/products"));
 const helper_1 = require("../../helpers/helper");
+const messages_1 = __importDefault(require("../../models/messages"));
 class DashboardController {
     constructor() { }
     dashboard(req, res, next) {
@@ -28,21 +30,31 @@ class DashboardController {
                     limit: 10,
                     include: [
                         {
+                            model: users_1.default,
+                            as: "orderUser",
+                        },
+                        {
                             model: productsOrders_1.default,
                             as: "productOrderTable",
                             include: [{ model: products_1.default, as: "productTable" }],
                         },
                     ],
                 })
-                    .then((orders) => {
+                    .then((orders) => __awaiter(this, void 0, void 0, function* () {
+                    const lastMessages = yield messages_1.default.findAll({
+                        limit: 10,
+                        include: [{ model: users_1.default, as: "messageUser" }],
+                    });
                     res.render("dashboard/dashboard", {
                         title: "Dashboard",
                         notification: req.flash("notification"),
                         webSeting: {},
                         orders: orders,
                         finalPriceForAdmin: others.finalPriceForAdmin,
+                        formateDate: others.formateDate,
+                        lastMessages,
                     });
-                });
+                }));
             }
             catch (error) {
                 next(error);

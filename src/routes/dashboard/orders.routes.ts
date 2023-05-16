@@ -57,5 +57,10 @@ export class OrdersRoutes {
       this.isAuthonticate.isAuthonticate,
       this.orders.showOrder
     );
+    this.Router.get(
+      "/download-order-pdf/:id",
+      this.isAuthonticate.isAuthonticate,
+      this.orders.downloadOrderPdf
+    );
   }
 }
