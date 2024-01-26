@@ -7,7 +7,7 @@ const sequelize_1 = require("sequelize");
 const config_1 = require("../config/config");
 const products_1 = __importDefault(require("./products"));
 const sequelize = new sequelize_1.Sequelize(...config_1.env.database);
-const tbl_productsOrder = sequelize.define("tbl_productsOrder", {
+const tbl_productsOrder = sequelize.define("tbl_productsorder", {
     id: {
         type: sequelize_1.DataTypes.INTEGER,
         primaryKey: true,

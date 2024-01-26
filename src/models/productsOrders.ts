@@ -4,7 +4,7 @@ import tbl_orders from "./orders";
 import tbl_products from "./products";
 const sequelize = new Sequelize(...env.database);
 const tbl_productsOrder = sequelize.define(
-  "tbl_productsOrder",
+  "tbl_productsorder",
   {
     id: {
       type: DataTypes.INTEGER,
