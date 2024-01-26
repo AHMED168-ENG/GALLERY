@@ -1,3 +1,5 @@
 node_modules
 env
 src/logging
+.env
+./env/.env
