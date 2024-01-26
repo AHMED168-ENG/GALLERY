@@ -66,7 +66,7 @@ export class FaqsController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const error = validationResult(req);
+      const error:any = validationResult(req);
       const body = req.body;
 
       const validationMessage: ValidationMessage = new ValidationMessage();
@@ -135,7 +135,7 @@ export class FaqsController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const error = validationResult(req);
+      const error:any = validationResult(req);
       const body = req.body;
       const validationMessage: ValidationMessage = new ValidationMessage();
       if (!error.isEmpty()) {

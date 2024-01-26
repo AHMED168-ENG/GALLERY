@@ -114,7 +114,7 @@ export class UserController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const error = validationResult(req);
+      const error : any = validationResult(req);
       const body = req.body;
       const filesOperations: FilesOperations = new FilesOperations();
       const validationMessage: ValidationMessage = new ValidationMessage();
@@ -192,7 +192,7 @@ export class UserController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const error = validationResult(req);
+      const error : any = validationResult(req);
       const body = req.body;
       const filesOperations: FilesOperations = new FilesOperations();
       const validationMessage: ValidationMessage = new ValidationMessage();
@@ -279,7 +279,7 @@ export class UserController {
   ): Promise<void> {
     try {
       const { id } = req.cookies.Admin;
-      const error = validationResult(req);
+      const error : any = validationResult(req);
       const body = req.body;
       const filesOperations: FilesOperations = new FilesOperations();
       const validationMessage: ValidationMessage = new ValidationMessage();
@@ -338,7 +338,7 @@ export class UserController {
     try {
       const { lng } = req.cookies;
       const { id } = req.cookies.User;
-      const error = validationResult(req);
+      const error : any = validationResult(req);
       const body = req.body;
       const filesOperations: FilesOperations = new FilesOperations();
       const validationMessage: ValidationMessage = new ValidationMessage();

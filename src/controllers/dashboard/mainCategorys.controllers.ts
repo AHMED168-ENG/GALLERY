@@ -23,7 +23,7 @@ export class MainCategoryController {
           offset: +((page - 1) * PAGE_ITEMS),
           limit: +PAGE_ITEMS,
           where: {
-            mainCatigory: { [Op.eq]: 0 },
+            mainCatigory: { [Op.eq]: null },
           },
         })
         .then((result) => {
@@ -73,7 +73,7 @@ export class MainCategoryController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const error = validationResult(req);
+      const error :any = validationResult(req);
       const body = req.body;
       const filesOperations: FilesOperations = new FilesOperations();
       const validationMessage: ValidationMessage = new ValidationMessage();
@@ -106,8 +106,9 @@ export class MainCategoryController {
       if (elementWithenSlug) {
         body.slug_en = body.slug_en + "-" + Date.now();
       }
+      console.log(body)
       body.active = body.active ? true : false;
-      body.mainCatigory = 0;
+      body.mainCatigory = null;
       body.image = file;
       tbl_categorys
         .create(body)
@@ -164,7 +165,7 @@ export class MainCategoryController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const error = validationResult(req);
+      const error :any = validationResult(req);
       const body = req.body;
       const filesOperations: FilesOperations = new FilesOperations();
       const validationMessage: ValidationMessage = new ValidationMessage();

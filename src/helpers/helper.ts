@@ -28,7 +28,7 @@ export class ValidationMessage {
     message = message ? message : "هناك خطا ما ويرجي التحقق من الكود";
     type = type ? type : "danger";
     req.flash("notification", [type, message]);
-    res.redirect(url);
+    res.redirect("back");
   }
   // about return to eny url with message
 

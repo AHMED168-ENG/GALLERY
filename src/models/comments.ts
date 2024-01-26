@@ -43,7 +43,6 @@ const tbl_comments = sequelize.define(
     },
   }
 );
-tbl_comments.sync();
 tbl_products.hasMany(tbl_comments, {
   as: "allComments",
   foreignKey: "productId",
@@ -60,5 +59,6 @@ tbl_comments.belongsTo(tbl_products, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
+tbl_comments.sync();
 
 export default tbl_comments;

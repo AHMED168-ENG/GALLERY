@@ -80,6 +80,7 @@ const tbl_categorys = sequelize.define(
   }
 );
 tbl_categorys.sync();
+
 tbl_categorys.hasMany(tbl_categorys, {
   as: "allSupCategorys",
   foreignKey: "mainCatigory",
@@ -87,6 +88,7 @@ tbl_categorys.hasMany(tbl_categorys, {
 tbl_categorys.belongsTo(tbl_categorys, {
   as: "mainCatigorys",
   foreignKey: "mainCatigory",
+  targetKey : "id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });

@@ -33,7 +33,7 @@ export class AuthAdminController {
   ): Promise<void> {
     try {
       const validationMessage: ValidationMessage = new ValidationMessage();
-      const Errors = validationResult(req);
+      const Errors : any = validationResult(req);
       if (!Errors.isEmpty()) {
         validationMessage.handel_validation_errors(
           req,

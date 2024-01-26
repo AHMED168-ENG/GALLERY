@@ -4,17 +4,15 @@ import dotenv from "dotenv";
 dotenv.config({
   path: path.join(__dirname, "../env/.env"),
 });
+
 import { env } from "./config/config";
 import Logging from "./config/logging.config";
 import cookies from "cookie-parser";
 import session from "express-session";
 import connectFlash from "connect-flash";
-import cors from "cors";
 import csurf from "csurf";
-import helmet from "helmet";
 import { Sequelize } from "sequelize";
 import AllDashboardRoutes from "./routes/dashboard/allDashboard.routes";
-import { StartActions } from "./helpers/helper";
 import AllSiteRoutes from "./routes/website/allSite.routes";
 import InitLanguage from "./routes/language/init.language";
 
@@ -32,6 +30,7 @@ class App {
 
   // start this part about authonticate database
   private DBAuthorization() {
+    console.log(...env.database)
     const sequelize = new Sequelize(...env.database);
 
     sequelize

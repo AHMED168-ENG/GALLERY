@@ -80,7 +80,7 @@ export class GalleryController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const error = validationResult(req);
+      const error : any = validationResult(req);
       const body = req.body;
       const filesOperations: FilesOperations = new FilesOperations();
 
@@ -166,7 +166,7 @@ export class GalleryController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const error = validationResult(req);
+      const error : any = validationResult(req);
       const body = req.body;
       const filesOperations: FilesOperations = new FilesOperations();
       const validationMessage: ValidationMessage = new ValidationMessage();
