@@ -69,7 +69,7 @@ data-open="click" data-menu="vertical-menu" data-col="2-columns">
                                                             <textarea type="text" class="form-control " placeholder="enter sliders header in english" name="header_en"><%- bodyData.header_en %></textarea>
                                                             <% if (validationError) { %>
                                                                 <% if (validationError["header_en"]) { %>
-                                                                    <span class="text-danger"><%=validationError["header_en"][0].msg %></span>
+                                                                    <span class="text-danger"><%= validationError["header_en"][0].msg %></span>
                                                                 <% } %>
                                                             <% } %>
                                                         </div>
@@ -81,7 +81,7 @@ data-open="click" data-menu="vertical-menu" data-col="2-columns">
                                                             <textarea type="text" class="form-control " placeholder="enter sliders description in arabic" name="description_ar"><%- bodyData.description_ar %></textarea>
                                                             <% if (validationError) { %>
                                                                 <% if (validationError["description_ar"]) { %>
-                                                                    <span class="text-danger"><%=validationError["description_ar"][0].msg %></span>
+                                                                    <span class="text-danger"><%= validationError["description_ar"][0].msg %></span>
                                                                 <% } %>
                                                             <% } %>
                                                         </div>
@@ -93,7 +93,7 @@ data-open="click" data-menu="vertical-menu" data-col="2-columns">
                                                             <textarea type="text" class="form-control " placeholder="enter sliders description in english" name="description_en"><%- bodyData.description_en %></textarea>
                                                             <% if (validationError) { %>
                                                                 <% if (validationError["description_en"]) { %>
-                                                                    <span class="text-danger"><%=validationError["description_en"][0].msg %></span>
+                                                                    <span class="text-danger"><%= validationError["description_en"][0].msg %></span>
                                                                 <% } %>
                                                             <% } %>
                                                         </div>
@@ -102,10 +102,10 @@ data-open="click" data-menu="vertical-menu" data-col="2-columns">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label for="projectinput1">button link </label>
-                                                            <textarea type="text" class="form-control " placeholder="enter button link " name="<%= element["link_" + lang]"><%- bodyData.<%= element["link_" + lang] %></textarea>
+                                                            <textarea type="text" class="form-control " name="link" placeholder="enter button link " ><%- bodyData["link"] %></textarea>
                                                             <% if (validationError) { %>
-                                                                <% if (validationError["<%= element["link_" + lang]"]) { %>
-                                                                    <span class="text-danger"><%=validationError["<%= element["link_" + lang]"][0].msg %></span>
+                                                                <% if (validationError["link"] ) { %>
+                                                                    <span class="text-danger"><%= validationError["link"][0].msg %></span>
                                                                 <% } %>
                                                             <% } %>
                                                         </div>
@@ -174,29 +174,6 @@ data-open="click" data-menu="vertical-menu" data-col="2-columns">
 
     <%- include("../includes/footer") %> 
     <%- include("../includes/footerScript") %> 
-<!-- <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
-<script>
-    const allEditor = document.querySelectorAll( '.editor' )
-    allEditor.forEach(ele => {
-    ClassicEditor
-    .create( ele , {
-        //    toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
-           toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ],
-            heading: {
-                options: [
-                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                    // { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                    // { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-                ]
-            },
-    } )
-    .catch( error => {
-        console.error( error );
-    } );
-    })
-
-
-</script>    -->
 </body>
 
 </html>
