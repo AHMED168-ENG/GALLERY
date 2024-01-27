@@ -12,6 +12,7 @@ export class MainCategoryController {
   public async findAll(
     req: Request,
     res: Response,
+    
     next: NextFunction
   ): Promise<void> {
     try {
