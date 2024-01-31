@@ -33,7 +33,7 @@ class MainCategoryController {
                     offset: +((page - 1) * PAGE_ITEMS),
                     limit: +PAGE_ITEMS,
                     where: {
-                        mainCatigory: { [sequelize_1.Op.eq]: null },
+                        mainCatigory: { [sequelize_1.Op.eq]: 0 },
                     },
                 })
                     .then((result) => {
@@ -105,7 +105,7 @@ class MainCategoryController {
                 }
                 console.log(body);
                 body.active = body.active ? true : false;
-                body.mainCatigory = null;
+                body.mainCatigory = 0;
                 body.image = file;
                 categorys_1.default
                     .create(body)

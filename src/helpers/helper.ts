@@ -152,67 +152,67 @@ export class StartActions {
     url: string,
     csrfToken: string
   ): Promise<void> {
-    const users = await tbl_users.findAndCountAll();
-    const usersNotActive = await tbl_users.scope("notActive").findAndCountAll();
-    // main categorys
-    const mainCategorys = await tbl_categorys
-      .scope("mainCategorys")
-      .findAndCountAll();
-    const mainCategorysNotActive = await tbl_categorys
-      .scope("mainCategorys")
-      .scope("notActive")
-      .findAndCountAll();
-    // sup categorys
-    const supCategorys = await tbl_categorys
-      .scope("supCategorys")
-      .findAndCountAll();
-    const supCategorysNotActive = await tbl_categorys
-      .scope("supCategorys")
-      .scope("notActive")
-      .findAndCountAll();
-    const products = await tbl_products.findAndCountAll();
-    const productsNotActive = await tbl_products
-      .scope("notActive")
-      .findAndCountAll();
-    const sliders = await tbl_sliders.findAndCountAll();
-    const slidersNotActive = await tbl_sliders
-      .scope("notActive")
-      .findAndCountAll();
-    // faqs statistic
-    const faqs = await tbl_faqs.findAndCountAll();
-    const faqsNotActive = await tbl_faqs.scope("notActive").findAndCountAll();
-    // testmonial statistic
-    const testmonial = await tbl_testmonials.findAndCountAll();
-    const testmonialNotActive = await tbl_testmonials
-      .scope("notActive")
-      .findAndCountAll();
-    // orders statistic
-    const order = await tbl_orders.findAndCountAll();
-    const orderNotSeen = await tbl_orders.scope("NotSeen").findAndCountAll();
-    const FeaturesNumber = {
-      users: users.count,
-      usersNotActive: usersNotActive.count,
-      mainCategorys: mainCategorys.count,
-      mainCategorysNotActive: mainCategorysNotActive.count,
-      supCategorys: supCategorys.count,
-      supCategorysNotActive: supCategorysNotActive.count,
-      products: products.count,
-      productsNotActive: productsNotActive.count,
-      sliders: sliders.count,
-      slidersNotActive: slidersNotActive.count,
-      faqsCount: faqs.count,
-      faqsNotActive: faqsNotActive.count,
-      testmonias: testmonial.count,
-      testmonialNotActive: testmonialNotActive.count,
-      orderCount: order.count,
-      orderNotActive: orderNotSeen.count,
-    };
+    // const users = await tbl_users.findAndCountAll();
+    // const usersNotActive = await tbl_users.scope("notActive").findAndCountAll();
+    // // main categorys
+    // const mainCategorys = await tbl_categorys
+    //   .scope("mainCategorys")
+    //   .findAndCountAll();
+    // const mainCategorysNotActive = await tbl_categorys
+    //   .scope("mainCategorys")
+    //   .scope("notActive")
+    //   .findAndCountAll();
+    // // sup categorys
+    // const supCategorys = await tbl_categorys
+    //   .scope("supCategorys")
+    //   .findAndCountAll();
+    // const supCategorysNotActive = await tbl_categorys
+    //   .scope("supCategorys")
+    //   .scope("notActive")
+    //   .findAndCountAll();
+    // const products = await tbl_products.findAndCountAll();
+    // const productsNotActive = await tbl_products
+    //   .scope("notActive")
+    //   .findAndCountAll();
+    // const sliders = await tbl_sliders.findAndCountAll();
+    // const slidersNotActive = await tbl_sliders
+    //   .scope("notActive")
+    //   .findAndCountAll();
+    // // faqs statistic
+    // const faqs = await tbl_faqs.findAndCountAll();
+    // const faqsNotActive = await tbl_faqs.scope("notActive").findAndCountAll();
+    // // testmonial statistic
+    // const testmonial = await tbl_testmonials.findAndCountAll();
+    // const testmonialNotActive = await tbl_testmonials
+    //   .scope("notActive")
+    //   .findAndCountAll();
+    // // orders statistic
+    // const order = await tbl_orders.findAndCountAll();
+    // const orderNotSeen = await tbl_orders.scope("NotSeen").findAndCountAll();
+    // const FeaturesNumber = {
+    //   users: users.count,
+    //   usersNotActive: usersNotActive.count,
+    //   mainCategorys: mainCategorys.count,
+    //   mainCategorysNotActive: mainCategorysNotActive.count,
+    //   supCategorys: supCategorys.count,
+    //   supCategorysNotActive: supCategorysNotActive.count,
+    //   products: products.count,
+    //   productsNotActive: productsNotActive.count,
+    //   sliders: sliders.count,
+    //   slidersNotActive: slidersNotActive.count,
+    //   faqsCount: faqs.count,
+    //   faqsNotActive: faqsNotActive.count,
+    //   testmonias: testmonial.count,
+    //   testmonialNotActive: testmonialNotActive.count,
+    //   orderCount: order.count,
+    //   orderNotActive: orderNotSeen.count,
+    // };
     let sitSetting = await tbl_app_settings.findOne({});
 
     res.locals.URL = url;
     res.locals.sitSetting = sitSetting;
     res.locals.adminData = req.cookies.Admin;
-    res.locals.FeaturesNumber = FeaturesNumber;
+    res.locals.FeaturesNumber = {} ;
 
     //   res.locals.webSeting = webSeting;
     res.locals.csrf = csrfToken;

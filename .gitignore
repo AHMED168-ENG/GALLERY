@@ -1,5 +1,8 @@
-node_modules
-env
-src/logging
-.env
-./env/.env
+/node_modules
+/locales
+/env
+/assets
+/package.json
+/tsconfig.json
+/src
+/dist/logging

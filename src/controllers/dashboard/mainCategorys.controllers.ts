@@ -23,7 +23,7 @@ export class MainCategoryController {
           offset: +((page - 1) * PAGE_ITEMS),
           limit: +PAGE_ITEMS,
           where: {
-            mainCatigory: { [Op.eq]: null },
+            mainCatigory: { [Op.eq]: 0 },
           },
         })
         .then((result) => {
@@ -108,7 +108,7 @@ export class MainCategoryController {
       }
       console.log(body)
       body.active = body.active ? true : false;
-      body.mainCatigory = null;
+      body.mainCatigory = 0;
       body.image = file;
       tbl_categorys
         .create(body)

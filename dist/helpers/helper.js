@@ -16,16 +16,10 @@ exports.OrdersPdf = exports.Outhers = exports.StartActions = exports.FilesOperat
 const path_1 = __importDefault(require("path"));
 const multer_1 = __importDefault(require("multer"));
 const fs_1 = __importDefault(require("fs"));
-const users_1 = __importDefault(require("../models/users"));
 const categorys_1 = __importDefault(require("../models/categorys"));
-const products_1 = __importDefault(require("../models/products"));
-const sliders_1 = __importDefault(require("../models/sliders"));
-const faqs_1 = __importDefault(require("../models/faqs"));
 const moment_1 = __importDefault(require("moment"));
 const favorits_1 = __importDefault(require("../models/favorits"));
 const shopingCart_1 = __importDefault(require("../models/shopingCart"));
-const testmonials_1 = __importDefault(require("../models/testmonials"));
-const orders_1 = __importDefault(require("../models/orders"));
 const appSeting_1 = __importDefault(require("../models/appSeting"));
 const pdfkit_table_1 = __importDefault(require("pdfkit-table"));
 class ValidationMessage {
@@ -115,61 +109,11 @@ exports.FilesOperations = FilesOperations;
 class StartActions {
     startFunctionForDashboard(req, res, url, csrfToken) {
         return __awaiter(this, void 0, void 0, function* () {
-            const users = yield users_1.default.findAndCountAll();
-            const usersNotActive = yield users_1.default.scope("notActive").findAndCountAll();
-            const mainCategorys = yield categorys_1.default
-                .scope("mainCategorys")
-                .findAndCountAll();
-            const mainCategorysNotActive = yield categorys_1.default
-                .scope("mainCategorys")
-                .scope("notActive")
-                .findAndCountAll();
-            const supCategorys = yield categorys_1.default
-                .scope("supCategorys")
-                .findAndCountAll();
-            const supCategorysNotActive = yield categorys_1.default
-                .scope("supCategorys")
-                .scope("notActive")
-                .findAndCountAll();
-            const products = yield products_1.default.findAndCountAll();
-            const productsNotActive = yield products_1.default
-                .scope("notActive")
-                .findAndCountAll();
-            const sliders = yield sliders_1.default.findAndCountAll();
-            const slidersNotActive = yield sliders_1.default
-                .scope("notActive")
-                .findAndCountAll();
-            const faqs = yield faqs_1.default.findAndCountAll();
-            const faqsNotActive = yield faqs_1.default.scope("notActive").findAndCountAll();
-            const testmonial = yield testmonials_1.default.findAndCountAll();
-            const testmonialNotActive = yield testmonials_1.default
-                .scope("notActive")
-                .findAndCountAll();
-            const order = yield orders_1.default.findAndCountAll();
-            const orderNotSeen = yield orders_1.default.scope("NotSeen").findAndCountAll();
-            const FeaturesNumber = {
-                users: users.count,
-                usersNotActive: usersNotActive.count,
-                mainCategorys: mainCategorys.count,
-                mainCategorysNotActive: mainCategorysNotActive.count,
-                supCategorys: supCategorys.count,
-                supCategorysNotActive: supCategorysNotActive.count,
-                products: products.count,
-                productsNotActive: productsNotActive.count,
-                sliders: sliders.count,
-                slidersNotActive: slidersNotActive.count,
-                faqsCount: faqs.count,
-                faqsNotActive: faqsNotActive.count,
-                testmonias: testmonial.count,
-                testmonialNotActive: testmonialNotActive.count,
-                orderCount: order.count,
-                orderNotActive: orderNotSeen.count,
-            };
             let sitSetting = yield appSeting_1.default.findOne({});
             res.locals.URL = url;
             res.locals.sitSetting = sitSetting;
             res.locals.adminData = req.cookies.Admin;
-            res.locals.FeaturesNumber = FeaturesNumber;
+            res.locals.FeaturesNumber = {};
             res.locals.csrf = csrfToken;
         });
     }
